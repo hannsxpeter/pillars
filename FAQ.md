@@ -64,7 +64,7 @@ Five minutes for the install. The agent degrades gracefully on absent pillars (i
 
 No, not for the runtime alignment loop (the daily use). The standard ships as markdown; every supporting AI tool reads it natively.
 
-A CLI would help with: CI/CD checks (lint, drift detection), one-command bootstrap from a clean terminal, and as the engine for per-tool skills. None of these are required to adopt the standard. See [README.md](README.md) for the phased rollout philosophy.
+A published CLI would help with one-command bootstrap from a clean terminal and as the engine for per-tool skills. For deterministic structure checks, the repo ships a small internal validator ([`tooling/ci/validate_pillars.py`](tooling/ci/validate_pillars.py)) used in its own CI, which adopters can run too. None of this is required to adopt the standard. See [README.md](README.md) for the phased rollout philosophy.
 
 ### How do I check structure without a CLI?
 

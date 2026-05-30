@@ -59,7 +59,7 @@ pillars/
 - `agents/` holds the project's own pillars (dogfooded).
 - `examples/` holds worked example pillars and compact adoption examples for adopters to reference.
 - `tooling/` holds optional helper forms. It is outside the runtime standard; it packages meta-operations such as init, author, verify, and structural checks.
-- `.github/` holds repository hosting metadata such as issue templates and PR templates. It is not part of the Pillars standard.
+- `.github/` holds repository hosting metadata such as issue templates, PR templates, and CI workflows (for example, `workflows/validate.yml`, which runs the structural validator). It is not part of the Pillars standard.
 
 ## Decisions
 

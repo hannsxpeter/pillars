@@ -2,7 +2,7 @@
 
 [![License: CC0-1.0](https://img.shields.io/badge/license-CC0--1.0-blue.svg)](LICENSE)
 [![Status: stable 1.0](https://img.shields.io/badge/status-stable%201.0-green.svg)](CHANGELOG.md)
-[![Spec: v1.0.0](https://img.shields.io/badge/spec-v1.0.0-green.svg)](SPEC.md)
+[![Spec: v1.0.1](https://img.shields.io/badge/spec-v1.0.1-green.svg)](SPEC.md)
 [![AGENTS.md: compatible](https://img.shields.io/badge/AGENTS.md-compatible-purple.svg)](AGENTS.md)
 [![Tooling: optional](https://img.shields.io/badge/tooling-optional-lightgrey.svg)](tooling/)
 [![Tool: agnostic](https://img.shields.io/badge/tool-agnostic-blue.svg)](FAQ.md#how-is-this-different-from-cursor-rules-windsurfrules-etc)
@@ -87,7 +87,7 @@ The prompt form covers optional report-first workflows for bootstrap, authoring,
 
 Pick your tool's install doc in [`tooling/prompts/`](tooling/prompts/) for one-paragraph setup instructions, or paste a prompt file directly into your tool's chat to run the operation.
 
-CLI, deeper per-tool wrappers, and CI integrations are roadmap items for when adoption signal warrants them.
+Deeper per-tool wrappers and a published CLI are roadmap items for when adoption signal warrants them.
 
 ### Versioning note
 
@@ -148,7 +148,7 @@ pillars/
 
 ## Status
 
-Stable 1.0.0. The standard's structure is stable, validated against six hypothetical project archetypes (SaaS dashboard, CLI tool, ML pipeline, marketing site, real-time collab, e-commerce) and expanded with report-only maintenance workflows for task routing, gaps, trimming, and external-doc reconciliation. Guidance and catalog can still refine through backward-compatible minor releases as real adoption surfaces edge cases. See [CHANGELOG.md](CHANGELOG.md) for version history.
+Stable 1.0.1. The standard's structure is stable, validated against six hypothetical project archetypes (SaaS dashboard, CLI tool, ML pipeline, marketing site, real-time collab, e-commerce) and expanded with report-only maintenance workflows for task routing, gaps, trimming, and external-doc reconciliation. Guidance and catalog can still refine through backward-compatible minor releases as real adoption surfaces edge cases. See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## Contributing
 

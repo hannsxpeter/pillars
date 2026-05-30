@@ -138,6 +138,8 @@ Adopters often start from an archetype list to avoid rediscovering common exclus
 | Marketing site | data, api, auth (if no users), observe (if platform-provided), async |
 | Mobile app | seo, i18n (if single-locale), `realtime` (if not collaborative) |
 | Open-source library | ui, api (if not a service), auth, observe, deploy (if not hosted), notifications, analytics |
+| SaaS dashboard | (none initially; add as decisions get made) |
+| Empty / greenfield | (none initially; add exclusions as the project takes shape) |
 
 Reasons are recommended in `AGENTS.md`'s `excluded:` block so future contributors understand the call.
 

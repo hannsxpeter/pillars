@@ -1,6 +1,6 @@
 # Pillars Specification
 
-Version 1.0.0.
+Version 1.0.1.
 
 This document defines the Pillars standard. It specifies the pillar file template, the YAML frontmatter schema, the loading mechanism, and the missing-pillar protocol. An implementation that conforms to this spec is *Pillars-compatible*.
 
@@ -161,7 +161,7 @@ A reference implementation is in this repository's [AGENTS.md](AGENTS.md).
 
 ## 7. Versioning
 
-This spec uses semantic versioning. The current version is 1.0.0.
+This spec uses semantic versioning. The current version is 1.0.1.
 
 - Major: changes to frontmatter schema or loading mechanics that break existing pillars.
 - Minor: additions to the schema or protocol that are backward-compatible.

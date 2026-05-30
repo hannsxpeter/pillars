@@ -8,6 +8,10 @@ All notable changes to the Pillars standard are documented here. Format follows 
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [1.0.1] - 2026-05-30
+
 Documentation and tooling consistency pass. Standard behavior is unchanged; the SPEC.md change is a clarification only.
 
 ### Added
@@ -26,6 +30,13 @@ Documentation and tooling consistency pass. Standard behavior is unchanged; the 
 - **`AGENTS.md`**: reworded the excluded-pillars note so the empty default reads cleanly in its dual role as the adopter template.
 - **`agents/repo.md`** and **`tooling/README.md`**: documented the new `tooling/ci/` directory.
 - **`DESIGN-NOTES.md`**: genericized a committed local filesystem path.
+- **`PILLARS.md`**: completed the archetype starter exclusion table with SaaS dashboard and greenfield rows (both default to no exclusions).
+- **`tooling/claude-skill/pillars-init/SKILL.md`** and **`tooling/prompts/pillars-init.md`**: aligned the archetype exclusion tables and matrix header to `PILLARS.md`.
+- **`agents/repo.md`**: noted CI workflows in the `.github/` description.
+- **`README.md`** and **`FAQ.md`**: updated CLI/CI roadmap language to reflect the shipped internal validator.
+- **`.github/ISSUE_TEMPLATE/bug.yml`**: fixed a stale `SPEC.md` section reference (4.0 to 4).
+
+[1.0.1]: https://github.com/aihxp/pillars/releases/tag/v1.0.1
 
 ## [1.0.0] - 2026-05-14
 

@@ -60,12 +60,12 @@ Drop the fetched AGENTS.md content (or the inline template below) at `<project-r
 | Archetype | Typical exclusions |
 |---|---|
 | CLI tool | ui, api, auth, observe, i18n, a11y, analytics, async, cache, notifications |
-| Internal API service | ui, a11y, seo, notifications (if no user surface) |
+| Internal API service | ui, a11y, seo (if no end-user surface), notifications (if no end users) |
 | SaaS dashboard | [] (leave empty initially) |
 | Marketing site | data, api, auth (if no users), observe (if platform-provided), async |
 | Mobile app | seo, i18n (if single-locale), realtime (if not collaborative) |
 | ML pipeline | ui, i18n, a11y, notifications, analytics |
-| Open-source library | ui, api (if not a service), auth, observe, deploy, notifications, analytics |
+| Open-source library | ui, api (if not a service), auth, observe, deploy (if not hosted), notifications, analytics |
 | Empty/greenfield | [] (leave empty) |
 
 Use the structured form with reasons:
@@ -138,7 +138,7 @@ Write `agents/repo.md` with the same structure but covering file layout, naming,
 
 Use this matrix to decide which Core pillars get stubs:
 
-| Pillar | CLI | API svc | SaaS | Marketing | Mobile | ML | OSS lib | Greenfield |
+| Pillar | CLI | Internal API | SaaS | Marketing | Mobile | ML | OSS lib | Greenfield |
 |---|---|---|---|---|---|---|---|---|
 | stack | yes | yes | yes | yes | yes | yes | yes | yes |
 | arch | yes | yes | yes | maybe | yes | yes | maybe | yes |

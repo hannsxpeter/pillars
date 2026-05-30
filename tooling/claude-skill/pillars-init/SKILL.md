@@ -95,7 +95,7 @@ Drop the fetched AGENTS.md text at the project root. Replace the `excluded: []` 
 | Archetype | Typical exclusions |
 |---|---|
 | CLI tool | ui, api, auth, observe, i18n, a11y, analytics, async, cache, notifications |
-| Internal API service | ui, a11y, seo, notifications (if no end-user surface) |
+| Internal API service | ui, a11y, seo (if no end-user surface), notifications (if no end users) |
 | SaaS dashboard | (none initially; add as decisions get made) |
 | Marketing site | data, api, auth (if no users), observe (if platform-provided), async |
 | Mobile app | seo, i18n (if single-locale), realtime (if not collaborative) |
