@@ -14,6 +14,8 @@ tooling/
 │   ├── pillars-init/
 │   ├── pillars-author/
 │   └── pillars-verify/
+├── ci/                     # Deterministic structural validator (this repo's CI)
+│   └── validate_pillars.py
 └── prompts/                # Universal paste-in prompts + per-tool install guides
     ├── pillars-check.md
     ├── pillars-find-gaps.md
@@ -82,6 +84,8 @@ A CLI could eventually be the right shape for CI/CD checks (lint, drift detectio
 1. The runtime alignment loop doesn't need a CLI; every AI tool already reads AGENTS.md.
 2. Meta-operations work cleanly through the AI tool itself (skill or paste-in prompt).
 3. CI integration is a separate use case with its own design (deterministic checks, no LLM calls). It belongs later, if demand proves it is worth the extra product surface.
+
+This repository does include a minimal, dependency-light structural validator (`tooling/ci/validate_pillars.py`) wired into its own CI to keep the standard's source files conformant. That is internal QA for this repo, not a published CLI adopters must install; the distinction is the point.
 
 If you want a lightweight check today, use `tooling/prompts/pillars-check.md` inside your AI tool. It reports structural issues without installing anything and without creating a command-line product.
 

@@ -121,12 +121,16 @@ pillars/
 ├── examples/           # worked example pillars for adopters
 │   ├── data.md
 │   ├── auth.md
+│   ├── auth/           # sub-pillar worked example (agent-facing registration)
+│   │   └── agent-registration.md
 │   └── saas-dashboard/ # compact end-to-end adoption example
 ├── tooling/            # tooling forms (skills, universal prompts)
 │   ├── claude-skill/   # Claude Code native skill bundle
 │   │   ├── pillars-init/
 │   │   ├── pillars-author/
 │   │   └── pillars-verify/
+│   ├── ci/             # deterministic structural validator (this repo's CI)
+│   │   └── validate_pillars.py
 │   └── prompts/        # Universal paste-in prompts + per-tool install guides
 │       ├── pillars-check.md
 │       ├── pillars-find-gaps.md

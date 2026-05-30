@@ -9,7 +9,6 @@ Northstar CRM is a multi-tenant B2B dashboard for account teams. It uses Next.js
 ```text
 saas-dashboard/
 ├── AGENTS.md
-├── design.md           # optional rich product design brief
 └── agents/
     ├── context.md
     ├── repo.md

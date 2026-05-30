@@ -2,7 +2,7 @@
 
 Cursor has good native support for project-level rules and custom commands. Two ways to integrate Pillars:
 
-## Option A: Project rule + paste-in prompts (recommended for v0.1)
+## Option A: Project rule + paste-in prompts (recommended)
 
 Add a Cursor rule that ensures the agent reads AGENTS.md on every interaction. Then paste the prompts from this folder when you want to run a Pillars workflow.
 

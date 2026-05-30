@@ -8,7 +8,24 @@ All notable changes to the Pillars standard are documented here. Format follows 
 
 ## [Unreleased]
 
-No unreleased changes.
+Documentation and tooling consistency pass. Standard behavior is unchanged; the SPEC.md change is a clarification only.
+
+### Added
+
+- **`tooling/ci/validate_pillars.py`** and **`.github/workflows/validate.yml`**: a deterministic, dependency-light structural validator for Pillars projects, wired into this repository's CI. It checks frontmatter schema, the eight-section heading order, `pillar`/filename agreement, the always-loaded floor pillars, and `must_read_with` reference resolution, and it structurally lints the standalone worked examples under `examples/`. This is repository-internal QA, not a published CLI; the standard stays usable with zero tooling.
+- **`examples/auth/agent-registration.md`**: a worked sub-pillar example showing how a project documents agent-facing self-registration (for example, the WorkOS `auth.md` agent-registration protocol) for its coding agent. Demonstrates the sub-pillar folder convention.
+- **`FAQ.md`**: a new entry disambiguating Pillars' `auth.md` context pillar from WorkOS's runtime `auth.md` agent-registration protocol (same filename, different layer).
+
+### Changed
+
+- **`SPEC.md`**: added section 4.3 clarifying that trigger matching is implementation-defined, and what that means for cross-tool portability. Clarification only; no schema or loading-behavior change.
+- **`FAQ.md`**: corrected the CLI exclusion count to 10 (matching the catalog and the init skill); it previously read 13.
+- **`CONTRIBUTING.md`**: refreshed the semantic-versioning examples to post-1.0 values and removed a stale pre-1.0 conditional from the Discussions note.
+- **`tooling/prompts/install-cursor.md`, `install-codex-cli.md`, `install-windsurf.md`**: removed stale `v0.1` version qualifiers.
+- **`examples/saas-dashboard/README.md`**: removed `design.md` from the file tree (it is illustrative and not shipped in the example); the relationship is still covered under "Where design.md Fits."
+- **`AGENTS.md`**: reworded the excluded-pillars note so the empty default reads cleanly in its dual role as the adopter template.
+- **`agents/repo.md`** and **`tooling/README.md`**: documented the new `tooling/ci/` directory.
+- **`DESIGN-NOTES.md`**: genericized a committed local filesystem path.
 
 ## [1.0.0] - 2026-05-14
 

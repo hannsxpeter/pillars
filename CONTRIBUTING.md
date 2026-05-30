@@ -49,8 +49,8 @@ Expect a multi-week conversation. The standard is intentionally small and slow-m
 Pillars uses [Semantic Versioning](https://semver.org/):
 
 - **Major** (`1.x.x` -> `2.x.x`) — frontmatter schema or loading-mechanism changes that break existing pillars. Requires migration notes.
-- **Minor** (`0.1.x` -> `0.2.x`) — backward-compatible additions to schema, protocol, pillar catalog, or sub-pillar patterns.
-- **Patch** (`0.1.0` -> `0.1.1`) — clarifications, typo fixes, new examples, documentation.
+- **Minor** (`1.0.x` -> `1.1.x`) — backward-compatible additions to schema, protocol, pillar catalog, or sub-pillar patterns.
+- **Patch** (`1.0.0` -> `1.0.1`) — clarifications, typo fixes, new examples, documentation.
 
 The current version is in `CHANGELOG.md`.
 
@@ -93,7 +93,7 @@ End-to-end adoption examples must:
 ## Communication
 
 - **Issues:** for bug reports (ambiguities in the spec, contradictions, broken examples), feature proposals (new pillars, new patterns), and questions.
-- **Discussions:** for open-ended conversations that aren't actionable issues (planning v0.2, exploring patterns, etc.). Enable when the project graduates from pre-1.0.
+- **Discussions:** for open-ended conversations that aren't actionable issues (planning the next minor version, exploring patterns).
 - **PRs:** for proposed changes. Link to the issue if the change was discussed.
 
 ## License of contributions

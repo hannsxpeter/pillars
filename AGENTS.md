@@ -29,7 +29,7 @@ If `context.md` or `repo.md` is missing entirely, pause and ask the human to eit
 
 ## Excluded pillars
 
-The following pillars are intentionally not used in this project. Reasons are recommended (not required) so future contributors understand the call.
+List the pillars this project intentionally excludes here, each with a reason so future contributors understand the call. The list is empty by default; populate it as you decide which concerns don't apply to your project.
 
 ```yaml
 excluded: []

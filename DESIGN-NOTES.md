@@ -2,7 +2,7 @@
 
 ## Project
 - **Name:** Pillars
-- **Target folder:** `/Users/hprincivil/Projects/pillars/`
+- **Target folder:** `pillars/`
 - **Status:** designing the standard in plan mode; folder scaffolding deferred until ExitPlanMode.
 
 ### Proposed folder structure (executed on ExitPlanMode)
@@ -43,7 +43,7 @@ Out of scope (separate future product):
 - The toolkit: commands to bootstrap pillars, generate from code, detect drift, refresh.
 
 ## Decisions Locked
-- **Project name:** Pillars. Folder: `/Users/hprincivil/Projects/pillars/`.
+- **Project name:** Pillars. Folder: `pillars/`.
 - Standalone product, no dependency on ready-suite.
 - Layer 1 (the spec) only for now; Layer 2 (toolkit) is a later product.
 - Audience: both new and existing projects.
@@ -455,4 +455,4 @@ exclusions:
 1. Review the worked `context.md` and `AGENTS.md` drafts above; iterate if needed.
 2. Optionally draft `repo.md` as a second worked example to stress-test the template.
 3. Decide remaining open decisions (sub-pillar discovery rule, stopping condition default, license).
-4. ExitPlanMode and execute: create `/Users/hprincivil/Projects/pillars/`, scaffold the folder structure, move DESIGN-NOTES.md, write SPEC.md / PILLARS.md / README.md, copy worked examples into `agents/` and `examples/`.
+4. ExitPlanMode and execute: create `pillars/`, scaffold the folder structure, move DESIGN-NOTES.md, write SPEC.md / PILLARS.md / README.md, copy worked examples into `agents/` and `examples/`.

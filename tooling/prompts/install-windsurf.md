@@ -26,7 +26,7 @@ Windsurf will load `.windsurfrules` as system context; the agent then proceeds v
 
 ## Running the prompt workflows
 
-Windsurf doesn't have a persistent custom-command format as of v0.1. Use paste-in:
+Windsurf's persistent custom-command support varies by version, so use paste-in:
 
 1. Open the relevant prompt file in this folder.
 2. Copy its content.

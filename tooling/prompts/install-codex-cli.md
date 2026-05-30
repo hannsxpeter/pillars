@@ -15,7 +15,7 @@ No Codex-specific configuration is required.
 
 ## Running the prompt workflows
 
-Codex CLI doesn't have a persistent custom-command system in v0.1, so you invoke meta-operations by pasting the prompt content:
+Codex CLI's persistent custom-command support varies by version, so the portable way to invoke meta-operations is to paste the prompt content:
 
 ### Option A: paste into chat
 

@@ -35,10 +35,13 @@ pillars/
 ├── examples/           # adopter-facing examples
 │   ├── data.md
 │   ├── auth.md
+│   ├── auth/           # sub-pillar worked example (agent-facing registration)
+│   │   └── agent-registration.md
 │   └── saas-dashboard/ # compact end-to-end adoption example
-└── tooling/            # optional prompts and skill packaging
+└── tooling/            # optional prompts, skill packaging, and CI validator
     ├── prompts/
-    └── claude-skill/
+    ├── claude-skill/
+    └── ci/
 ```
 
 **Naming:**

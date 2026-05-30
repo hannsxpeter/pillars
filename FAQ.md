@@ -24,11 +24,15 @@ If your tool doesn't read project-level instructions at all, no, Pillars doesn't
 
 No. The standard mentions Claude and Claude Code as examples because that's a common adoption path, but Pillars is tool-agnostic by design and accepts no tool-specific extensions.
 
+### Is Pillars' `auth.md` the same as WorkOS's `auth.md`?
+
+No. They share a filename and nothing else. Pillars' `auth.md` is a dev-time **context pillar** at `agents/auth.md` that briefs a *coding* agent on your project's identity and access design. WorkOS's [`auth.md`](https://github.com/workos/auth.md) is a runtime **agent-registration protocol**: a file a live service hosts at `https://yourservice.com/auth.md` so an *autonomous action agent* can sign up for that service on a user's behalf. Different layer, different audience, different lifecycle, and they coexist fine in one project because they live at different paths. If your project adopts agent-facing registration, document it for your coding agent like any other integration: in your `auth.md` pillar, or a focused sub-pillar such as `agents/auth/agent-registration.md`. See [examples/auth/agent-registration.md](examples/auth/agent-registration.md) for a worked example.
+
 ## How it works
 
 ### Do I have to use all 21 pillars?
 
-No. The standard defines a tiered set so you reason about each topic, but you populate only what applies. CLI tools commonly exclude 13 of them; that's first-class supported via `excluded:` in `AGENTS.md`. See [PILLARS.md](PILLARS.md) for archetype-specific starter exclusion lists.
+No. The standard defines a tiered set so you reason about each topic, but you populate only what applies. CLI tools commonly exclude 10 of them; that's first-class supported via `excluded:` in `AGENTS.md`. See [PILLARS.md](PILLARS.md) for archetype-specific starter exclusion lists.
 
 ### Can I use only some pillars and not others?
 

@@ -113,6 +113,10 @@ The standard treats these patterns as boundary smells:
 
 Bad decomposition is visible in the frontmatter; the standard surfaces it without external tooling.
 
+### 4.3 Trigger matching is implementation-defined
+
+Step 2 deliberately leaves the matching technique open: a conforming tool may match `triggers` by substring, keyword, or semantic similarity. Pillar *content* is fully portable across tools; relevance *matching* is intentionally not pinned, because tools differ in retrieval capability and fixing one algorithm would freeze the standard to today's techniques. The practical consequence is that two conforming tools may select slightly different primaries for the same task. Three things bound that variance: the always-loaded floor (`context`, `repo`) loads regardless of matching, the depth-1 rule (section 4.1) caps how far a primary pulls in others, and any pillar that must load for a class of task can be promoted to `always_load: true`. Author `triggers` for recall: include the obvious synonyms a task might use, rather than assuming a particular matching algorithm.
+
 ## 5. Missing-pillar protocol
 
 A pillar can be in one of four states relative to a project:
