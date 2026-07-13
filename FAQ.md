@@ -30,17 +30,19 @@ No. They share a filename and nothing else. Pillars' `auth.md` is a dev-time **c
 
 ## How it works
 
-### Do I have to use all 21 pillars?
+### Do I have to use all 24 catalog pillars?
 
-No. The standard defines a tiered set so you reason about each topic, but you populate only what applies. CLI tools commonly exclude 10 of them; that's first-class supported via `excluded:` in `AGENTS.md`. See [PILLARS.md](PILLARS.md) for archetype-specific starter exclusion lists.
+No. The standard defines a tiered set so you reason about each topic, but you populate only what applies. CLI tools commonly exclude 11 of them; that's first-class supported via `excluded:` in `AGENTS.md`. See [PILLARS.md](PILLARS.md) for archetype-specific starter exclusion lists.
 
 ### Can I use only some pillars and not others?
 
-Yes. The 4-state missing-pillar protocol handles incomplete adoption gracefully: present pillars are loaded, stubs prompt the agent to ask, excluded pillars are treated as not applicable, absent pillars degrade to inference with explicit assumption-stating.
+Yes. The 5-state missing-pillar protocol handles incomplete adoption: present pillars load, stubs prompt the agent to ask, exclusions are not applicable, locally cataloged absences degrade to explicit inference, and unknown concerns make no Pillars-specific claim.
 
 ### How does this work for a monorepo?
 
-The 1.0.0 standard is single-repo. For monorepos, the simplest pattern is one set of pillars at the monorepo root, with sub-pillars or domain pillars distinguishing per-app concerns (e.g., `agents/data.md` covers shared schema; `agents/data/orders.md` covers an orders-app-specific table). A more elaborate per-app `AGENTS.md` is possible but not part of the standard yet. Cross-package conventions are a future minor-version topic.
+Pillars 1.1 defines nested scopes. Put shared guidance in the root `AGENTS.md` and `agents/`. A package can add its own `AGENTS.md` plus `agents/` when it needs local routing or overrides. For a package task, the agent loads applicable scopes from root to package. Non-conflicting guidance accumulates, and the nearest scope wins conflicts. A child exclusion suppresses an inherited task-routed pillar of the same identity for that child.
+
+Keep one root scope when package differences are small. Nested scopes are useful when packages have independent stacks, layouts, or product boundaries, not as a reason to duplicate every pillar.
 
 ### Can pillars cover non-code concerns (legal, compliance, business rules)?
 
@@ -58,13 +60,13 @@ Five minutes for the install (copy `AGENTS.md`, create `agents/`, write two stub
 
 ### How long for an existing project?
 
-Five minutes for the install. The agent degrades gracefully on absent pillars (it infers from code and states the assumption), so you can adopt without authoring any pillars upfront. Pillars get authored from the agent's inferences over time.
+Five minutes for the install. Add absent concerns to local `agents/catalog.yaml` when you want deterministic offline discovery. A matching catalog entry degrades gracefully: the agent infers from code and states the assumption. Unknown concerns that are not present, excluded, or cataloged produce no Pillars-specific claim.
 
 ### Do I need a CLI?
 
 No, not for the runtime alignment loop (the daily use). The standard ships as markdown; every supporting AI tool reads it natively.
 
-A published CLI would help with one-command bootstrap from a clean terminal and as the engine for per-tool skills. For deterministic structure checks, the repo ships a small internal validator ([`tooling/ci/validate_pillars.py`](tooling/ci/validate_pillars.py)) used in its own CI, which adopters can run too. None of this is required to adopt the standard. See [README.md](README.md) for the phased rollout philosophy.
+For deterministic structure and routing checks, the repo ships a small validator ([`tooling/ci/validate_pillars.py`](tooling/ci/validate_pillars.py)) used in its own CI. It checks local files and conformance fixtures without a model or external service. Adopters may run it, but compatibility never requires this implementation or a published package.
 
 ### How do I check structure without a CLI?
 
@@ -95,7 +97,7 @@ Only changes to [SPEC.md](SPEC.md) change what it means to be Pillars-compatible
 
 ### Can I adopt incrementally?
 
-Yes. Start with the two always-loaded pillars (`context.md`, `repo.md`). Add Tier 1 pillars as the corresponding decisions get made. Add Tier 2 and Domain pillars when they're load-bearing for your project. Stubs and exclusions are first-class.
+Yes. Start with the two always-loaded pillars (`context.md`, `repo.md`). Add Tier 1 pillars as decisions get made. Keep other known concerns in local `agents/catalog.yaml`, or explicitly exclude concerns that do not apply. Remove catalog entries when their pillars are created or excluded.
 
 ## Spec details
 
@@ -111,9 +113,21 @@ It's the smallest set that covers both *briefing* (Scope, Context, Decisions) an
 
 Visual hierarchy is self-documenting. `./agents/data/migrations.md` is obviously a sub-pillar of `data`. Frontmatter would require opening the file to learn the same fact. Hugo, Jekyll, Astro, MkDocs, and every static site generator use folders for hierarchy; the pattern is conventional.
 
+### How do I reference a sub-pillar?
+
+Use its path-derived identity. `agents/auth.md` is `auth`; `agents/auth/agent-registration.md` is `auth/agent-registration`. The frontmatter `pillar` value remains the leaf filename, `agent-registration`. Bare references resolve top-level pillars only, so two parents may safely have sub-pillars with the same leaf name.
+
+### Is trigger matching still implementation-defined?
+
+Implementations may add semantic matching, but 1.1 defines a portable minimum. ASCII letters are lowercased, punctuation becomes spaces, and a selector matches a contiguous token sequence. This means `schema-change` matches `Schema change`, while `api` does not match `capital`. Primary triggers, catalog triggers, and conditional `see_also` checks use the same baseline.
+
+### What is `agents/catalog.yaml`?
+
+It is an optional local index of concerns that this project knows are absent. It carries identities and triggers so a gap can be discovered offline. Present pillars never need catalog entries because their own frontmatter routes them. Exclusions stay in `AGENTS.md`. A missing catalog preserves 1.0 present-pillar behavior but makes no claim about unknown absent concerns.
+
 ### Why is tooling optional?
 
-Standards succeed by being portable and small. Tooling is a force multiplier, not a substitute. Pillars 1.0.0 defines compatibility through markdown files and loading behavior, so adoption is not gated on which tooling form you use. Optional tooling lives under `tooling/` when the friction it relieves is well-understood.
+Standards succeed by being portable and small. Tooling is a force multiplier, not a substitute. Pillars 1.1.0 defines compatibility through local text files and loading behavior, so adoption is not gated on which tooling form you use. Optional tooling lives under `tooling/` when the friction it relieves is well-understood.
 
 ### Can I version pillars within a project?
 
@@ -145,7 +159,7 @@ Slowly. Major versions are years apart by design. Minor versions are quarterly o
 
 ### Is this stable enough to adopt?
 
-Yes. Pillars 1.0.0 marks the AGENTS.md protocol, `agents/` layout, frontmatter schema, loading behavior, and missing-pillar behavior as stable. The catalog and guidance can still refine through backward-compatible minor releases as real adoption surfaces edge cases.
+Yes. Pillars 1.1.0 preserves the stable 1.0 top-level schema and single-scope behavior while specifying path identities, deterministic routing, local absent discovery, and nested scopes. Future incompatible changes still require a new major version.
 
 ### How do I report a problem?
 

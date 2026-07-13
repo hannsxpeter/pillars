@@ -22,6 +22,8 @@ body:
         - "Structural change: frontmatter schema"
         - "Structural change: loading protocol"
         - "Structural change: missing-pillar protocol"
+        - "Validator or conformance fixture"
+        - "Nested-scope or routing behavior"
         - "Other"
     validations:
       required: true

@@ -15,7 +15,7 @@ globs:
 alwaysApply: true
 ---
 
-This project follows the [Pillars](https://github.com/aihxp/pillars) standard. Before doing any code work, read `AGENTS.md` at the project root and follow its protocol to load the relevant pillars from `./agents/*.md`.
+This project follows the [Pillars](https://github.com/hannsxpeter/pillars) standard. Before doing any code work, read `AGENTS.md` at the project root and follow its protocol to load the relevant pillars from `./agents/*.md`.
 
 Do not infer conventions when a relevant pillar exists; consult the pillar. Do not silently ignore a `Gaps` entry; ask the user instead.
 ```
@@ -58,4 +58,4 @@ Delete `.cursor/rules/pillars.mdc` and (if used) `.cursor/commands/pillars-*.md`
 ## Reference
 
 - Cursor docs on Rules: https://docs.cursor.com/context/rules
-- Pillars standard: https://github.com/aihxp/pillars
+- Pillars standard: https://github.com/hannsxpeter/pillars

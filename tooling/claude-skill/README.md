@@ -1,6 +1,6 @@
 # Pillars Skills for Claude Code
 
-Skill-form tooling for the [Pillars](https://github.com/aihxp/pillars) standard. These skills run inside Claude Code and automate the meta-operations around adopting and maintaining Pillars: bootstrapping a new project, authoring pillars from code, and verifying pillars against the current codebase.
+Skill-form tooling for the [Pillars](https://github.com/hannsxpeter/pillars) standard. These skills run inside Claude Code and automate the meta-operations around adopting and maintaining Pillars: bootstrapping a new project, authoring pillars from code, and verifying pillars against the current codebase.
 
 The standard itself ships separately as portable markdown. These skills are *one* form of tooling; a CLI, a Cursor wrapper, or other forms could exist alongside. None of them are required to use the standard; they make adoption easier.
 
@@ -8,7 +8,7 @@ The standard itself ships separately as portable markdown. These skills are *one
 
 | Skill | Job |
 |---|---|
-| `pillars-init` | Bootstrap Pillars in a project. Detects archetype, drops AGENTS.md, scaffolds `./agents/`, writes stubs, sets archetype exclusions. |
+| `pillars-init` | Bootstrap Pillars in a project. Detects archetype, drops AGENTS.md, scaffolds `./agents/`, writes stubs, and reconciles exclusions with the local catalog. |
 | `pillars-author` | Author a specific pillar from the codebase. Scans relevant code, drafts the 8-section pillar following the template, asks before writing. |
 | `pillars-verify` | Walk pillar Context claims against the current codebase. Flag drift, suggest fixes. Manual lightweight check; no CI integration. |
 
@@ -71,9 +71,9 @@ The skill walks each pillar's Context section and checks claims against current 
 
 ## What these skills don't do
 
-- **No CI integration.** These run inside Claude Code, not in pipelines. A neutral CLI would be the right shape for CI; this bundle deliberately doesn't include one.
+- **No CI execution inside the skills.** The repository's optional deterministic validator and conformance suite are the CI surface; the skills remain interactive.
 - **No drift remediation.** The verify skill flags drift; it doesn't auto-fix. Fixing is a human + agent collaboration on what the current truth is.
-- **No multi-project orchestration.** Each skill operates on the current Claude Code project context.
+- **No cross-repository orchestration.** Each skill operates on the current repository, including its applicable nested scopes.
 
 ## Versioning
 
@@ -81,9 +81,9 @@ Skill versions are tracked in each skill's frontmatter. Skills are versioned ind
 
 | Skill | Version | Standard compatibility |
 |---|---|---|
-| `pillars-init` | 0.1.0 | Pillars v1.0.0+ |
-| `pillars-author` | 0.1.0 | Pillars v1.0.0+ |
-| `pillars-verify` | 0.1.0 | Pillars v1.0.0+ |
+| `pillars-init` | 0.2.0 | Pillars v1.1.0+ |
+| `pillars-author` | 0.2.0 | Pillars v1.1.0+ |
+| `pillars-verify` | 0.2.0 | Pillars v1.1.0+ |
 
 ## License
 

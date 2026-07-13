@@ -52,4 +52,4 @@ If you used Option C, delete `.codex/prompts/`. Nothing else to clean up.
 ## Reference
 
 - OpenAI Codex CLI: https://github.com/openai/codex
-- Pillars standard: https://github.com/aihxp/pillars
+- Pillars standard: https://github.com/hannsxpeter/pillars

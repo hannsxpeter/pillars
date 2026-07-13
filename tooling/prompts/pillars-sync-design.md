@@ -8,7 +8,7 @@ Use this when a project already has `design.md`, when a new `design.md` has been
 
 ## Task: reconcile design.md and Pillars
 
-You are going to compare root `design.md` (if present) with the project's [Pillars](https://github.com/aihxp/pillars) files and produce a sync report. Do not write, edit, move, or delete files.
+You are going to compare root `design.md` (if present) with the project's [Pillars](https://github.com/hannsxpeter/pillars) files and produce a sync report. Do not write, edit, move, or delete files.
 
 ### Step 1: Locate the artifacts
 
@@ -33,7 +33,7 @@ When `design.md` is absent, continue only if the user explicitly asked for guida
 Follow the project's `AGENTS.md` protocol:
 
 1. Load always-loaded pillars.
-2. Inventory other pillar files under `agents/`.
+2. Inventory other pillar files in every applicable root or nested scope. Treat local catalog entries as known absences, not pillar claims.
 3. For this reconciliation task, inspect these pillars if present:
    - `context`
    - `arch`

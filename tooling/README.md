@@ -15,7 +15,10 @@ tooling/
 │   ├── pillars-author/
 │   └── pillars-verify/
 ├── ci/                     # Deterministic structural validator (this repo's CI)
-│   └── validate_pillars.py
+│   ├── validate_pillars.py
+│   ├── requirements.txt
+│   └── tests/
+├── conformance/            # Task routing fixtures and benchmark protocol
 └── prompts/                # Universal paste-in prompts + per-tool install guides
     ├── pillars-check.md
     ├── pillars-find-gaps.md
@@ -54,7 +57,7 @@ tooling/
 
 ## Quick start (any tool)
 
-1. Adopt the standard: copy `AGENTS.md` to your project root, create `agents/`.
+1. Adopt the standard: copy `AGENTS.md` to your project root, create `agents/`, and optionally add `agents/catalog.yaml`.
 2. Read the install doc for your tool.
 3. Use the meta-operation prompts (or skill, in Claude Code) to bootstrap and maintain pillars.
 
@@ -64,7 +67,7 @@ The universal prompts implement these procedures:
 
 | Operation | Job |
 |---|---|
-| **check** | Validate Pillars file structure, frontmatter, section order, floor pillars, and references |
+| **check** | Validate structure, identities, list fields, section order, floors, references, and budgets |
 | **find-gaps** | Index unresolved `Gaps` across pillars and classify their impact |
 | **init** | Bootstrap Pillars: detect archetype, drop AGENTS.md, scaffold `agents/`, write stubs, set exclusions |
 | **author** | Draft a specific pillar from the codebase via targeted archaeology, present 8-section draft for approval |
@@ -75,19 +78,33 @@ The universal prompts implement these procedures:
 | **sync-readme** | Reconcile README with Pillars |
 | **trim** | Report bloat, duplication, and over-prescription in pillars |
 
-The Claude Code skill bundle currently packages the three higher-touch procedures: init, author, and verify. The smaller report-only workflows are intentionally prompt-only for now: they give adopters useful checks without introducing a CLI or another native tool surface.
+The Claude Code skill bundle currently packages the three higher-touch procedures: init, author, and verify. Smaller report-only workflows remain prompt-only. The deterministic validator covers machine-checkable structure and routing; it does not replace judgment-based drift verification.
 
-## Why no CLI
+## Deterministic validator and conformance suite
 
-A CLI could eventually be the right shape for CI/CD checks (lint, drift detection in PR gates). It is deliberately not in this release because:
+The local validator is an executable QA surface without being a required or published package. It checks:
 
-1. The runtime alignment loop doesn't need a CLI; every AI tool already reads AGENTS.md.
-2. Meta-operations work cleanly through the AI tool itself (skill or paste-in prompt).
-3. CI integration is a separate use case with its own design (deterministic checks, no LLM calls). It belongs later, if demand proves it is worth the extra product surface.
+- Frontmatter types, unique list items, identity and filename agreement, section order, floors, exclusions, self-references, fan-out, and content budgets.
+- Path-qualified `must_read_with` and `see_also` references.
+- Local absent catalogs and present, absent, or excluded conflicts.
+- Deterministic trigger and `see_also` matching through task-to-load-set fixtures.
+- Nested-scope inheritance, override, and exclusion behavior.
 
-This repository does include a minimal, dependency-light structural validator (`tooling/ci/validate_pillars.py`) wired into its own CI to keep the standard's source files conformant. That is internal QA for this repo, not a published CLI adopters must install; the distinction is the point.
+Run the same gates as CI:
 
-If you want a lightweight check today, use `tooling/prompts/pillars-check.md` inside your AI tool. It reports structural issues without installing anything and without creating a command-line product.
+```bash
+python3 -m pip install -r tooling/ci/requirements.txt
+python3 -m unittest discover -s tooling/ci/tests -v
+python3 tooling/ci/validate_pillars.py \
+  . --recursive-scopes \
+  --standalone examples \
+  --fixtures tooling/conformance/fixtures.yaml
+python3 tooling/ci/check_consistency.py
+```
+
+The validator uses local files only. With `--recursive-scopes`, it discovers every nested scope that contains both `AGENTS.md` and `agents/`. The standard still works without Python, PyYAML, CI, or this implementation. For a report-only manual check, use `tooling/prompts/pillars-check.md`.
+
+The conformance directory also includes an optional live-model benchmark protocol and an intentionally blank result template. No score is claimed until real runs and raw artifacts exist.
 
 ## Why no full per-tool wrappers
 

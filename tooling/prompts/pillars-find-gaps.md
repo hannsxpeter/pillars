@@ -27,7 +27,7 @@ Then stop.
 
 ### Step 2: Inventory pillars
 
-For each pillar file, parse frontmatter and note:
+For each applicable root or nested scope, read its exclusions and optional `agents/catalog.yaml`. For each pillar file, parse frontmatter and note:
 
 - Path
 - `pillar`
@@ -36,6 +36,8 @@ For each pillar file, parse frontmatter and note:
 - `triggers`
 
 Read the body and extract the `## Gaps` section.
+
+Catalog entries are known absent concerns, not body gaps. Report them in a separate `Cataloged Absences` section unless the same identity is excluded or present, which is a structural conflict.
 
 ### Step 3: Classify gaps
 
@@ -67,6 +69,7 @@ Use this format:
 Project: <best available project name>
 Pillars scanned: <N>
 Gaps found: <N>
+Cataloged absences: <N>
 
 ## High Impact
 
@@ -87,6 +90,10 @@ Gaps found: <N>
 ## Stub Pillars
 
 - `agents/<pillar>.md`: <summary>
+
+## Cataloged Absences
+
+- `<scope>::<identity>`: <covers and likely task impact>
 
 ## Suggested Next Actions
 

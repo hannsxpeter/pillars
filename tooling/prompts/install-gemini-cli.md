@@ -17,7 +17,7 @@ If your version only reads `GEMINI.md`, create a thin redirect:
 ```markdown
 # Project agent instructions
 
-This project follows the [Pillars](https://github.com/aihxp/pillars) standard.
+This project follows the [Pillars](https://github.com/hannsxpeter/pillars) standard.
 
 Read `AGENTS.md` at the repo root and follow its protocol to load the relevant pillars from `./agents/*.md` before doing any work.
 ```
@@ -63,4 +63,4 @@ Delete `GEMINI.md` (if you added a redirect) and any files under `~/.gemini/comm
 ## Reference
 
 - Gemini CLI: https://github.com/google-gemini/gemini-cli
-- Pillars standard: https://github.com/aihxp/pillars
+- Pillars standard: https://github.com/hannsxpeter/pillars

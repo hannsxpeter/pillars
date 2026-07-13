@@ -8,7 +8,7 @@ Use this when a project has `PRD.md`, `requirements.md`, `product.md`, `spec.md`
 
 ## Task: reconcile product requirements and Pillars
 
-You are going to compare product requirement documents with the project's [Pillars](https://github.com/aihxp/pillars) files and produce a sync report. Do not write, edit, move, or delete files.
+You are going to compare product requirement documents with the project's [Pillars](https://github.com/hannsxpeter/pillars) files and produce a sync report. Do not write, edit, move, or delete files.
 
 ### Step 1: Locate the artifacts
 
@@ -34,7 +34,7 @@ Then stop.
 Follow the project's `AGENTS.md` protocol:
 
 1. Load always-loaded pillars.
-2. Inventory other pillar files under `agents/`.
+2. Inventory other pillar files in every applicable root or nested scope. Treat local catalog entries as known absences, not pillar claims.
 3. For this reconciliation task, inspect relevant pillars when present:
    - `context`
    - `arch`

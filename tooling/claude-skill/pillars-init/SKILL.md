@@ -1,16 +1,16 @@
 ---
 name: pillars-init
-description: "Bootstrap the Pillars standard in a project. Detects whether the project is greenfield or has existing code, identifies the archetype (CLI tool, SaaS dashboard, ML pipeline, marketing site, internal API service, mobile app, open-source library), drops AGENTS.md at the repo root, creates the `./agents/` directory, writes stubs for the always-loaded pillars and applicable Core pillars, and sets archetype-appropriate `excluded:` entries. Use this skill when the user asks to 'set up Pillars,' 'adopt Pillars,' 'initialize Pillars,' 'scaffold pillars,' 'install the Pillars standard,' 'add AGENTS.md and pillars,' or describes wanting to start using the Pillars standard in a project."
-version: 0.1.0
-updated: 2026-05-13
+description: "Bootstrap the Pillars standard in a project. Detects the project archetype, writes AGENTS.md, creates `./agents/`, writes always-loaded and applicable Core stubs, reconciles a local absent catalog, and records archetype exclusions. Use this skill when the user asks to set up, adopt, initialize, scaffold, or install Pillars."
+version: 0.2.0
+updated: 2026-07-13
 compatible_with:
   - claude-code
-standard_version: ">=1.0.0"
+standard_version: ">=1.1.0"
 ---
 
 # Pillars Init
 
-This skill bootstraps the [Pillars](https://github.com/aihxp/pillars) standard in a project. It is the recommended entry point: it handles archetype detection, AGENTS.md placement, pillar stub creation, and exclusion list setup in one pass.
+This skill bootstraps the [Pillars](https://github.com/hannsxpeter/pillars) standard in a project. It is the recommended entry point: it handles archetype detection, AGENTS.md placement, pillar stub creation, and exclusion list setup in one pass.
 
 ## When to use this skill
 
@@ -34,6 +34,7 @@ After running, the user's project will contain:
 └── agents/
     ├── context.md        # stub, status: stub
     ├── repo.md           # stub, status: stub
+    ├── catalog.yaml      # offline metadata for absent concerns
     └── <core-pillars>.md # stubs for Tier 1 pillars that apply to this archetype
 ```
 
@@ -82,9 +83,10 @@ If the project is **empty/greenfield**, ask the user what they're building. Map 
 
 The skill needs the current canonical text of AGENTS.md and the pillar template. Fetch from the Pillars repo:
 
-- AGENTS.md: `https://raw.githubusercontent.com/aihxp/pillars/main/AGENTS.md`
-- Spec for template reference: `https://raw.githubusercontent.com/aihxp/pillars/main/SPEC.md`
-- Catalog for archetype exclusions: `https://raw.githubusercontent.com/aihxp/pillars/main/PILLARS.md`
+- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/AGENTS.md`
+- Spec for template reference: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/SPEC.md`
+- Catalog for archetype exclusions: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/PILLARS.md`
+- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/agents/catalog.yaml`
 
 Use the `WebFetch` tool. Cache locally for the rest of the session.
 
@@ -94,7 +96,7 @@ Drop the fetched AGENTS.md text at the project root. Replace the `excluded: []` 
 
 | Archetype | Typical exclusions |
 |---|---|
-| CLI tool | ui, api, auth, observe, i18n, a11y, analytics, async, cache, notifications |
+| CLI tool | ui, api, auth, deploy, observe, i18n, a11y, analytics, async, cache, notifications |
 | Internal API service | ui, a11y, seo (if no end-user surface), notifications (if no end users) |
 | SaaS dashboard | (none initially; add as decisions get made) |
 | Marketing site | data, api, auth (if no users), observe (if platform-provided), async |
@@ -118,8 +120,10 @@ If the archetype's reason is generic, infer something concrete from the detected
 ### Step 4. Create the `./agents/` directory and write always-loaded stubs
 
 ```bash
-mkdir agents
+mkdir -p agents
 ```
+
+Write the fetched starter catalog to `agents/catalog.yaml`. Remove entries for every pillar stub created below and every identity recorded in `excluded:`. The catalog must contain only locally absent concerns.
 
 Write `agents/context.md`:
 
@@ -226,7 +230,9 @@ Not every Tier 1 pillar applies to every archetype. Use this matrix to decide wh
 | ui | no | no | yes | yes | yes | no | no | maybe |
 | auth | no | maybe | yes | no | yes | yes | no | maybe |
 | quality | yes | yes | yes | yes | yes | yes | yes | yes |
-| deploy | yes | yes | yes | yes | yes | yes | no | yes |
+| development | yes | yes | yes | yes | yes | yes | yes | yes |
+| release | yes | yes | yes | yes | yes | yes | yes | yes |
+| deploy | no | yes | yes | yes | yes | yes | no | yes |
 | observe | no | yes | yes | maybe | yes | yes | no | maybe |
 
 `maybe` means "ask the user before stubbing." `no` means it's likely excluded (already handled in step 3).
@@ -242,7 +248,9 @@ For each pillar marked `yes` (or `maybe` after confirmation), write a stub at `a
 | ui | [ui, component, page, layout, design, style, theme] |
 | auth | [auth, login, session, role, permission, access, user] |
 | quality | [test, testing, error, lint, style, naming] |
-| deploy | [deploy, cutover, environment, rollback, promotion, release] |
+| development | [develop, development, local setup, bootstrap, debug] |
+| release | [release, version, changelog, publish, semver] |
+| deploy | [deploy, cutover, environment, rollback, promotion] |
 | observe | [log, logging, metric, tracing, alert, monitoring, runbook] |
 
 Use `must_read_with: []` for stubs; the user can add couplings once content exists. Use `see_also: []` for stubs.
@@ -258,6 +266,7 @@ Files created:
 - AGENTS.md (protocol, archetype: <archetype-name>)
 - agents/context.md (stub, always-loaded)
 - agents/repo.md (stub, always-loaded)
+- agents/catalog.yaml (offline metadata for remaining absent concerns)
 - agents/stack.md (stub)
 - agents/quality.md (stub)
 - ... etc ...
@@ -291,10 +300,10 @@ If yes, transition to `pillars-author` for `context`. If no, end.
 
 - **Wrong archetype guess.** If detection is ambiguous, *ask* before writing. Better to clarify than to write the wrong exclusion set.
 - **Project has a hand-built `CLAUDE.md` or `.cursorrules`.** Do not delete these. Instead, note them in the summary and recommend the user reduce them to a redirect: `"See AGENTS.md and the pillars in ./agents/."`
-- **User wants to adopt for a sub-package in a monorepo.** Pillars 1.0.0 is single-repo. If the user is in a monorepo, ask whether they want root-level adoption (covers the monorepo) or to wait for the multi-repo guidance in a future spec version.
+- **User wants to adopt for a sub-package in a monorepo.** Pillars 1.1 supports nested scopes. Confirm the package is a real independent scope, then place its `AGENTS.md` and `agents/` there. Root guidance applies first, and nearest-scope guidance wins conflicts.
 
 ## Reference
 
-- Pillars standard: https://github.com/aihxp/pillars
-- SPEC.md: https://github.com/aihxp/pillars/blob/main/SPEC.md
-- PILLARS.md: https://github.com/aihxp/pillars/blob/main/PILLARS.md
+- Pillars standard: https://github.com/hannsxpeter/pillars
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md

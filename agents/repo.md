@@ -31,14 +31,15 @@ pillars/
 ├── DESIGN-NOTES.md     # design conversation log
 ├── agents/             # this project's pillars, dogfooded
 │   ├── context.md      # always-loaded
-│   └── repo.md         # always-loaded
+│   ├── repo.md         # always-loaded
+│   └── catalog.yaml    # offline metadata for locally absent concerns
 ├── examples/           # adopter-facing examples
 │   ├── data.md
 │   ├── auth.md
 │   ├── auth/           # sub-pillar worked example (agent-facing registration)
 │   │   └── agent-registration.md
 │   └── saas-dashboard/ # compact end-to-end adoption example
-└── tooling/            # optional prompts, skill packaging, and CI validator
+└── tooling/            # optional prompts, skills, validator, tests, and conformance assets
     ├── prompts/
     ├── claude-skill/
     └── ci/
@@ -49,6 +50,7 @@ pillars/
 - Top-level docs use SCREAMING-CASE (`README.md`, `SPEC.md`, `PILLARS.md`, `AGENTS.md`, `LICENSE`, `DESIGN-NOTES.md`). Convention for repo-level documents.
 - Pillar files use lowercase single-word names (`context.md`, `data.md`, `auth.md`). Matches the `pillar:` field in frontmatter.
 - Sub-pillars live in a folder named for the parent (`agents/<parent>/<name>.md`).
+- Sub-pillar references use their path-derived identity (`<parent>/<name>`). The frontmatter `pillar` value remains the leaf filename.
 
 **Anchor files:**
 
@@ -58,7 +60,7 @@ pillars/
 - `AGENTS.md` is the loader, dogfooded.
 - `agents/` holds the project's own pillars (dogfooded).
 - `examples/` holds worked example pillars and compact adoption examples for adopters to reference.
-- `tooling/` holds optional helper forms. It is outside the runtime standard; it packages meta-operations such as init, author, verify, and structural checks.
+- `tooling/` holds optional helper forms and repository QA. It packages prompts, skills, the deterministic validator, unit tests, conformance fixtures, and benchmark protocol assets.
 - `.github/` holds repository hosting metadata such as issue templates, PR templates, and CI workflows (for example, `workflows/validate.yml`, which runs the structural validator). It is not part of the Pillars standard.
 
 ## Decisions
@@ -67,12 +69,13 @@ pillars/
 - **`agents/` for dogfooded pillars; `examples/` for adopter references.** Reason: separates "this project's own pillars" from "pillars an adopter might want to copy." Keeps dogfooding honest while still providing reference material.
 - **`tooling/` for optional helper forms.** Reason: prompts and skills make meta-operations easier, but the standard must remain usable without installing anything.
 - **SCREAMING-CASE at root, lowercase under `agents/` and `examples/`.** Reason: matches conventional repo expectations (README, LICENSE in caps) while keeping pillar filenames machine-friendly (lowercase matches `pillar:` field).
-- **No `src/`, `tests/`, `docs/`.** Reason: Pillars is a documentation standard, not a software project. Standard-project conventions don't apply.
+- **Executable QA stays under `tooling/`.** Reason: validator tests and conformance assets support the standard but do not turn optional tooling into a runtime requirement.
 
 ## Rules
 
 - **Pillar filename must match the `pillar:` frontmatter field.** Loading is path-based; mismatch breaks discovery.
 - **Sub-pillars must live in `agents/<parent>/<name>.md`.** No `parent:` field in frontmatter; the path is the source of truth.
+- **`agents/catalog.yaml` records only absent concerns.** Present pillar metadata stays in frontmatter; exclusions stay in `AGENTS.md`.
 - **`agents/`, `examples/`, and `tooling/` are the only visible structural directories.** Don't introduce new top-level folders without updating this pillar. Hidden repository metadata such as `.github/` is allowed when it supports project hosting.
 
 ## Workflows

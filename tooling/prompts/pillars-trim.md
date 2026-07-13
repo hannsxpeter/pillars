@@ -27,7 +27,7 @@ Then stop.
 
 ### Step 2: Scan structure and size
 
-For each pillar file:
+For each root or nested scope and each pillar file:
 
 - Count approximate lines and words.
 - Parse frontmatter.
@@ -47,6 +47,8 @@ Flag:
 - Compliance-style or command-heavy prose.
 - Large examples that could move to `examples/`.
 - Pillars covering multiple domains that should be split.
+- Always-loaded files over 1,000 words or 8 KiB, or over 2,000 words and 16 KiB in aggregate per scope.
+- Task-routed files over 2,000 words or 16 KiB without a documented reason.
 
 Do not flag concise, useful specificity as bloat.
 

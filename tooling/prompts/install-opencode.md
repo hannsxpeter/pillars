@@ -52,4 +52,4 @@ Delete `.opencode/commands/pillars-*.md` if you used Option A.
 ## Reference
 
 - opencode: https://opencode.ai/
-- Pillars standard: https://github.com/aihxp/pillars
+- Pillars standard: https://github.com/hannsxpeter/pillars

@@ -8,7 +8,7 @@ For installation as a native command/skill in specific tools, see the relevant i
 
 ## Task: bootstrap Pillars in this project
 
-You are going to set up the [Pillars](https://github.com/aihxp/pillars) standard in the current project. Follow this procedure exactly. Do not skip steps.
+You are going to set up the [Pillars](https://github.com/hannsxpeter/pillars) standard in the current project. Follow this procedure exactly. Do not skip steps.
 
 ### Step 0 — Check for existing adoption
 
@@ -47,9 +47,10 @@ If empty/greenfield, ask what they're building and map to the closest archetype.
 
 Fetch these from the Pillars repo (use your tool's web-fetch or download capability):
 
-- AGENTS.md: `https://raw.githubusercontent.com/aihxp/pillars/main/AGENTS.md`
-- SPEC: `https://raw.githubusercontent.com/aihxp/pillars/main/SPEC.md` (reference)
-- PILLARS: `https://raw.githubusercontent.com/aihxp/pillars/main/PILLARS.md` (reference)
+- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/AGENTS.md`
+- SPEC: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/SPEC.md` (reference)
+- PILLARS: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/PILLARS.md` (reference)
+- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/agents/catalog.yaml`
 
 If you cannot fetch URLs, use the inline AGENTS.md template at the bottom of this prompt.
 
@@ -59,7 +60,7 @@ Drop the fetched AGENTS.md content (or the inline template below) at `<project-r
 
 | Archetype | Typical exclusions |
 |---|---|
-| CLI tool | ui, api, auth, observe, i18n, a11y, analytics, async, cache, notifications |
+| CLI tool | ui, api, auth, deploy, observe, i18n, a11y, analytics, async, cache, notifications |
 | Internal API service | ui, a11y, seo (if no end-user surface), notifications (if no end users) |
 | SaaS dashboard | [] (leave empty initially) |
 | Marketing site | data, api, auth (if no users), observe (if platform-provided), async |
@@ -85,6 +86,8 @@ Infer concrete reasons from detected stack when possible (e.g., "Vercel Analytic
 ```
 mkdir agents
 ```
+
+Write the fetched starter catalog to `agents/catalog.yaml`. Remove entries for every pillar stub created below and every identity recorded in `excluded:`. The catalog must contain only locally absent concerns.
 
 Write `agents/context.md`:
 
@@ -147,7 +150,9 @@ Use this matrix to decide which Core pillars get stubs:
 | ui | no | no | yes | yes | yes | no | no | maybe |
 | auth | no | maybe | yes | no | yes | yes | no | maybe |
 | quality | yes | yes | yes | yes | yes | yes | yes | yes |
-| deploy | yes | yes | yes | yes | yes | yes | no | yes |
+| development | yes | yes | yes | yes | yes | yes | yes | yes |
+| release | yes | yes | yes | yes | yes | yes | yes | yes |
+| deploy | no | yes | yes | yes | yes | yes | no | yes |
 | observe | no | yes | yes | maybe | yes | yes | no | maybe |
 
 For each `yes` (or `maybe` after asking the user), write a stub at `agents/<pillar>.md` with the standard 8-section template. Use these triggers per pillar:
@@ -161,7 +166,9 @@ For each `yes` (or `maybe` after asking the user), write a stub at `agents/<pill
 | ui | [ui, component, page, layout, design, style, theme] |
 | auth | [auth, login, session, role, permission, access, user] |
 | quality | [test, testing, error, lint, style, naming] |
-| deploy | [deploy, cutover, environment, rollback, promotion, release] |
+| development | [develop, development, local setup, bootstrap, debug] |
+| release | [release, version, changelog, publish, semver] |
+| deploy | [deploy, cutover, environment, rollback, promotion] |
 | observe | [log, logging, metric, tracing, alert, monitoring, runbook] |
 
 All stubs get `must_read_with: []` and `see_also: []` initially; couplings get added when content arrives.
@@ -177,6 +184,7 @@ Files created:
 - AGENTS.md
 - agents/context.md (stub, always-loaded)
 - agents/repo.md (stub, always-loaded)
+- agents/catalog.yaml (offline metadata for remaining absent concerns)
 - agents/<core-pillars>.md (N stubs)
 
 Excluded pillars: <list with reasons>
@@ -209,24 +217,19 @@ If yes, draft `context.md` from what the user has told you. Use the same procedu
 
 ## Inline AGENTS.md template (use if URL fetch is unavailable)
 
-```markdown
+````markdown
 # Pillars: Agent Protocol
 
-This project follows the [Pillars](https://github.com/aihxp/pillars) standard. Coding agents working in this repository read the pillar files in `./agents/*.md` to stay aligned with the project's facts, decisions, and conventions.
+This project follows [Pillars 1.1.0](https://github.com/hannsxpeter/pillars/tree/v1.1.0). Coding agents read project pillar files before acting.
 
 ## At the start of any task
 
-1. **Load always-pillars.** Read every file in `./agents/` (recursively) whose frontmatter has `always_load: true`. These load every session regardless of task.
-
-2. **Identify primary pillars.** Scan the frontmatter of all other files in `./agents/`. For each, check whether any of its `triggers` match the current task. The matching pillars are this task's primaries.
-
-3. **Compute the load set.** Start with the primaries. Add every pillar listed in their `must_read_with` (depth 1; do not follow transitively).
-
-4. **Load bodies.** Read the bodies of every pillar in the load set.
-
-5. **Consult `see_also` selectively.** If the task explicitly touches an area named in a loaded pillar's `see_also`, read it too.
-
-6. **Comply.** Follow `Rules`. Apply `Workflows`. Heed `Watchouts` (with judgment). Defer to `Gaps` (ask the human).
+1. Resolve applicable scopes from repository root to the task target. Apply outer scopes first; nearest-scope guidance wins conflicts.
+2. In each scope, scan pillar frontmatter, local exclusions, and optional `agents/catalog.yaml`.
+3. Load always-loaded pillars. Match task tokens against other `triggers`; matches are primaries and catalog matches are absent concerns.
+4. Add each primary's `must_read_with` identities at depth 1. Use path-qualified identities for sub-pillars.
+5. Add a selected pillar's `see_also` target only when the task matches its identity, `triggers`, or `covers` with the same matcher.
+6. Read selected bodies and comply with Rules, Workflows, Watchouts, and Gaps.
 
 ## Handling missing pillars
 
@@ -234,10 +237,15 @@ This project follows the [Pillars](https://github.com/aihxp/pillars) standard. C
 |---|---|
 | `status: present` | Load and comply. |
 | `status: stub` | Concern acknowledged but rules undefined. Ask the human. Do not infer silently. |
-| Name in `excluded:` (below) | Not applicable. Proceed without. |
-| Trigger matches, file absent, not excluded | Infer from code. State the assumption. Recommend creating the pillar. |
+| Identity in `excluded:` | Treat as not applicable in this scope. |
+| Trigger matches local `agents/catalog.yaml` entry | Infer from code, state the assumption, and recommend the pillar. |
+| No local file, exclusion, or catalog entry | Make no Pillars-specific claim. |
 
-If `context.md` or `repo.md` is missing entirely, pause and ask the human to create stubs or declare them excluded.
+If `context.md` or `repo.md` is missing and not explicitly excluded, pause and ask for a stub or exclusion.
+
+## Portable matcher
+
+Lowercase ASCII letters, replace non-alphanumeric runs with spaces, and match complete contiguous token sequences. Semantic matching may add results but cannot remove deterministic matches.
 
 ## Excluded pillars
 
@@ -248,15 +256,16 @@ excluded: []
 ## Reference
 
 - Pillar files: `./agents/*.md`
-- Spec: https://github.com/aihxp/pillars/blob/main/SPEC.md
-- Pillar enumeration: https://github.com/aihxp/pillars/blob/main/PILLARS.md
-```
+- Optional absent catalog: `./agents/catalog.yaml`
+- Spec: https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
+- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md
+````
 
 ---
 
 ## Reference
 
-- Pillars standard: https://github.com/aihxp/pillars
-- SPEC.md: https://github.com/aihxp/pillars/blob/main/SPEC.md
-- PILLARS.md: https://github.com/aihxp/pillars/blob/main/PILLARS.md
-- Worked examples: https://github.com/aihxp/pillars/tree/main/examples
+- Pillars standard: https://github.com/hannsxpeter/pillars
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.1.0/examples

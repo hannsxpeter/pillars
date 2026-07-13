@@ -1,0 +1,68 @@
+version: 1
+absent:
+  - identity: stack
+    covers: [technology choices, dependencies, version constraints]
+    triggers: [stack, framework, library, dependency, package, version]
+  - identity: arch
+    covers: [system architecture, services, boundaries, data flow]
+    triggers: [architecture, service, module, boundary, system design]
+  - identity: data
+    covers: [data model, schema, migrations, queries, storage]
+    triggers: [database, schema, migration, query, table, column, model]
+  - identity: api
+    covers: [api contracts, requests, responses, versioning]
+    triggers: [api, endpoint, route, request, response, http, rpc]
+  - identity: ui
+    covers: [visual interface, components, design tokens]
+    triggers: [ui, component, page, layout, style, theme]
+  - identity: auth
+    covers: [identity, sessions, permissions, access]
+    triggers: [auth, login, session, role, permission, access, user]
+  - identity: quality
+    covers: [testing, errors, code style, naming]
+    triggers: [test, testing, error, lint, style, naming]
+  - identity: development
+    covers: [local setup, developer workflow, debugging]
+    triggers: [develop, development, local setup, bootstrap, debug]
+  - identity: release
+    covers: [versioning, release preparation, publication]
+    triggers: [release, version, changelog, publish, semver]
+  - identity: deploy
+    covers: [environments, promotion, rollback, cutover]
+    triggers: [deploy, environment, rollback, promotion, cutover]
+  - identity: observe
+    covers: [logging, metrics, tracing, alerts, runbooks]
+    triggers: [log, logging, metric, tracing, alert, monitoring, runbook]
+  - identity: config
+    covers: [configuration, environment variables, feature flags, secrets]
+    triggers: [config, configuration, environment variable, feature flag, secret]
+  - identity: security
+    covers: [threats, input validation, vulnerabilities]
+    triggers: [security, threat, vulnerability, cve, owasp]
+  - identity: privacy
+    covers: [personal data, consent, retention, deletion]
+    triggers: [privacy, personal data, pii, consent, retention, deletion]
+  - identity: compliance
+    covers: [regulatory requirements, audit controls]
+    triggers: [compliance, soc2, hipaa, gdpr, pci, audit]
+  - identity: i18n
+    covers: [translation, locale, right-to-left layout]
+    triggers: [i18n, translation, locale, rtl, localization]
+  - identity: a11y
+    covers: [accessibility, wcag, assistive technology]
+    triggers: [a11y, accessibility, wcag, screen reader]
+  - identity: analytics
+    covers: [product events, user telemetry, key metrics]
+    triggers: [analytics, product event, telemetry, kpi]
+  - identity: integrations
+    covers: [third-party services, outbound contracts]
+    triggers: [integration, third party, webhook, external api]
+  - identity: async
+    covers: [background jobs, queues, schedules, events]
+    triggers: [background job, queue, scheduler, cron, async]
+  - identity: cache
+    covers: [caching, invalidation, time to live]
+    triggers: [cache, caching, invalidation, ttl]
+  - identity: notifications
+    covers: [transactional email, sms, push notifications]
+    triggers: [notification, transactional email, sms, push]

@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: Read the FAQ
-    url: https://github.com/aihxp/pillars/blob/main/FAQ.md
+    url: https://github.com/hannsxpeter/pillars/blob/main/FAQ.md
     about: Most adoption and usage questions are answered here.
   - name: Read the Spec
-    url: https://github.com/aihxp/pillars/blob/main/SPEC.md
+    url: https://github.com/hannsxpeter/pillars/blob/main/SPEC.md
     about: Formal definition of the Pillars standard.
   - name: Read the Pillar Catalog
-    url: https://github.com/aihxp/pillars/blob/main/PILLARS.md
+    url: https://github.com/hannsxpeter/pillars/blob/main/PILLARS.md
     about: All pillars, tiers, boundary calls, and sub-pillar patterns.

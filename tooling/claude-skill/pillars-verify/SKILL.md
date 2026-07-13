@@ -1,11 +1,11 @@
 ---
 name: pillars-verify
 description: "Audit the current project's Pillars files against the actual codebase. Walks each pillar's Context section, checks whether its declarative claims (stack, file locations, conventions, decisions) still match the code, flags drift, and proposes specific fixes for each finding. Use this skill when the user asks to 'verify pillars,' 'check pillars for drift,' 'audit pillars,' 'are my pillars up to date,' 'check if my pillars match the code,' or after a significant refactor when they want to confirm the pillars still reflect reality."
-version: 0.1.0
-updated: 2026-05-13
+version: 0.2.0
+updated: 2026-07-13
 compatible_with:
   - claude-code
-standard_version: ">=1.0.0"
+standard_version: ">=1.1.0"
 ---
 
 # Pillars Verify
@@ -37,7 +37,7 @@ After presenting the report, the user can decide which findings to address and (
 
 ## Procedure
 
-### Step 1. Locate the project's pillars
+### Step 1. Locate the project's scopes and pillars
 
 Check the standard locations:
 
@@ -47,7 +47,7 @@ ls AGENTS.md agents/
 
 If either is missing, tell the user: "This project doesn't appear to have Pillars set up. Run `/pillars-init` first." End.
 
-Read `AGENTS.md` to identify any `excluded:` entries (these are not drift, they're intentional).
+Also find nested directories containing both `AGENTS.md` and `agents/`. Verify each scope independently and apply nearest-scope precedence when claims conflict. Read each scope's exclusions and optional `agents/catalog.yaml`. Exclusions are intentional. Catalog entries are known absences, not pillar claims.
 
 ### Step 2. Inventory the pillar files
 
@@ -161,7 +161,7 @@ Format:
 # Pillars Drift Report
 
 Project: <name from context.md>
-Pillars scanned: N (M present, K stubs, L excluded)
+Pillars scanned: N across S scopes (M present, K stubs, L excluded, A cataloged absent)
 Findings: <total drift count>
 
 <per-pillar findings>
@@ -211,6 +211,6 @@ If the user picks a specific finding to address:
 
 ## Reference
 
-- Pillars standard: https://github.com/aihxp/pillars
-- SPEC.md: https://github.com/aihxp/pillars/blob/main/SPEC.md
-- PILLARS.md: https://github.com/aihxp/pillars/blob/main/PILLARS.md
+- Pillars standard: https://github.com/hannsxpeter/pillars
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md

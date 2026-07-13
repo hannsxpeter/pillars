@@ -14,7 +14,7 @@ body:
       label: What's wrong?
       description: A concrete description of the issue. Quote the specific text in `SPEC.md` / `PILLARS.md` / `AGENTS.md` if applicable.
       placeholder: |
-        In SPEC.md section 4.1, the rule about depth-1 loading contradicts the example in section 4, which shows...
+        In SPEC.md section 5.2, the depth-1 rule contradicts a conformance fixture, which shows...
     validations:
       required: true
 
