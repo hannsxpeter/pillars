@@ -6,7 +6,7 @@ Pillars is a documentation standard, not executable software, so its security su
 
 If you find a security-relevant issue in this repository or in the standard itself, please **do not open a public issue**. Instead:
 
-1. Use GitHub's [private vulnerability reporting](https://github.com/aihxp/pillars/security/advisories/new) for this repository, or
+1. Use GitHub's [private vulnerability reporting](https://github.com/hannsxpeter/pillars/security/advisories/new) for this repository, or
 2. Contact the maintainers directly through GitHub.
 
 You'll get an acknowledgment within a week. Coordinated disclosure timelines are negotiated case by case based on severity and impact.
@@ -32,7 +32,8 @@ When adopting Pillars in your own project:
 
 - **Treat pillar files like documentation.** They can be public. They should not contain secrets, API keys, tokens, passwords, private hostnames, or PII.
 - **Secret *references* are fine; secret *values* are not.** A pillar can say "the database URL is in `DATABASE_URL` env var." It should not say "the database URL is `postgres://user:pass@host:5432/db`."
-- **Threat modeling lives in `security.md`, not `auth.md`.** Keeping these separate (per the standard's boundary call) clarifies who's responsible for which concern.
+- **Threat modeling lives in `security.md`, not `auth.md`.** Keeping these separate clarifies who owns adversarial concerns.
+- **Personal-data handling lives in `privacy.md`.** Use it for classification, purpose, consent, retention, deletion, and subject rights. Keep secret values out of every pillar.
 
 ## Disclosure history
 

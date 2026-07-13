@@ -1,11 +1,11 @@
 ---
 name: pillars-author
 description: "Draft or revise a specific Pillars pillar file by scanning the relevant code, decisions, and conventions in the current project. Given a pillar name (e.g., data, auth, api, ui, stack, arch), this skill performs targeted archaeology on the codebase, drafts the 8-section pillar body following the Pillars template, includes proper YAML frontmatter, and presents the draft for the user's approval before writing. Use this skill when the user asks to 'author pillar X,' 'draft data.md,' 'create the auth.md pillar,' 'generate pillar from code,' 'fill in pillar X,' 'populate context.md,' or names a specific pillar they want filled in."
-version: 0.1.0
-updated: 2026-05-13
+version: 0.2.0
+updated: 2026-07-13
 compatible_with:
   - claude-code
-standard_version: ">=1.0.0"
+standard_version: ">=1.1.0"
 ---
 
 # Pillars Author
@@ -37,12 +37,12 @@ A complete pillar file at `agents/<pillar>.md` (or sub-pillar at `agents/<parent
 
 ### Step 1. Determine which pillar to author
 
-Get the pillar name from the user's request. If ambiguous, ask. Acceptable names are any from the [Pillars catalog](https://github.com/aihxp/pillars/blob/main/PILLARS.md):
+Get the pillar name from the user's request. If ambiguous, ask. Acceptable names are any from the [Pillars catalog](https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md):
 
 - Always-loaded: `context`, `repo`
-- Core: `stack`, `arch`, `data`, `api`, `ui`, `auth`, `quality`, `deploy`, `observe`
-- Common: `config`, `security`, `compliance`, `i18n`, `a11y`, `analytics`, `integrations`, `async`, `cache`, `notifications`
-- Domain (open): `ml`, `realtime`, `payments`, `email`, `search`, `mobile`, `state`, `forms`, `validation`, `seo`, `event-bus`, `pubsub`, `cms`, `crm`, `cli`, `inventory`, `data-pipeline`, `etl`, or project-specific.
+- Core: `stack`, `arch`, `data`, `api`, `ui`, `auth`, `quality`, `development`, `release`, `deploy`, `observe`
+- Common: `config`, `security`, `privacy`, `compliance`, `i18n`, `a11y`, `analytics`, `integrations`, `async`, `cache`, `notifications`
+- Domain (open): `ml`, `realtime`, `payments`, `billing`, `tenancy`, `reliability`, `performance`, `infrastructure`, `documentation`, `email`, `search`, `mobile`, `state`, `forms`, `validation`, `seo`, `cli`, or project-specific.
 - Sub-pillars: same names with a parent path (e.g., `data/multi-tenant`).
 
 If the name isn't in the catalog and isn't an obvious domain pillar, ask the user to confirm before proceeding.
@@ -70,10 +70,13 @@ Each pillar has a typical scan area. Use this table to focus archaeology:
 | ui | `src/components/`, `src/ui/`, `app/`, `pages/`, design tokens | Tailwind/CSS config, component library | Component conventions, design system, theming |
 | auth | `src/auth/`, `middleware/auth*`, identity provider config | `next-auth.config`, `better-auth.config`, OAuth env vars | Identity flow, sessions, roles, permissions |
 | quality | `tests/`, `__tests__/`, `*.test.*`, `*.spec.*`, lint config, format config | `eslint`, `prettier`, `biome`, `vitest`, `jest` configs | Testing strategy, style rules, error patterns |
+| development | setup docs, scripts, dev containers, generators | task runners, editor config | Local setup, inner loop, debugging |
+| release | changelog, tags, publishing workflows | package metadata, release automation | Versioning, release gates, publication |
 | deploy | `Dockerfile`, `Procfile`, `.github/workflows/`, `vercel.json`, `netlify.toml` | CI configs, IaC | Cutover strategy, environments, rollback approach |
 | observe | logging setup, metrics setup, error tracking init, runbook docs | OpenTelemetry, Sentry, Datadog, Prometheus configs | Logging conventions, metrics emitted, alerts, runbook locations |
 | config | `.env*`, `config/`, feature flag service init, `app.config*` | env example files, config schema | Env vars, feature flags, secrets handling |
 | security | `middleware/`, validation libs, dependency audit configs | `npm audit`, `dependabot.yml`, security policy | Input validation, CSRF/CORS, dep scanning |
+| privacy | data inventory, retention jobs, consent and deletion flows | privacy policy, data maps | Personal data, purpose, retention, rights |
 | integrations | SDK imports throughout `src/`, webhook handlers | API key env vars | Third-party services consumed, contract patterns |
 | async | `jobs/`, `workers/`, `queue/`, cron config | BullMQ/Sidekiq/Celery configs | Background work patterns, retries, scheduling |
 | cache | Redis init, in-memory cache code, CDN config | Cache TTL constants | Caching strategy, invalidation patterns |
@@ -83,11 +86,11 @@ Each pillar has a typical scan area. Use this table to focus archaeology:
 | a11y | aria attributes throughout components, a11y testing setup | axe-core or Pa11y configs | WCAG patterns, screen reader conventions |
 | compliance | data retention configs, audit log setup, GDPR/HIPAA-relevant comments | privacy policy in repo | Regulatory mapping if any |
 
-For Domain pillars (Tier 3), use your judgment to identify the relevant code. For sub-pillars, scan within the parent's territory (e.g., `data/multi-tenant.md` scans `src/db/` looking for `tenant_id` patterns).
+For Domain pillars (Tier 3), use your judgment to identify the relevant code. For sub-pillars, scan within the parent's territory. Use path-derived identities in references: `agents/auth/agent-registration.md` has `pillar: agent-registration` but is referenced as `auth/agent-registration`.
 
 ### Step 4. Draft the 8 sections
 
-Follow the [Pillars template](https://github.com/aihxp/pillars/blob/main/SPEC.md). Earn-your-keep principle: only populate a section when it adds value the others don't.
+Follow the [Pillars template](https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md). Earn-your-keep principle: only populate a section when it adds value the others don't.
 
 **Section drafting guidance:**
 
@@ -123,6 +126,8 @@ Follow the [Pillars template](https://github.com/aihxp/pillars/blob/main/SPEC.md
 - `must_read_with`: hard dependencies on other pillars. Keep to 3 or fewer. If you list more, the boundary is wrong.
 - `see_also`: soft coupling to other pillars.
 
+Keep always-loaded pillars at or below 1,000 words and 8 KiB. Keep task-routed pillars at or below 2,000 words and 16 KiB unless the project documents a justified exception.
+
 ### Step 6. Present the draft for approval
 
 **Never write the file without user approval.** Show the draft in chat with a clear marker:
@@ -145,7 +150,7 @@ If the user asks for revisions, iterate before writing.
 
 ### Step 7. Write the file
 
-On approval, write to the target path. Use the `Write` tool. If the file already exists (per Step 2's merge path), use `Edit` to preserve original Decisions/Watchouts content where appropriate.
+On approval, write to the target path. Use the `Write` tool. If the file already exists (per Step 2's merge path), use `Edit` to preserve original Decisions/Watchouts content where appropriate. Remove the same identity from `agents/catalog.yaml` when the pillar replaces a locally cataloged absence.
 
 After writing, confirm:
 
@@ -170,7 +175,7 @@ If the authored pillar mentions concepts that belong in other pillars (e.g., aut
 - **Does not write without user approval.** Every draft is presented first.
 - **Does not fabricate Decisions or Watchouts.** Reasoning that isn't visible in code or stated by the user is left out; surface as Gaps instead.
 - **Does not exceed the 8-section template.** No custom sections.
-- **Does not update other pillars.** One pillar per invocation. If multiple need updating, ask the user to invoke separately.
+- **Does not update other pillar bodies.** One pillar per invocation. Removing the authored identity from `agents/catalog.yaml` is required metadata cleanup.
 - **Does not modify AGENTS.md.** Use `pillars-init` for that.
 
 ## Common failure modes
@@ -182,7 +187,7 @@ If the authored pillar mentions concepts that belong in other pillars (e.g., aut
 
 ## Reference
 
-- Pillars standard: https://github.com/aihxp/pillars
-- SPEC.md (template, frontmatter): https://github.com/aihxp/pillars/blob/main/SPEC.md
-- PILLARS.md (catalog, boundary calls, sub-pillar patterns): https://github.com/aihxp/pillars/blob/main/PILLARS.md
-- Worked examples: https://github.com/aihxp/pillars/tree/main/examples
+- Pillars standard: https://github.com/hannsxpeter/pillars
+- SPEC.md (template, frontmatter): https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
+- PILLARS.md (catalog, boundary calls, sub-pillar patterns): https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.1.0/examples

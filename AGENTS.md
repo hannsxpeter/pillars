@@ -1,54 +1,47 @@
 # Pillars: Agent Protocol
 
-This project follows the [Pillars](https://github.com/aihxp/pillars) standard. Coding agents working in this repository read the pillar files in `./agents/*.md` to stay aligned with the project's facts, decisions, and conventions.
+This project follows [Pillars 1.1.0](https://github.com/hannsxpeter/pillars/tree/v1.1.0). Coding agents read project pillar files before acting.
 
 ## At the start of any task
 
-1. **Load always-pillars.** Read every file in `./agents/` (recursively) whose frontmatter has `always_load: true`. These load every session regardless of task.
+1. **Resolve scopes.** Starting at the repository root and ending at the task's target path or current directory, find every directory containing both `AGENTS.md` and `agents/`. Apply scopes from outermost to innermost. The nearest scope wins when guidance conflicts.
 
-2. **Identify primary pillars.** Scan the frontmatter of all other files in `./agents/`. For each, check whether any of its `triggers` match the current task. The matching pillars are this task's primaries.
+2. **Inventory local metadata.** In each scope, scan pillar frontmatter recursively. Read exclusions from the local `AGENTS.md` and absent concerns from optional `agents/catalog.yaml`.
 
-3. **Compute the load set.** Start with the primaries. Add every pillar listed in their `must_read_with` (depth 1; do not follow transitively). The result is the full load set.
+3. **Select always and primary pillars.** Load every pillar with `always_load: true`. Match the task against every other pillar's `triggers` using the portable matcher in `SPEC.md`. Matching pillars are primaries. Matching catalog entries are absent concerns.
 
-4. **Load bodies.** Read the bodies of every pillar in the load set.
+4. **Add direct dependencies.** Add every identity in each primary's `must_read_with`. Resolve top-level identities such as `auth` at `agents/auth.md` and sub-pillar identities such as `auth/agent-registration` at that exact relative path. Stop at depth 1.
 
-5. **Consult `see_also` selectively.** If the task explicitly touches an area named in a loaded pillar's `see_also`, read that pillar too. Otherwise skip.
+5. **Consult soft references.** Add a selected pillar's `see_also` target only when the task matches that target's identity, `triggers`, or `covers` with the same matcher. Do not follow `see_also` recursively.
 
-6. **Comply.** Follow `Rules`. Apply `Workflows`. Heed `Watchouts` (with judgment). Defer to `Gaps` (ask the human; don't infer silently).
+6. **Load and comply.** Read selected bodies. Follow `Rules`, apply `Workflows`, heed `Watchouts` with judgment, and defer to `Gaps`. Preserve non-conflicting ancestor guidance; nearest-scope guidance wins conflicts.
 
 ## Handling missing pillars
 
 | State | Action |
 |---|---|
 | `status: present` | Load and comply. |
-| `status: stub` | Concern acknowledged but rules undefined. Ask the human before making decisions in this area. Do not infer silently. |
-| Name in `excluded:` (below) | Not applicable to this project. Proceed without. |
-| Trigger matches a known name, file absent, not excluded | Graceful degradation. Infer conventions from code. State the assumption in your response. Recommend creating the pillar. |
+| `status: stub` | Ask before making decisions in this area. Do not infer silently. |
+| Identity in local `excluded:` | Treat as intentionally not applicable in that scope. |
+| Trigger matches local `agents/catalog.yaml` entry | Infer from code, state the assumption, and recommend creating the pillar. |
+| No local file, exclusion, or catalog entry | Make no Pillars-specific claim about that concern. |
 
-If `context.md` or `repo.md` is missing entirely, pause and ask the human to either create stubs or declare them excluded. These are the floor.
+If `context.md` or `repo.md` is missing and not explicitly excluded, pause and ask the human to create a stub or record an exclusion.
+
+## Portable matcher
+
+Lowercase ASCII letters, replace each run of non-alphanumeric characters with one space, trim, and split into tokens. A selector matches when its complete token sequence appears contiguously in the task tokens. Semantic matching may add matches but cannot remove deterministic matches.
 
 ## Excluded pillars
-
-List the pillars this project intentionally excludes here, each with a reason so future contributors understand the call. The list is empty by default; populate it as you decide which concerns don't apply to your project.
 
 ```yaml
 excluded: []
 ```
 
-When non-empty, the form is:
-
-```yaml
-excluded:
-  - name: observe
-    reason: Vercel Analytics + built-in alerting cover our needs
-  - name: i18n
-    reason: English-only product
-```
-
 ## Reference
 
-- Pillar files in this repo: `./agents/*.md`
-- Pillars standard: https://github.com/aihxp/pillars
-- Spec: https://github.com/aihxp/pillars/blob/main/SPEC.md
-- Pillar enumeration with tiers and boundaries: https://github.com/aihxp/pillars/blob/main/PILLARS.md
-- Worked examples: https://github.com/aihxp/pillars/tree/main/examples
+- Pillar files in this repo: `./agents/**/*.md`
+- Optional absent catalog: `./agents/catalog.yaml`
+- Spec: https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
+- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.1.0/examples

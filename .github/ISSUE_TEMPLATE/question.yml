@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Before opening: check [FAQ.md](https://github.com/aihxp/pillars/blob/main/FAQ.md) and [SPEC.md](https://github.com/aihxp/pillars/blob/main/SPEC.md). If your answer isn't there, ask away.
+        Before opening: check [FAQ.md](https://github.com/hannsxpeter/pillars/blob/main/FAQ.md) and [SPEC.md](https://github.com/hannsxpeter/pillars/blob/main/SPEC.md). If your answer isn't there, ask away.
 
   - type: textarea
     id: question

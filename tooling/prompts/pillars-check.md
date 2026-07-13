@@ -1,181 +1,103 @@
 # Pillars Check Prompt
 
-Paste this entire file into your AI coding tool's chat to check whether a project's Pillars files are structurally valid. This is a lightweight conformance check, not a CLI and not a drift audit.
-
-For drift between pillar claims and the current codebase, use `pillars-verify.md` instead.
-
----
+Paste this file into an AI coding tool to perform a report-only Pillars 1.1 structure check. For factual drift between pillar claims and code, use `pillars-verify.md`.
 
 ## Task: check Pillars structure
 
-You are going to inspect the current project for structural conformance with the [Pillars](https://github.com/aihxp/pillars) standard. Report findings only. Do not write, edit, move, or delete files.
+### Step 1: Find scopes
 
-### Step 1: Locate the required entry points
+Locate directories containing both `AGENTS.md` and `agents/`, starting with the repository root. A missing root `AGENTS.md` or `agents/` is a blocking issue for a repository that claims root adoption. Validate nested scopes independently.
 
-Check for:
+### Step 2: Inventory local metadata
 
-```bash
-ls AGENTS.md agents/
-```
+For every scope, inventory pillar markdown files recursively, the local `excluded:` block, and optional `agents/catalog.yaml`. Derive each identity from its path:
 
-If `AGENTS.md` is missing, report:
+- `agents/auth.md` has identity `auth` and `pillar: auth`.
+- `agents/auth/agent-registration.md` has identity `auth/agent-registration` and `pillar: agent-registration`.
 
-> Missing `AGENTS.md`. This project is not currently Pillars-compatible.
+One sub-pillar level is portable. Identity segments use lowercase ASCII letters, digits, and internal hyphens.
 
-If `agents/` is missing, report:
-
-> Missing `agents/`. This project is not currently Pillars-compatible.
-
-If either is missing, stop after reporting the missing entry points.
-
-### Step 2: Inventory pillar files
-
-List every markdown file under `agents/` recursively:
-
-```bash
-find agents -name "*.md" -type f | sort
-```
-
-For each file, parse the YAML frontmatter and record:
-
-- Path
-- `pillar`
-- `status`
-- `always_load`
-- `covers`
-- `triggers`
-- `must_read_with`
-- `see_also`
-
-### Step 3: Validate frontmatter
-
-For each pillar file, check:
-
-- Frontmatter starts and ends with `---`.
-- `pillar` exists.
-- `covers` exists and is a list.
-- `triggers` exists and is a list, unless `always_load: true`.
-- `status`, when present, is either `present` or `stub`.
-- `always_load`, when present, is a boolean.
-- `must_read_with`, when present, is a list.
-- `see_also`, when present, is a list.
-
-### Step 4: Validate naming and paths
-
-For each top-level pillar at `agents/<name>.md`:
-
-- The filename without `.md` must match the `pillar` value.
-
-For each sub-pillar at `agents/<parent>/<name>.md`:
-
-- The filename without `.md` must match the `pillar` value.
-- Do not require a `parent` frontmatter field. Pillars derives parentage from the folder path.
-
-Flag deeper nesting under `agents/<parent>/<child>/<name>.md` as a warning unless the project has explicitly documented that pattern.
-
-### Step 5: Validate body sections
-
-Each pillar body must include these 8 headings, in this order:
-
-1. `## Scope`
-2. `## Context`
-3. `## Decisions`
-4. `## Rules`
-5. `## Workflows`
-6. `## Watchouts`
-7. `## Touchpoints`
-8. `## Gaps`
-
-Empty sections should contain `(none)` or a short explanation of why they are empty. For `status: stub`, accept placeholder text as long as the 8 headings exist.
-
-### Step 6: Validate required floor pillars
+### Step 3: Validate pillar frontmatter
 
 Check that:
 
-- `agents/context.md` exists.
-- `agents/repo.md` exists.
-- Both have `always_load: true`.
+- `pillar` is a string matching the leaf filename.
+- `status` is `present` or `stub`.
+- `always_load` is a boolean when present.
+- `covers` is a list of non-empty strings.
+- `triggers` is a list of non-empty strings unless always-loaded.
+- `must_read_with` and `see_also` are lists of valid identities.
+- List items are the correct type and unique after portable matcher normalization.
+- Identities are unique and do not collide on case-insensitive filesystems.
+- Neither reference field contains a self-reference.
+- More than three hard dependencies produces a boundary-smell warning.
 
-If either floor pillar is missing, report it as a blocking conformance issue.
+Top-level references remain bare names. Sub-pillar references must be path-qualified. A bare name never searches sub-pillars by leaf.
 
-### Step 7: Validate references
+### Step 4: Validate the body and budgets
 
-For every name listed in `must_read_with` or `see_also`:
+Require these headings in order: Scope, Context, Decisions, Rules, Workflows, Watchouts, Touchpoints, Gaps. Empty sections use `(none)`.
 
-- Check whether a matching pillar file exists under `agents/`.
-- Check whether the name appears in the `excluded:` block in `AGENTS.md`.
+Report budget warnings at:
 
-If the referenced pillar is neither present nor excluded, flag it as an unresolved reference.
+- Always-loaded file: over 1,000 words or 8 KiB.
+- All always-loaded files in one scope: over 2,000 words or 16 KiB.
+- Task-routed file: over 2,000 words or 16 KiB.
 
-Do not follow `must_read_with` transitively. Pillars loading is depth 1.
+Budgets are warnings, not compatibility errors.
 
-### Step 8: Validate exclusions
+### Step 5: Validate floors, exclusions, and catalog
 
-Read the `excluded:` block in `AGENTS.md`.
+- `context` and `repo` must exist with `always_load: true`, or be explicitly excluded.
+- A floor exclusion is valid but produces a warning.
+- An identity cannot be both present and excluded.
+- `agents/catalog.yaml`, when present, has `version: 1` and an `absent:` list.
+- Each catalog entry has a valid unique `identity` and string-list `triggers`; `covers` is optional.
+- An identity cannot be present, cataloged absent, and excluded in more than one state.
+- `context` and `repo` cannot be cataloged absent.
 
-Accept either:
+### Step 6: Validate references
 
-```yaml
-excluded: []
-```
+Resolve every reference within its declaring scope.
 
-or:
+- A missing, non-excluded `must_read_with` target is blocking.
+- A present or excluded `see_also` target is valid.
+- A `see_also` target may also resolve to the local catalog as an absent soft concern.
+- Do not follow references transitively during structural validation.
 
-```yaml
-excluded:
-  - name: ui
-    reason: No visual UI surface
-```
-
-For each exclusion:
-
-- `name` should be a pillar name.
-- `reason` is recommended. Flag a missing reason as a warning, not an error.
-
-### Step 9: Produce the report
-
-Use this format:
+### Step 7: Report
 
 ```markdown
 # Pillars Structure Check
 
-Project: <best available project name>
-Pillar files scanned: <N>
+Scopes: <N>
+Pillar files: <N>
 Blocking issues: <N>
 Warnings: <N>
 
 ## Blocking Issues
 
-- <issue with file path and reason>
+- `<path>`: <reason>
 
 ## Warnings
 
-- <issue with file path and reason>
+- `<path>`: <reason>
 
 ## Confirmed
 
-- <short list of things that passed>
+- <identities, floors, references, catalog, budgets, or scope checks that passed>
 
 ## Suggested Next Actions
 
-1. <highest-value fix>
-2. <next fix>
+1. <highest-value repair>
+2. <next repair>
 ```
 
-If there are no blocking issues, say:
-
-> No blocking Pillars structure issues found.
-
----
+If no blocking issues exist, say: `No blocking Pillars structure issues found.`
 
 ## Constraints
 
-- Do not write files.
-- Do not modify files.
-- Do not audit pillar claims against application code. That belongs to `pillars-verify.md`.
-- Do not treat absent non-floor pillars as errors when they are not referenced.
-- Do not require a CLI, package install, schema library, or external network access.
-
----
-
-Now: check this project and produce the structure report.
+- Do not write or modify files.
+- Do not audit factual drift against code.
+- Do not require a package, CLI, model call, or external network access.
+- Do not invent absent concerns that are not in the local catalog.

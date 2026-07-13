@@ -8,11 +8,11 @@ For installation as a native command/skill in specific tools, see the relevant i
 
 ## Task: audit Pillars against the current codebase
 
-You are going to verify the project's [Pillars](https://github.com/aihxp/pillars) files against the actual state of the code. Walk each present pillar's Context section, check claims, flag drift with evidence, and propose specific fixes.
+You are going to verify the project's [Pillars](https://github.com/hannsxpeter/pillars) files against the actual state of the code. Walk each present pillar's Context section, check claims, flag drift with evidence, and propose specific fixes.
 
 **Do not auto-fix.** Present findings; the user decides what to act on.
 
-### Step 1 — Locate the pillars
+### Step 1: Locate the scopes and pillars
 
 ```
 ls AGENTS.md agents/
@@ -24,7 +24,7 @@ If either is missing:
 
 End.
 
-Read `AGENTS.md` to identify `excluded:` entries. Excluded pillars are intentional, not drift.
+Also find nested directories containing both `AGENTS.md` and `agents/`. Verify each scope independently and apply nearest-scope precedence when claims conflict. Read each scope's exclusions and optional `agents/catalog.yaml`. Exclusions are intentional. Catalog entries are known absences, not pillar claims.
 
 ### Step 2 — Inventory pillar files
 
@@ -132,7 +132,7 @@ Look for cross-cutting issues:
 # Pillars Drift Report
 
 Project: <name from context.md>
-Pillars scanned: N (M present, K stubs, L excluded)
+Pillars scanned: N across S scopes (M present, K stubs, L excluded, A cataloged absent)
 Findings: <total>
 
 <per-pillar findings>
@@ -166,6 +166,7 @@ If the user picks a finding to address:
 - Do NOT flag stylistic differences as drift unless the pillar declared a hard rule.
 - Do NOT treat stubs as drift; stubs claim nothing.
 - Do NOT flag excluded pillars as gaps; exclusions are intentional.
+- Do NOT treat catalog entries as present claims. Report only evidence that an absent concern has become load-bearing or should be excluded.
 
 ## Common failure modes to avoid
 
@@ -183,9 +184,9 @@ If the user picks a finding to address:
 
 ## Reference
 
-- Pillars standard: https://github.com/aihxp/pillars
-- SPEC.md: https://github.com/aihxp/pillars/blob/main/SPEC.md
-- PILLARS.md: https://github.com/aihxp/pillars/blob/main/PILLARS.md
+- Pillars standard: https://github.com/hannsxpeter/pillars
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md
 
 ---
 

@@ -96,4 +96,4 @@ Remove the `systemMessage` and `slashCommands` entries from `.continue/config.js
 
 - Continue: https://continue.dev/
 - Continue config docs: https://docs.continue.dev/customization/overview
-- Pillars standard: https://github.com/aihxp/pillars
+- Pillars standard: https://github.com/hannsxpeter/pillars

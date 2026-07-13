@@ -10,6 +10,30 @@ All notable changes to the Pillars standard are documented here. Format follows 
 
 No unreleased changes.
 
+## [1.1.0] - 2026-07-13
+
+Backward-compatible standard release focused on portable routing, incremental discovery, monorepos, and measurable conformance.
+
+### Added
+
+- **Path-derived identities:** top-level references remain unchanged, while sub-pillars use unambiguous references such as `auth/agent-registration`.
+- **Portable minimum matcher:** primary triggers, absent discovery, and conditional `see_also` loading share deterministic ASCII token matching. Semantic matching remains an optional superset.
+- **Offline absent discovery:** optional local `agents/catalog.yaml` files identify silent gaps without network access, global state, or model memory.
+- **Nested scopes:** monorepos can combine root and package scopes with outer-to-inner inheritance, nearest-scope conflict precedence, and child exclusions.
+- **Catalog guidance:** `development.md` and `release.md` join Core; `privacy.md` joins Common. Domain guidance now covers business rules, tenancy, billing, reliability, performance, infrastructure, and documentation with explicit boundary calls.
+- **Context budgets:** recommended word and byte budgets for always-loaded and task-routed pillars, reported as warnings rather than compatibility errors.
+- **Conformance assets:** six task-to-load-set fixtures, a local runner, 16 validator unit tests, recursive scope discovery, and CI coverage on current GitHub Actions majors.
+- **Evaluation protocol:** a repeatable optional three-condition live-model procedure and an intentionally unpopulated result template. No benchmark score is claimed.
+
+### Changed
+
+- **Validator:** now checks identities, portable collisions, list item types and duplicates, hard and soft references, self-references, dependency fan-out, floors and exclusions, catalogs, budgets, nested scopes, and routing fixtures.
+- **Adoption guidance:** install URLs are pinned to `v1.1.0` where practical, and prompts and skills teach catalog maintenance, deterministic matching, identities, and nested scopes.
+- **Repository ownership:** release, issue, security, prompt, skill, and documentation URLs now use `hannsxpeter/pillars`.
+- **Documentation:** README, SPEC, PILLARS, FAQ, AGENTS, examples, tooling docs, contribution guidance, and release surfaces now describe the same 1.1 behavior and catalog counts.
+
+[1.1.0]: https://github.com/hannsxpeter/pillars/releases/tag/v1.1.0
+
 ## [1.0.1] - 2026-05-30
 
 Documentation and tooling consistency pass. Standard behavior is unchanged; the SPEC.md change is a clarification only.
@@ -36,7 +60,7 @@ Documentation and tooling consistency pass. Standard behavior is unchanged; the 
 - **`README.md`** and **`FAQ.md`**: updated CLI/CI roadmap language to reflect the shipped internal validator.
 - **`.github/ISSUE_TEMPLATE/bug.yml`**: fixed a stale `SPEC.md` section reference (4.0 to 4).
 
-[1.0.1]: https://github.com/aihxp/pillars/releases/tag/v1.0.1
+[1.0.1]: https://github.com/hannsxpeter/pillars/releases/tag/v1.0.1
 
 ## [1.0.0] - 2026-05-14
 
@@ -57,7 +81,7 @@ Stable standard release. No breaking schema or loading-protocol changes from 0.1
 - README and FAQ now describe Pillars as stable 1.0.0 instead of pre-1.0.
 - README, FAQ, tooling docs, install guides, and the SaaS example now document the expanded report-only prompt set.
 
-[1.0.0]: https://github.com/aihxp/pillars/releases/tag/v1.0.0
+[1.0.0]: https://github.com/hannsxpeter/pillars/releases/tag/v1.0.0
 
 ## [0.1.3] - 2026-05-14
 
@@ -73,7 +97,7 @@ Standard itself unchanged.
 - Dogfooded `agents/context.md` and `agents/repo.md` now reflect the current repository shape, including optional tooling.
 - README, FAQ, and contributing docs now clarify that standard compatibility is defined by `SPEC.md`; tooling-only releases do not change compatibility.
 
-[0.1.3]: https://github.com/aihxp/pillars/releases/tag/v0.1.3
+[0.1.3]: https://github.com/hannsxpeter/pillars/releases/tag/v0.1.3
 
 ## [0.1.2] - 2026-05-13
 
@@ -96,7 +120,7 @@ Multi-tool tooling support. Standard itself unchanged.
 - For tools beyond the eight with install docs (e.g., Pieces, Pi Coder, future tools), the universal prompts work via paste-in. No per-tool wrapper is required for the operations to function.
 - CLI still deliberately not included. Roadmap item for v0.2+ when CI demand surfaces.
 
-[0.1.2]: https://github.com/aihxp/pillars/releases/tag/v0.1.2
+[0.1.2]: https://github.com/hannsxpeter/pillars/releases/tag/v0.1.2
 
 ## [0.1.1] - 2026-05-13
 
@@ -117,7 +141,7 @@ First tooling form ships. Standard itself unchanged.
 - CLI form is deliberately not included; deferred until clear demand for CI/scripted use.
 - Other tooling forms (Cursor commands, Codex prompts, neutral CLI) may follow when adoption signal warrants.
 
-[0.1.1]: https://github.com/aihxp/pillars/releases/tag/v0.1.1
+[0.1.1]: https://github.com/hannsxpeter/pillars/releases/tag/v0.1.1
 
 ## [0.1.0] - 2026-05-13
 
@@ -154,4 +178,4 @@ Initial release. Foundations of the Pillars standard.
 
 - Standard structure pressure-tested against six hypothetical project archetypes (SaaS dashboard, CLI tool, ML pipeline, marketing site, real-time collaborative app, e-commerce platform). All friction surfaced was guidance-level, not structural.
 
-[0.1.0]: https://github.com/aihxp/pillars/releases/tag/v0.1.0
+[0.1.0]: https://github.com/hannsxpeter/pillars/releases/tag/v0.1.0

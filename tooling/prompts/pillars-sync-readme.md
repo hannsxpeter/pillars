@@ -8,7 +8,7 @@ Use this when README is the public project truth and Pillars are the agent-facin
 
 ## Task: reconcile README and Pillars
 
-You are going to compare root `README.md` with the project's [Pillars](https://github.com/aihxp/pillars) files and produce a sync report. Do not write, edit, move, or delete files.
+You are going to compare root `README.md` with the project's [Pillars](https://github.com/hannsxpeter/pillars) files and produce a sync report. Do not write, edit, move, or delete files.
 
 ### Step 1: Locate the artifacts
 
@@ -33,7 +33,7 @@ Then stop if either side is missing.
 Follow the project's `AGENTS.md` protocol:
 
 1. Load always-loaded pillars.
-2. Inspect relevant pillars when present:
+2. Inspect relevant pillars in every applicable root or nested scope. Treat local catalog entries as known absences, not pillar claims:
    - `context`
    - `repo`
    - `stack`

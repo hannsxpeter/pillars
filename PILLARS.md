@@ -1,155 +1,213 @@
 # Pillars Enumeration
 
-This document lists the pillars Pillars defines, their tiers, their scopes, and the boundary calls that draw lines between them. It also documents sub-pillar patterns.
+This document lists the standard pillar catalog, tiers, scopes, and boundary calls. The file structure and runtime behavior live in [SPEC.md](SPEC.md).
 
-The standard's *structure* lives in [SPEC.md](SPEC.md). This document is the *catalog*.
+The catalog helps people decide which concerns to record. Runtime discovery is local: present pillars route from their frontmatter and silent gaps route from optional `agents/catalog.yaml`.
 
 ## Tier overview
 
-- **Always-loaded (2):** `context`, `repo`. Tiny by spec (~one page each). Loaded every session via `always_load: true` in frontmatter.
-- **Tier 1 — Core (9, task-routed):** topics every non-trivial project should *consider*. Not every project populates them all; excluding is first-class. The tier exists so adopters reason about each topic, not so they must implement each.
-- **Tier 2 — Common (10):** recommended when relevant. Add as the project grows into them.
-- **Tier 3 — Domain (open set):** topics whose presence depends on *what* you're building. Often the primary pillars for the projects that need them: `realtime` for collab apps, `ml` for ML systems, `seo` for marketing sites, `payments` for e-commerce.
-- **Sub-pillars:** folder-based deep-dives within a top-level pillar. Same template and frontmatter.
+- **Always-loaded (2):** `context`, `repo`. Small enough to load for every task.
+- **Tier 1, Core (11):** concerns every non-trivial project should consider. They are task-routed and may be excluded.
+- **Tier 2, Common (11):** recurring cross-cutting concerns to add when relevant.
+- **Tier 3, Domain (open set):** concerns determined by the product and operating model.
+- **Sub-pillars:** folder-based deep dives with path-derived identities.
 
 ## Always-loaded (2)
 
 | Pillar | Covers |
 |---|---|
-| `context.md` | Domain language, product invariants, glossary, why the project exists. Tiny by spec. |
-| `repo.md` | File layout, naming conventions, where things go. Every file-touching task needs this. |
+| `context.md` | Project identity, domain language, invariants, glossary, and why the project exists. |
+| `repo.md` | File layout, naming conventions, ownership, and where things go. |
 
-## Tier 1 — Core (9, task-routed)
-
-| Pillar | Covers |
-|---|---|
-| `stack.md` | Tech choices, dependencies, version constraints, why each was chosen. |
-| `arch.md` | System architecture, services, boundaries, data flow at the system level. |
-| `data.md` | Data model, schema, migrations, queries, storage. |
-| `api.md` | API contract: HTTP, RPC, internal. Request/response shapes. Versioning. |
-| `ui.md` | Web/visual UI conventions. Components. Design tokens. (CLI UX lives in Tier 3 `cli.md`.) |
-| `auth.md` | Identity, sessions, access. Authn + authz. (Secrets live in `config.md`.) |
-| `quality.md` | Testing, error handling, code style, naming. Sub-pillars when a project wants depth. |
-| `deploy.md` | Cutover, environments, promotion, rollback. |
-| `observe.md` | Logging, metrics, tracing, alerts, runbooks. |
-
-## Tier 2 — Common (10)
+## Tier 1, Core (11)
 
 | Pillar | Covers |
 |---|---|
-| `config.md` | Env vars, feature flags, secrets handling, configuration. |
-| `security.md` | Adversarial concerns beyond auth: input validation, OWASP, threat model, dependency CVEs. |
-| `compliance.md` | Regulatory mapping: SOC2, HIPAA, GDPR, PCI. Project-specific. |
-| `i18n.md` | Translation, locale, RTL, formatting. |
-| `a11y.md` | Accessibility standards, WCAG, screen reader patterns. |
-| `analytics.md` | Product event tracking, user telemetry, KPIs. |
-| `integrations.md` | Third-party services consumed, outbound API calls, contracts. Above ~3-5 significant integrations, promote each to a sub-pillar (`integrations/<service>.md`). |
-| `async.md` | Background jobs, queues, schedulers, cron, event-driven work. |
-| `cache.md` | Caching strategy, invalidation, layers, TTLs. |
-| `notifications.md` | *Transactional* notifications (order confirmations, password resets, system alerts) via email/SMS/push. Marketing or lifecycle email lives in Tier 3 `email.md`. |
+| `stack.md` | Technology choices, dependencies, version constraints, and why each was chosen. |
+| `arch.md` | System architecture, services, boundaries, and system-level data flow. |
+| `data.md` | Data model, schema, migrations, queries, and storage. |
+| `api.md` | HTTP, RPC, and internal API contracts, shapes, and versioning. |
+| `ui.md` | Web and visual UI conventions, components, and design tokens. CLI UX belongs in Domain `cli.md`. |
+| `auth.md` | Identity, sessions, authentication, authorization, and access. Secrets belong in `config.md`. |
+| `quality.md` | Testing, error handling, code style, and naming. |
+| `development.md` | Local setup, inner-loop commands, debugging, generated artifacts, and contributor workflow. |
+| `release.md` | Versioning, release criteria, changelog policy, artifact publication, and release ownership. |
+| `deploy.md` | Environments, promotion, cutover, rollback, and runtime delivery. |
+| `observe.md` | Logs, metrics, traces, alerts, and operational runbooks. |
 
-## Tier 3 — Domain (open, examples)
+`development` and `release` are Core in 1.1 because nearly every maintained project has local workflow and version-publication decisions that are neither repository layout nor deployment behavior. They remain task-routed, so their addition does not increase the always-loaded floor.
 
-The standard provides examples; projects coin new domain pillars freely when justified.
+## Tier 2, Common (11)
 
-Common examples: `ml.md`, `realtime.md`, `payments.md`, `email.md` (marketing/lifecycle), `search.md`, `mobile.md`, `state.md` (frontend state management; essential when relevant despite Tier 3 placement), `forms.md`, `validation.md`, `seo.md`, `event-bus.md`, `pubsub.md`, `cms.md`, `crm.md`, `cli.md` (CLI UX: color, prompts, output formatting), `inventory.md` (e-commerce stock/SKU rules), `data-pipeline.md`, `etl.md`.
+| Pillar | Covers |
+|---|---|
+| `config.md` | Environment variables, feature flags, secrets handling, and configuration. |
+| `security.md` | Adversarial concerns beyond auth: input validation, threat models, dependency vulnerabilities. |
+| `privacy.md` | Personal-data classification, collection, consent, retention, deletion, and subject rights. |
+| `compliance.md` | Project-specific regulatory and control mappings such as SOC 2, HIPAA, GDPR, and PCI. |
+| `i18n.md` | Translation, locale, right-to-left layout, and formatting. |
+| `a11y.md` | Accessibility standards, assistive technology, and WCAG patterns. |
+| `analytics.md` | Product event tracking, user telemetry, and KPIs. |
+| `integrations.md` | Third-party services and outbound contracts. Promote substantial integrations to sub-pillars or Domain pillars. |
+| `async.md` | Background jobs, queues, schedules, and event-driven work. |
+| `cache.md` | Cache layers, invalidation, and time-to-live policy. |
+| `notifications.md` | Transactional email, SMS, and push notifications. Marketing email belongs in Domain `email.md`. |
 
-**Tier 3 placement does not imply "rarely needed."** For some project types, a Tier 3 pillar is the *primary* concern. The "Domain" tier captures concerns whose presence depends on *what* you're building, not on how big the project is.
+`privacy` is distinct from compliance. Projects handle personal data even when no formal compliance mapping is maintained, so the concern deserves direct routing rather than being buried in legal controls.
+
+## Tier 3, Domain (open set)
+
+Projects may coin domain pillars when a concern is load-bearing and does not fit the cross-project catalog. Tier 3 placement means product-dependent, not unimportant.
+
+Common examples include:
+
+- Product capabilities: `ml`, `realtime`, `payments`, `search`, `mobile`, `forms`, `seo`, `cms`, `crm`, `cli`, `inventory`, `email`.
+- Business model: `domain` or a specific noun such as `orders`, `subscriptions`, `entitlements`, or `pricing`.
+- Operating model: `tenancy`, `billing`, `reliability`, `performance`, `infrastructure`, `documentation`.
+- Data movement: `event-bus`, `pubsub`, `data-pipeline`, `etl`.
+- Frontend depth: `state`, `validation`, `animations`.
+
+Use a precise domain noun when possible. `orders.md` is more useful than a catch-all `business-rules.md` when orders are the actual bounded concern.
 
 ## Boundary calls
 
-The standard defines these tiebreakers for pillar pairs that get confused. When in doubt, refer here.
-
 ### Auth vs. security
 
-- **`auth.md`** = "who's allowed to do what." Identity, sessions, permissions.
-- **`security.md`** = everything else adversarial. Input validation, OWASP, dependency CVEs, threat model, attacker-already-inside scenarios.
+- `auth.md` answers who may do what: identities, sessions, roles, and permissions.
+- `security.md` covers other adversarial concerns: untrusted input, abuse, vulnerabilities, and threat models.
 
 ### Auth vs. config
 
-- Secrets live in **`config.md`**, not `auth.md`. Auth handles access; config handles configuration including secret materials.
+Secret material and configuration live in `config.md`. Auth owns how identity and access use that material.
+
+### Data vs. privacy vs. compliance
+
+- `data.md` describes representation, storage, queries, and lifecycle mechanics.
+- `privacy.md` describes which data is personal, why it is collected, how long it is kept, and how people exercise rights.
+- `compliance.md` maps project behavior to external regulations and control frameworks.
+
+A deletion implementation may touch all three, but each pillar answers a different question.
 
 ### Analytics vs. observe
 
-- **`analytics.md`** = understanding *users* (product KPIs, behavioral events).
-- **`observe.md`** = understanding *system health* (operational telemetry, error rates, latency).
-- The same event might emit to both pipelines; the rules for emitting them differ.
+- `analytics.md` explains user and product behavior.
+- `observe.md` explains system health and operational behavior.
 
-### Repo vs. arch
+One event may feed both systems, but collection rules and audiences differ.
 
-- **`repo.md`** = file layout (where files go).
-- **`arch.md`** = system shape (what services/modules exist, how they communicate).
-- If a rule changes where a file goes, it's `repo`. If it changes module/service structure, it's `arch`.
+### Repo vs. development vs. stack
 
-### Quality bundle
+- `repo.md` says where files belong and how the repository is organized.
+- `development.md` says how contributors set up, run, generate, and debug the project.
+- `stack.md` says which technologies and dependency versions the project chose.
 
-- **`quality.md`** keeps testing + errors + style + naming together by default.
-- Splittable via sub-pillars (`quality/testing.md`, `quality/style.md`) when a project needs depth.
+### Arch vs. infrastructure
 
-### Dedicated integration pillar vs. `integrations.md`
+- `arch.md` describes logical services, module boundaries, and data flow.
+- Domain `infrastructure.md` describes provisioned resources, topology, infrastructure-as-code, capacity, and provider constraints.
 
-- If the integration has its own business logic and lifecycle (Stripe billing, Auth0 user sync), give it a dedicated Tier 3 pillar.
-- If it's a thin wrapper around a third-party API, list it under `integrations.md`.
-- Rule of thumb: would *removing* the integration change the product, or just a feature?
+Use a dedicated infrastructure pillar only when those operational details are substantial. Small projects can keep infrastructure facts in `deploy.md` or `stack.md`.
 
-### UI scope
+### Release vs. deploy
 
-- **`ui.md`** = web/visual UI conventions only.
-- CLI UX (color, prompts, output format) gets a Tier 3 `cli.md`. Not in scope for `ui.md`.
+- `release.md` covers version decisions, readiness, changelogs, artifacts, and publication.
+- `deploy.md` covers placing a release into an environment, promotion, cutover, and rollback.
 
-### Compliance scope
+A library can release without deploying. A continuously delivered service may deploy many revisions under one product release.
 
-- **`compliance.md`** is project-specific. SaaS often needs SOC 2; ML touching biometric/health data needs HIPAA/GDPR; CLI tools may need nothing. Excluding `compliance` entirely is legitimate.
+### Quality vs. reliability vs. performance
+
+- `quality.md` covers how changes are verified and code quality is maintained.
+- Domain `reliability.md` covers service objectives, failure budgets, resilience, and recovery expectations.
+- Domain `performance.md` covers latency, throughput, resource budgets, benchmarks, and optimization constraints.
+- `observe.md` owns the telemetry used to measure reliability and performance.
+
+Keep reliability and performance in existing pillars when the guidance is small. Promote them when they have independent budgets, owners, or workflows.
+
+### Domain rules vs. data or API
+
+- A business-domain pillar owns invariants, vocabulary, lifecycle, and decisions such as entitlement or order state rules.
+- `data.md` owns how those concepts are stored.
+- `api.md` owns how those concepts cross an interface.
+
+Do not make schema shape or endpoint shape the only record of a business invariant.
+
+### Tenancy vs. auth or data
+
+- Domain `tenancy.md` owns tenant boundaries, membership lifecycle, cross-tenant policy, and isolation invariants.
+- `auth.md` owns identities and permission checks.
+- `data.md` owns storage enforcement and query patterns.
+
+For a narrow data-only concern, `data/multi-tenant.md` remains a good sub-pillar. Use top-level `tenancy.md` when tenancy changes product behavior across auth, data, billing, and operations.
+
+### Billing vs. payments
+
+- Domain `billing.md` owns plans, metering, invoices, credits, tax inputs, and entitlement consequences.
+- Domain `payments.md` owns payment collection, payment methods, processor states, refunds, and disputes.
+
+Simple products can combine them. Split when invoicing or entitlements have a lifecycle independent of processor transactions.
+
+### Documentation vs. repo or development
+
+- Domain `documentation.md` owns audience, information architecture, source-of-truth policy, examples, and publication workflow.
+- `repo.md` owns where documentation files live.
+- `development.md` owns local commands that build or preview documentation.
+
+Create `documentation.md` only when docs are a product surface or have a substantial maintenance model.
+
+### Dedicated integration vs. integrations
+
+- Keep thin outbound clients in `integrations.md`.
+- Give an integration a sub-pillar or Domain pillar when it has product behavior, lifecycle, or substantial operational policy.
+
+Rule of thumb: would removing it change the product or merely one implementation detail?
+
+### UI vs. CLI
+
+`ui.md` covers visual UI. Domain `cli.md` covers terminal prompts, color, output formatting, exit codes, and scripting behavior.
 
 ### Notifications vs. email
 
-- **`notifications.md`** (Tier 2) = *transactional* notifications (order confirmations, password resets) via email/SMS/push.
-- **`email.md`** (Tier 3) = *marketing/lifecycle* email (campaigns, drip sequences). Different operational and regulatory rules (sending limits, suppression lists, CAN-SPAM).
+`notifications.md` covers transactional delivery across email, SMS, and push. Domain `email.md` covers marketing and lifecycle campaigns, consent, suppression, and sending policy.
 
 ## Sub-pillar conventions
 
-Sub-pillars live in a folder named for their parent: `./agents/<parent>/<name>.md`. Hierarchy is path-derived; no `parent:` field in frontmatter. Sub-pillars use the same 8-section template and the same frontmatter schema as top-level pillars. They participate in loading the same way.
+Sub-pillars live at `agents/<parent>/<name>.md`. Their path-derived identity is `<parent>/<name>`, while the frontmatter `pillar` value remains the leaf `<name>`. References to sub-pillars must use the path-qualified identity.
+
+Sub-pillars use the same 8 sections and routing fields as top-level pillars. A sub-pillar may declare `must_read_with: [parent]` when it needs its parent. The parent is not auto-loaded.
 
 ### Common sub-pillar patterns
 
-| Pattern | Example sub-pillars | When |
+| Pattern | Examples | Use when |
 |---|---|---|
-| **Cross-cutting Tier 3 specialty** | `security/ml.md`, `quality/ml.md`, `observe/ml.md` | When a Domain pillar (`ml`, `realtime`, `mobile`) has implications across Core pillars. The Domain pillar owns its domain; sub-pillars capture cross-cuts. |
-| **Multiple API surfaces** | `api/storefront.md`, `api/admin.md`, `api/webhooks.md` | Apps with distinct API consumers and contracts. |
-| **Integration saturation** | `integrations/algolia.md`, `integrations/klaviyo.md` | When `integrations.md` has more than ~3-5 significant entries. |
-| **UI depth** | `ui/components.md`, `ui/animations.md`, `ui/tokens.md` | UI-heavy projects where one pillar bloats. |
-| **Quality depth** | `quality/testing.md`, `quality/style.md` | When testing rules are substantial enough to warrant their own home. |
-| **Multi-tenancy** | `data/multi-tenant.md` | SaaS apps where tenant isolation rules deserve focused attention. |
-| **Data shape** | `data/migrations.md`, `data/queries.md` | When data conventions split cleanly into schema management vs. query patterns. |
-
-### Loading behavior
-
-A sub-pillar can declare `must_read_with: [parent]` if loading the sub-pillar requires its parent. Conversely, a top-level pillar might list specific sub-pillars in `see_also` to flag where deep-dive material lives. The standard does not auto-load a parent when a sub-pillar matches; coupling is explicit.
+| Cross-cutting specialty | `security/ml`, `quality/ml`, `observe/ml` | A Domain concern changes several Core areas. |
+| Multiple API surfaces | `api/storefront`, `api/admin`, `api/webhooks` | Consumers have distinct contracts. |
+| Integration saturation | `integrations/algolia`, `integrations/klaviyo` | The shared integration pillar is losing focus. |
+| UI depth | `ui/components`, `ui/animations`, `ui/tokens` | UI guidance has stable sub-domains. |
+| Quality depth | `quality/testing`, `quality/style` | Testing or style needs focused procedures. |
+| Data depth | `data/migrations`, `data/queries`, `data/multi-tenant` | Schema, query, or isolation guidance stands alone. |
 
 ## Archetype starter exclusions
 
-Adopters often start from an archetype list to avoid rediscovering common exclusions. These are *suggestions*, not enforced:
+These are starting suggestions, not requirements:
 
 | Archetype | Typical exclusions |
 |---|---|
-| CLI tool | ui, api, auth, observe, i18n, a11y, analytics, async, cache, notifications |
-| Internal API service | ui, a11y, seo (if no end-user surface), notifications (if no end users) |
+| CLI tool | ui, api, auth, deploy, observe, i18n, a11y, analytics, async, cache, notifications |
+| Internal API service | ui, a11y, seo if no user surface, notifications if no end users |
 | ML pipeline | ui, i18n, a11y, notifications, analytics |
-| Marketing site | data, api, auth (if no users), observe (if platform-provided), async |
-| Mobile app | seo, i18n (if single-locale), `realtime` (if not collaborative) |
-| Open-source library | ui, api (if not a service), auth, observe, deploy (if not hosted), notifications, analytics |
-| SaaS dashboard | (none initially; add as decisions get made) |
-| Empty / greenfield | (none initially; add exclusions as the project takes shape) |
+| Marketing site | data, api, auth if no users, observe if platform-provided, async |
+| Mobile app | seo, i18n if single-locale, realtime if not collaborative |
+| Open-source library | ui, api if not a service, auth, observe, deploy if not hosted, notifications, analytics |
+| SaaS dashboard | none initially |
+| Empty or greenfield | none initially |
 
-Reasons are recommended in `AGENTS.md`'s `excluded:` block so future contributors understand the call.
+Record reasons in `AGENTS.md` so future contributors can distinguish deliberate exclusions from forgotten work.
 
-## Naming conventions
+## Naming and maturity
 
-- Pillar file: `<name>.md` where `<name>` is the canonical pillar name in lowercase.
-- Sub-pillar file: `<parent>/<name>.md` under `./agents/`.
-- Frontmatter `pillar:` matches the filename without `.md`.
-- Pillar names are nouns or noun phrases (`auth`, `data`, `multi-tenant`), never verbs.
-
-## Maturity gradient
-
-A pillar exists once it has frontmatter and a Scope statement, even if Sections 3-8 are empty (or `(none)`). Sections fill in over the project's lifetime: stub -> partially populated -> fully populated. There is no obligation to fill all 8 sections at creation time.
+- Top-level identity: `<name>` at `agents/<name>.md`.
+- Sub-pillar identity: `<parent>/<name>` at `agents/<parent>/<name>.md`.
+- Identity segments are lowercase nouns or noun phrases with optional internal hyphens.
+- Frontmatter `pillar` matches the file's leaf name.
+- A pillar can remain partially populated indefinitely. Empty sections use `(none)`.

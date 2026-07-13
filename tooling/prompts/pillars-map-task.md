@@ -1,116 +1,90 @@
 # Pillars Map Task Prompt
 
-Paste this entire file into your AI coding tool's chat to explain which Pillars files should load for a specific task and why. This is a report-only workflow. It does not write files.
+Paste this file into an AI coding tool to explain the deterministic Pillars load set for a task. This workflow reports only and does not execute the task or modify files.
 
-Use this to debug routing, teach the loading model, or check whether a task is missing a relevant pillar.
+## Task: map a task to Pillars
 
----
+### Step 1: Get the task and target
 
-## Task: map a task to its Pillars load set
+Use the supplied task text. If none is present, ask for it. Use an explicitly named file or directory as the target. Otherwise use the current working directory.
 
-You are going to map a user task to the Pillars files that should be loaded under the project's `AGENTS.md` protocol. Do not write, edit, move, or delete files.
+### Step 2: Resolve applicable scopes
 
-### Step 1: Get the task
+Starting at the repository root and ending at the target, identify every directory with both `AGENTS.md` and `agents/`. If none exists, report that Pillars is not set up and stop.
 
-Use the task text the user provided with this prompt. If no task text is provided, ask:
+Apply scopes from outermost to innermost. Non-conflicting guidance accumulates. The nearest scope wins conflicts. A child exclusion suppresses an inherited task-routed pillar of the same identity for that child.
 
-> What task should I map to Pillars?
+### Step 3: Read local metadata
 
-Then stop until the user answers.
+For each scope, read:
 
-### Step 2: Locate Pillars
+- Every pillar's `pillar`, `status`, `always_load`, `covers`, `triggers`, `must_read_with`, and `see_also` fields.
+- The local `AGENTS.md` `excluded:` block.
+- Optional `agents/catalog.yaml` absent entries.
 
-Check for:
+Use the path-derived identity. `agents/auth.md` is `auth`; `agents/auth/agent-registration.md` is `auth/agent-registration`. Bare references resolve top-level pillars only.
 
-```bash
-ls AGENTS.md agents/
-find agents -name "*.md" -type f | sort
-```
+### Step 4: Use the portable matcher
 
-If `AGENTS.md` or `agents/` is missing, report:
+For both task text and selector:
 
-> This project does not appear to have Pillars set up. Use `pillars-init.md` first.
+1. Lowercase ASCII letters.
+2. Replace each run outside ASCII letters and digits with one space.
+3. Trim and split on spaces.
+4. Match only when the selector's full token sequence appears contiguously in the task tokens.
 
-Then stop.
+For example, `schema-change` matches `Schema change`; `api` does not match `capital`. Report deterministic matches separately from any optional semantic matches.
 
-### Step 3: Read routing metadata
+### Step 5: Compute each local load set
 
-For each pillar file, parse frontmatter:
+1. Add every `always_load: true` pillar.
+2. Add non-always pillars whose `triggers` match the task. These are primaries.
+3. Record matching catalog entries as absent concerns.
+4. Add each primary's `must_read_with` targets at depth 1 only.
+5. For each selected pillar, resolve `see_also`. Add a present target only when the task matches the target identity, `triggers`, or `covers` with the same matcher. Record a matching catalog target as absent.
+6. Deduplicate by scope plus identity while preserving all selection reasons.
 
-- `pillar`
-- `status`
-- `always_load`
-- `covers`
-- `triggers`
-- `must_read_with`
-- `see_also`
+Do not match primary pillars from `covers`. Do not follow dependency dependencies. Do not follow `see_also` recursively.
 
-Read `AGENTS.md` for the `excluded:` block.
-
-### Step 4: Compute the load set
-
-Apply the Pillars loading protocol:
-
-1. Load every pillar with `always_load: true`.
-2. Identify primary pillars whose `triggers` or `covers` semantically match the task.
-3. Add every pillar listed in each primary's `must_read_with`, depth 1 only.
-4. Add `see_also` only if the task explicitly touches that area.
-5. Treat excluded pillars as intentionally not applicable.
-6. For missing but relevant known pillars, state the assumption and recommend authoring the pillar.
-
-Deduplicate the final load set. If a pillar qualifies for multiple reasons, list it once and include all reasons in the "Why it loads" cell.
-
-Do not follow `must_read_with` transitively.
-
-### Step 5: Produce the report
-
-Use this format:
+### Step 6: Report
 
 ```markdown
 # Pillars Task Map
 
 Task: <task>
+Target: <target>
 
 ## Load Set
 
-| Pillar | Why it loads |
-|---|---|
-| `context` | always-loaded |
-| `repo` | always-loaded |
-| `<pillar>` | trigger match: <trigger or semantic reason> |
-| `<pillar>` | must_read_with from `<primary>` |
+| Scope | Identity | Why it loads |
+|---|---|---|
+| `root` | `context` | always-loaded |
+| `<scope>` | `<identity>` | trigger, dependency, or see_also reason |
 
-## Soft References
+## Absent, Stub, Or Excluded
 
-| Pillar | Why it is only `see_also` |
-|---|---|
-| `<pillar>` | task touches this only if <condition> |
+- `<scope>::<identity>`: <state and required behavior>
 
-## Missing Or Excluded
+## Scope Precedence
 
-- `<pillar>`: <missing, stub, or excluded explanation>
+- <overrides, inherited guidance, or suppressions>
 
 ## Routing Notes
 
-- <any useful observation about overmatching, weak triggers, or missing pillars>
+- <optional semantic additions, weak selectors, or unresolved references>
 ```
 
-If no task-routed pillars match, say:
-
-> Only always-loaded pillars match this task.
-
----
+If no task-routed pillar matches, say that only always-loaded pillars apply. If a catalog entry matches, state the assumption that the task would require and recommend authoring that identity.
 
 ## Constraints
 
-- Do not write files.
-- Do not modify files.
-- Do not execute the mapped task.
-- Do not treat absent non-floor pillars as errors.
-- Do not follow `must_read_with` transitively.
-
----
+- Do not write files or execute the mapped task.
+- Do not invent globally known absent pillars. Use only local catalog entries.
+- Do not treat unknown non-floor concerns as errors.
+- Do not follow dependencies transitively.
 
 ## Now: map this task
 
-**Task to map:** _<replace this line with the task, e.g., `Add workspace invite links`>_
+**Task:** _<replace with the task>_
+
+**Target:** _<optional path>_

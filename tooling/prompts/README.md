@@ -10,9 +10,9 @@ If your tool has a native command/skill format, see the `tooling/<tool>/` direct
 
 | File | When to use |
 |---|---|
-| [`pillars-check.md`](pillars-check.md) | Validate Pillars file structure, frontmatter, section order, floor pillars, and references. Does not audit code drift. |
-| [`pillars-find-gaps.md`](pillars-find-gaps.md) | Index unresolved `Gaps` across pillars and classify their implementation impact. |
-| [`pillars-init.md`](pillars-init.md) | Bootstrap Pillars in a new or existing project. Detects archetype, drops AGENTS.md, scaffolds stubs, sets exclusions. |
+| [`pillars-check.md`](pillars-check.md) | Validate identities, frontmatter, sections, floors, references, catalogs, and budgets. Does not audit code drift. |
+| [`pillars-find-gaps.md`](pillars-find-gaps.md) | Index body `Gaps`, stubs, and cataloged absences across scopes. |
+| [`pillars-init.md`](pillars-init.md) | Bootstrap Pillars. Detects archetype, drops AGENTS.md, scaffolds stubs, and reconciles exclusions with the local catalog. |
 | [`pillars-author.md`](pillars-author.md) | Draft or revise a specific pillar from the codebase. Scans relevant code, presents 8-section draft for approval. |
 | [`pillars-map-task.md`](pillars-map-task.md) | Map a task to the pillars that should load and explain why. |
 | [`pillars-verify.md`](pillars-verify.md) | Audit pillars against current code. Flags drift with evidence, suggests fixes. Manual lightweight check. |
@@ -62,6 +62,6 @@ If a procedural update happens, matching prompt and skill forms should be update
 
 ## Reference
 
-- Pillars standard: https://github.com/aihxp/pillars
-- SPEC.md: https://github.com/aihxp/pillars/blob/main/SPEC.md
-- PILLARS.md: https://github.com/aihxp/pillars/blob/main/PILLARS.md
+- Pillars standard: https://github.com/hannsxpeter/pillars
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md

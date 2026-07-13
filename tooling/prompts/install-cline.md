@@ -15,7 +15,7 @@ For versions that only read `.clinerules`:
 `.clinerules`:
 
 ```markdown
-This project follows the Pillars standard (https://github.com/aihxp/pillars).
+This project follows the Pillars standard (https://github.com/hannsxpeter/pillars).
 
 Before doing any code work, read `AGENTS.md` at the project root and follow its protocol to load the relevant pillars from `./agents/*.md`.
 
@@ -39,4 +39,4 @@ Delete `.clinerules` if you added one.
 ## Reference
 
 - Cline: https://github.com/cline/cline
-- Pillars standard: https://github.com/aihxp/pillars
+- Pillars standard: https://github.com/hannsxpeter/pillars

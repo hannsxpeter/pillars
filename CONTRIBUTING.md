@@ -11,6 +11,7 @@ Thank you for considering a contribution. Pillars is a standard, not a code proj
 | New worked examples | `examples/` | PR directly; reviewed for quality and accuracy |
 | End-to-end adoption examples | `examples/<archetype>/` | PR directly; keep them compact and realistic |
 | Tooling prompts | `tooling/prompts/` | PR directly for prompt-only workflows; keep them report-first unless writes are explicitly user-approved |
+| Validator and conformance cases | `tooling/ci/`, `tooling/conformance/` | PR directly with unit tests and expected load sets |
 | Boundary call refinements | `PILLARS.md` | Issue first to discuss the boundary; PR after agreement |
 | Archetype exclusion lists | `PILLARS.md` | PR directly; new archetypes welcome |
 | Sub-pillar patterns | `PILLARS.md` | Issue first to discuss; PR after |
@@ -49,12 +50,29 @@ Expect a multi-week conversation. The standard is intentionally small and slow-m
 Pillars uses [Semantic Versioning](https://semver.org/):
 
 - **Major** (`1.x.x` -> `2.x.x`) — frontmatter schema or loading-mechanism changes that break existing pillars. Requires migration notes.
-- **Minor** (`1.0.x` -> `1.1.x`) — backward-compatible additions to schema, protocol, pillar catalog, or sub-pillar patterns.
-- **Patch** (`1.0.0` -> `1.0.1`) — clarifications, typo fixes, new examples, documentation.
+- **Minor** (`1.1.x` -> `1.2.x`): backward-compatible additions to schema, protocol, pillar catalog, or sub-pillar patterns.
+- **Patch** (`1.1.0` -> `1.1.1`): clarifications, typo fixes, new examples, documentation.
 
 The current version is in `CHANGELOG.md`.
 
 Tooling-only releases may update prompts, skills, install guides, or examples without changing Pillars compatibility. When the standard itself is unchanged, say so clearly in `CHANGELOG.md`.
+
+## Validation before a pull request
+
+Install the pinned validator dependency and run the same checks as CI:
+
+```bash
+python3 -m pip install -r tooling/ci/requirements.txt
+python3 -m unittest discover -s tooling/ci/tests -v
+python3 tooling/ci/validate_pillars.py \
+  . --recursive-scopes \
+  --standalone examples \
+  --fixtures tooling/conformance/fixtures.yaml
+python3 tooling/ci/check_consistency.py
+git diff --check
+```
+
+Spec changes that affect routing must add or update deterministic conformance cases. Validator behavior changes must include focused unit tests. Live-model benchmark results are optional, but claimed results must follow `tooling/conformance/BENCHMARK-PROTOCOL.md` and include raw artifacts.
 
 ## Style and tone
 

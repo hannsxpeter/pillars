@@ -37,7 +37,7 @@ For older Aider versions that only read `CONVENTIONS.md`:
 ```markdown
 # Project conventions
 
-This project follows the [Pillars](https://github.com/aihxp/pillars) standard.
+This project follows the [Pillars](https://github.com/hannsxpeter/pillars) standard.
 
 Read `AGENTS.md` at the repo root and follow its protocol to load the relevant pillars from `./agents/*.md` before doing any work.
 ```
@@ -60,4 +60,4 @@ Remove `--read AGENTS.md` flags or the `read:` block from your aider config. Del
 
 - Aider: https://aider.chat/
 - Aider conventions docs: https://aider.chat/docs/usage/conventions.html
-- Pillars standard: https://github.com/aihxp/pillars
+- Pillars standard: https://github.com/hannsxpeter/pillars

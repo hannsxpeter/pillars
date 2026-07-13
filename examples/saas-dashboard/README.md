@@ -12,6 +12,7 @@ saas-dashboard/
 └── agents/
     ├── context.md
     ├── repo.md
+    ├── catalog.yaml
     ├── auth.md
     └── data.md
 ```
@@ -22,6 +23,7 @@ saas-dashboard/
 - Task-routed pillars: `auth.md` and `data.md`.
 - Depth-1 `must_read_with`: auth and data load together because tenant isolation spans both.
 - `see_also` as a soft hint, not an automatic chain walk.
+- Local `catalog.yaml` discovery for relevant concerns that have no pillar yet.
 - Gaps that tell the agent when to ask instead of inventing a policy.
 
 ## Before And After
@@ -74,8 +76,8 @@ This example is small, but the report-only prompts show how an adopter would mai
 |---|---|---|
 | "Add an owner-only team invite link" | `auth` | `data` via `must_read_with`; `repo` and `context` always load |
 | "Add `last_contacted_at` to accounts" | `data` | `auth` via `must_read_with`; `repo` and `context` always load |
-| "Move account pages into a new route group" | none in this example | `repo` and `context` always load; a real app would likely add `ui.md` |
+| "Move account pages into a new route group" | none present | `repo` and `context` always load; the local catalog reports absent `ui` |
 
 ## Why It Is Small
 
-This example intentionally stops before a full production pillar set. A real SaaS dashboard would likely add `stack.md`, `api.md`, `ui.md`, `quality.md`, `deploy.md`, `observe.md`, `config.md`, and `security.md`. The goal here is to show the end-to-end loading behavior without drowning the reader in a fake application.
+This example intentionally stops before a full production pillar set. A real SaaS dashboard would likely add `stack.md`, `api.md`, `ui.md`, `quality.md`, `development.md`, `release.md`, `deploy.md`, `observe.md`, `config.md`, `security.md`, and `privacy.md`. The goal here is to show the end-to-end loading behavior without drowning the reader in a fake application.
