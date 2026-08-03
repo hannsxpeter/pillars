@@ -1,6 +1,6 @@
 # Pillars Check Prompt
 
-Paste this file into an AI coding tool to perform a report-only Pillars 1.1 structure check. For factual drift between pillar claims and code, use `pillars-verify.md`.
+Paste this file into an AI coding tool to perform a report-only Pillars 1.2 structure check. For factual drift between pillar claims and code, use `pillars-verify.md`.
 
 ## Task: check Pillars structure
 

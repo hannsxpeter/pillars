@@ -1,6 +1,6 @@
 # Nested Fixture Protocol
 
-This package inherits the root Pillars 1.1 protocol and refines the fixture guidance for the web scope.
+This package inherits the root Pillars 1.2 protocol and refines the fixture guidance for the web scope.
 
 ## Excluded pillars
 

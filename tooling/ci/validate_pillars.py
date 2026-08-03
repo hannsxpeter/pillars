@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic structural and routing validator for Pillars 1.1 projects.
+"""Deterministic structural and routing validator for Pillars 1.2 projects.
 
 The validator is optional repository tooling. It checks local files only and
 never fetches the standard catalog or calls an external service.
