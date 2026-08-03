@@ -127,11 +127,11 @@ It is an optional local index of concerns that this project knows are absent. It
 
 ### Why is tooling optional?
 
-Standards succeed by being portable and small. Tooling is a force multiplier, not a substitute. Pillars 1.1.0 defines compatibility through local text files and loading behavior, so adoption is not gated on which tooling form you use. Optional tooling lives under `tooling/` when the friction it relieves is well-understood.
+Standards succeed by being portable and small. Tooling is a force multiplier, not a substitute. Pillars 1.2.0 defines compatibility through local text files and loading behavior, so adoption is not gated on which tooling form you use. Optional tooling lives under `tooling/` when the friction it relieves is well-understood.
 
 ### Can I version pillars within a project?
 
-The standard doesn't define per-pillar versioning. The project's git history is the version log. If a pillar undergoes a major rewrite, note it in the `Decisions` section of the pillar itself.
+The standard doesn't define per-pillar versioning. The project's git history is the version log. If a pillar undergoes a major rewrite, note it in the `Decisions` section of the pillar itself. When reversed or superseded choices need to stay visible with their original reasoning, which a flat `Decisions` section fights because the natural edit is to delete the stale entry, promote the rationale to a decision-depth sub-pillar such as `arch/decisions`. See [Common sub-pillar patterns](PILLARS.md#common-sub-pillar-patterns).
 
 ## Philosophy
 
@@ -159,7 +159,7 @@ Slowly. Major versions are years apart by design. Minor versions are quarterly o
 
 ### Is this stable enough to adopt?
 
-Yes. Pillars 1.1.0 preserves the stable 1.0 top-level schema and single-scope behavior while specifying path identities, deterministic routing, local absent discovery, and nested scopes. Future incompatible changes still require a new major version.
+Yes. Pillars 1.2.0 preserves the stable 1.0 top-level schema, single-scope behavior, and every 1.1 routing rule. It adds catalog guidance only. Future incompatible changes still require a new major version.
 
 ### How do I report a problem?
 

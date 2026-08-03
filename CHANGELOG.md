@@ -10,6 +10,21 @@ All notable changes to the Pillars standard are documented here. Format follows 
 
 No unreleased changes.
 
+## [1.2.0] - 2026-08-03
+
+Backward-compatible catalog release. No frontmatter schema, identity, or loading behavior changed; a 1.1 project conforms to 1.2 with no edits.
+
+### Added
+
+- **Decision-depth sub-pillar pattern:** `PILLARS.md` documents `arch/decisions` and `stack/decisions` as a recognized sub-pillar shape. Use it when rationale has enough volume or churn that a flat `Decisions` section stops being readable, or when superseded choices need to stay on the record with their original reasoning. The flat `Decisions` section remains the default; this is an escalation path, not a replacement.
+
+### Changed
+
+- **`FAQ.md`:** the per-pillar versioning answer now points at the decision-depth pattern for the case a flat `Decisions` section handles badly, namely reversed choices whose natural edit is deletion.
+- **Adoption guidance:** install and reference URLs are repinned from `v1.1.0` to `v1.2.0` so adopters fetch the catalog that documents the new pattern.
+
+[1.2.0]: https://github.com/hannsxpeter/pillars/releases/tag/v1.2.0
+
 ## [1.1.0] - 2026-07-13
 
 Backward-compatible standard release focused on portable routing, incremental discovery, monorepos, and measurable conformance.

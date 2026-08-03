@@ -47,10 +47,10 @@ If empty/greenfield, ask what they're building and map to the closest archetype.
 
 Fetch these from the Pillars repo (use your tool's web-fetch or download capability):
 
-- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/AGENTS.md`
-- SPEC: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/SPEC.md` (reference)
-- PILLARS: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/PILLARS.md` (reference)
-- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/agents/catalog.yaml`
+- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/AGENTS.md`
+- SPEC: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/SPEC.md` (reference)
+- PILLARS: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/PILLARS.md` (reference)
+- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/agents/catalog.yaml`
 
 If you cannot fetch URLs, use the inline AGENTS.md template at the bottom of this prompt.
 
@@ -220,7 +220,7 @@ If yes, draft `context.md` from what the user has told you. Use the same procedu
 ````markdown
 # Pillars: Agent Protocol
 
-This project follows [Pillars 1.1.0](https://github.com/hannsxpeter/pillars/tree/v1.1.0). Coding agents read project pillar files before acting.
+This project follows [Pillars 1.2.0](https://github.com/hannsxpeter/pillars/tree/v1.2.0). Coding agents read project pillar files before acting.
 
 ## At the start of any task
 
@@ -257,8 +257,8 @@ excluded: []
 
 - Pillar files: `./agents/*.md`
 - Optional absent catalog: `./agents/catalog.yaml`
-- Spec: https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
-- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md
+- Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.0/SPEC.md
+- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.0/PILLARS.md
 ````
 
 ---
@@ -266,6 +266,6 @@ excluded: []
 ## Reference
 
 - Pillars standard: https://github.com/hannsxpeter/pillars
-- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
-- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md
-- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.1.0/examples
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.0/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.0/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.0/examples

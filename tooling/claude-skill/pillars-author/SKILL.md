@@ -37,7 +37,7 @@ A complete pillar file at `agents/<pillar>.md` (or sub-pillar at `agents/<parent
 
 ### Step 1. Determine which pillar to author
 
-Get the pillar name from the user's request. If ambiguous, ask. Acceptable names are any from the [Pillars catalog](https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md):
+Get the pillar name from the user's request. If ambiguous, ask. Acceptable names are any from the [Pillars catalog](https://github.com/hannsxpeter/pillars/blob/v1.2.0/PILLARS.md):
 
 - Always-loaded: `context`, `repo`
 - Core: `stack`, `arch`, `data`, `api`, `ui`, `auth`, `quality`, `development`, `release`, `deploy`, `observe`
@@ -90,7 +90,7 @@ For Domain pillars (Tier 3), use your judgment to identify the relevant code. Fo
 
 ### Step 4. Draft the 8 sections
 
-Follow the [Pillars template](https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md). Earn-your-keep principle: only populate a section when it adds value the others don't.
+Follow the [Pillars template](https://github.com/hannsxpeter/pillars/blob/v1.2.0/SPEC.md). Earn-your-keep principle: only populate a section when it adds value the others don't.
 
 **Section drafting guidance:**
 
@@ -188,6 +188,6 @@ If the authored pillar mentions concepts that belong in other pillars (e.g., aut
 ## Reference
 
 - Pillars standard: https://github.com/hannsxpeter/pillars
-- SPEC.md (template, frontmatter): https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
-- PILLARS.md (catalog, boundary calls, sub-pillar patterns): https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md
-- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.1.0/examples
+- SPEC.md (template, frontmatter): https://github.com/hannsxpeter/pillars/blob/v1.2.0/SPEC.md
+- PILLARS.md (catalog, boundary calls, sub-pillar patterns): https://github.com/hannsxpeter/pillars/blob/v1.2.0/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.0/examples

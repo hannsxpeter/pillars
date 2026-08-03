@@ -83,10 +83,10 @@ If the project is **empty/greenfield**, ask the user what they're building. Map 
 
 The skill needs the current canonical text of AGENTS.md and the pillar template. Fetch from the Pillars repo:
 
-- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/AGENTS.md`
-- Spec for template reference: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/SPEC.md`
-- Catalog for archetype exclusions: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/PILLARS.md`
-- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/agents/catalog.yaml`
+- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/AGENTS.md`
+- Spec for template reference: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/SPEC.md`
+- Catalog for archetype exclusions: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/PILLARS.md`
+- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/agents/catalog.yaml`
 
 Use the `WebFetch` tool. Cache locally for the rest of the session.
 
@@ -305,5 +305,5 @@ If yes, transition to `pillars-author` for `context`. If no, end.
 ## Reference
 
 - Pillars standard: https://github.com/hannsxpeter/pillars
-- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/SPEC.md
-- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.1.0/PILLARS.md
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.0/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.0/PILLARS.md

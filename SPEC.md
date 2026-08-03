@@ -1,6 +1,6 @@
 # Pillars Specification
 
-Version 1.1.0.
+Version 1.2.0.
 
 This document defines the Pillars standard. It specifies pillar structure, routing, local discovery, nested scopes, and missing-pillar behavior. An implementation that conforms to this spec is *Pillars-compatible*.
 
@@ -229,13 +229,15 @@ A reference implementation is in this repository's [AGENTS.md](AGENTS.md).
 
 Pillars compatibility does not require the repository's validator or any external service. Implementations can validate the standard with their own tooling. Deterministic routing implementations should be checked against representative task-to-load-set fixtures.
 
-This spec uses semantic versioning. The current version is 1.1.0.
+This spec uses semantic versioning. The current version is 1.2.0.
 
 - Major: incompatible changes to existing pillar files or loading behavior.
 - Minor: backward-compatible additions or newly specified behavior.
 - Patch: corrections that do not change behavior.
 
 Pillars 1.1 keeps existing top-level identities and single-scope behavior intact. Local catalogs, path-qualified sub-pillar references, deterministic matching, and nested scopes add portable behavior without requiring adopters to rewrite 1.0 top-level pillars.
+
+Pillars 1.2 changes no schema, identity, or loading rule. It adds the decision-depth sub-pillar pattern to the catalog guidance in `PILLARS.md`. A 1.1 project is a conforming 1.2 project with no edits.
 
 ## 9. License
 
