@@ -2,7 +2,7 @@
 
 [![License: CC0-1.0](https://img.shields.io/badge/license-CC0--1.0-blue.svg)](LICENSE)
 [![Status: stable 1.1](https://img.shields.io/badge/status-stable%201.1-green.svg)](CHANGELOG.md)
-[![Spec: v1.1.0](https://img.shields.io/badge/spec-v1.1.0-green.svg)](SPEC.md)
+[![Spec: v1.2.0](https://img.shields.io/badge/spec-v1.2.0-green.svg)](SPEC.md)
 [![AGENTS.md: compatible](https://img.shields.io/badge/AGENTS.md-compatible-purple.svg)](AGENTS.md)
 [![Tooling: optional](https://img.shields.io/badge/tooling-optional-lightgrey.svg)](tooling/)
 [![Tool: agnostic](https://img.shields.io/badge/tool-agnostic-blue.svg)](FAQ.md#how-is-this-different-from-cursor-rules-windsurfrules-etc)
@@ -16,14 +16,14 @@ Pillars is a decomposed, frontmatter-driven convention for documenting what a co
 In your project root:
 
 ```bash
-curl -O https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/AGENTS.md
+curl -O https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/AGENTS.md
 mkdir agents
-curl -o agents/catalog.yaml https://raw.githubusercontent.com/hannsxpeter/pillars/v1.1.0/agents/catalog.yaml
+curl -o agents/catalog.yaml https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/agents/catalog.yaml
 ```
 
 Then open your coding agent and say:
 
-> *Adopt Pillars 1.1.0. Read SPEC.md and PILLARS.md from https://github.com/hannsxpeter/pillars/tree/v1.1.0. Scaffold the always-loaded stubs and applicable Core stubs, then remove created or excluded identities from the local catalog.*
+> *Adopt Pillars 1.2.0. Read SPEC.md and PILLARS.md from https://github.com/hannsxpeter/pillars/tree/v1.2.0. Scaffold the always-loaded stubs and applicable Core stubs, then remove created or excluded identities from the local catalog.*
 
 The pinned tag makes installation reproducible. `catalog.yaml` is an optional offline index of concerns you have not authored or excluded yet; remove entries as you create pillars. See [Adoption](#adopting-pillars) below for details.
 
@@ -157,7 +157,7 @@ pillars/
 
 ## Status
 
-Stable 1.1.0. This backward-compatible release specifies deterministic routing, path-qualified sub-pillar identities, offline absent discovery, nested scopes, content budgets, and expanded catalog boundaries. The conformance suite is repeatable and local. Hypothetical pressure tests are not presented as adopter evidence, and the optional live-model benchmark template remains unscored until a real run is published. See [CHANGELOG.md](CHANGELOG.md) for version history.
+Stable 1.2.0. This backward-compatible release adds the decision-depth sub-pillar pattern on top of 1.1, which specified deterministic routing, path-qualified sub-pillar identities, offline absent discovery, nested scopes, content budgets, and expanded catalog boundaries. No schema or loading behavior changed. The conformance suite is repeatable and local. Hypothetical pressure tests are not presented as adopter evidence, and the optional live-model benchmark template remains unscored until a real run is published. See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## Contributing
 

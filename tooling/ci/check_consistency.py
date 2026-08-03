@@ -10,7 +10,7 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[2]
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 CORE = [
     "stack", "arch", "data", "api", "ui", "auth", "quality",
     "development", "release", "deploy", "observe",
@@ -73,7 +73,7 @@ def check_versions(errors):
         "SPEC.md": "Version %s." % VERSION,
         "README.md": "Spec: v%s" % VERSION,
         "AGENTS.md": "Pillars %s" % VERSION,
-        "CHANGELOG.md": "## [%s] - 2026-07-13" % VERSION,
+        "CHANGELOG.md": "## [%s] - 2026-08-03" % VERSION,
     }
     for rel, marker in expected.items():
         if marker not in (ROOT / rel).read_text(encoding="utf-8"):

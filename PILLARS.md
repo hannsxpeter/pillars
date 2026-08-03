@@ -186,6 +186,7 @@ Sub-pillars use the same 8 sections and routing fields as top-level pillars. A s
 | UI depth | `ui/components`, `ui/animations`, `ui/tokens` | UI guidance has stable sub-domains. |
 | Quality depth | `quality/testing`, `quality/style` | Testing or style needs focused procedures. |
 | Data depth | `data/migrations`, `data/queries`, `data/multi-tenant` | Schema, query, or isolation guidance stands alone. |
+| Decision depth | `arch/decisions`, `stack/decisions` | Rationale has enough volume or churn that a flat `Decisions` section stops being readable, or superseded choices need to stay on the record. |
 
 ## Archetype starter exclusions
 
