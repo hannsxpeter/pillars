@@ -14,7 +14,7 @@ You are going to draft (or revise) a specific [Pillars](https://github.com/hanns
 
 ### Step 1 — Determine which pillar
 
-The user named a pillar. Confirm it's a valid one from the [Pillars catalog](https://github.com/hannsxpeter/pillars/blob/v1.2.1/PILLARS.md):
+The user named a pillar. Confirm it's a valid one from the [Pillars catalog](https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md):
 
 - Always-loaded: `context`, `repo`
 - Core: `stack`, `arch`, `data`, `api`, `ui`, `auth`, `quality`, `development`, `release`, `deploy`, `observe`
@@ -67,7 +67,7 @@ For Domain pillars, use judgment to identify relevant code. For sub-pillars, sca
 
 Apply the "earn your keep" principle: populate a section only when it adds value the others don't.
 
-**Scope** (always): one paragraph. What this pillar covers, what it does NOT. Reference boundary calls from [PILLARS.md](https://github.com/hannsxpeter/pillars/blob/v1.2.1/PILLARS.md).
+**Scope** (always): one paragraph. What this pillar covers, what it does NOT. Reference boundary calls from [PILLARS.md](https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md).
 
 **Context** (always): declarative facts. The bulk of the pillar.
 - Stack/library choices visible in code.
@@ -169,9 +169,9 @@ If authoring this pillar surfaced concepts belonging in another pillar (e.g., au
 ## Reference
 
 - Pillars standard: https://github.com/hannsxpeter/pillars
-- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.1/SPEC.md
-- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.1/PILLARS.md
-- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.1/examples
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.2/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.2/examples
 
 ---
 

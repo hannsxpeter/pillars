@@ -2,108 +2,200 @@
 
 [![License: CC0-1.0](https://img.shields.io/badge/license-CC0--1.0-blue.svg)](LICENSE)
 [![Status: stable 1.2](https://img.shields.io/badge/status-stable%201.2-green.svg)](CHANGELOG.md)
-[![Spec: v1.2.1](https://img.shields.io/badge/spec-v1.2.1-green.svg)](SPEC.md)
+[![Spec: v1.2.2](https://img.shields.io/badge/spec-v1.2.2-green.svg)](SPEC.md)
 [![AGENTS.md: compatible](https://img.shields.io/badge/AGENTS.md-compatible-purple.svg)](AGENTS.md)
 [![Tooling: optional](https://img.shields.io/badge/tooling-optional-lightgrey.svg)](tooling/)
-[![Tool: agnostic](https://img.shields.io/badge/tool-agnostic-blue.svg)](FAQ.md#how-is-this-different-from-cursor-rules-windsurfrules-etc)
+[![Tool: agnostic](https://img.shields.io/badge/tool-agnostic-blue.svg)](FAQ.md#how-is-this-different-from-cursor-rules-or-windsurfrules)
 
-**An open standard for project-specific instructions that keep coding agents aligned.**
+### Your AI coding assistant starts every session knowing nothing about your project. Pillars fixes that.
 
-Pillars is a decomposed, frontmatter-driven convention for documenting what a coding agent (Claude Code, Cursor, Copilot, Codex, Gemini, opencode, Aider, others) needs to know about a project before it writes a single line of code. Inspired by [design.md](https://github.com/google-labs-code/design.md), generalized into a tiered set of pillar files plus a thin `AGENTS.md` loader.
+Pillars is a free, open standard for writing down what an AI assistant needs to know about your project before it touches your code. You write a handful of short files in plain language. Your assistant reads the ones that matter for the task at hand, and stops guessing.
 
-## Quick start
+It works with Claude Code, Cursor, Copilot, Codex, Gemini, opencode, Aider, and anything else that reads instructions from your repository. No account, no install, no vendor, no lock-in.
 
-In your project root:
+**[Start in five minutes](#start-in-five-minutes)** | **[See what a pillar looks like](#what-a-pillar-actually-looks-like)** | **[Read the spec](SPEC.md)**
+
+---
+
+## The problem, in plain terms
+
+An AI coding assistant can read your code. It cannot read your reasons.
+
+It never saw the meeting where your team picked one database over another. It does not know that the odd-looking workaround in the checkout flow is deliberate. It does not know which folder a new file is supposed to go in, or that you moved off a library six months ago and never want to see it again.
+
+So it guesses. And the guesses look like this:
+
+- It reaches for the wrong library, the one you deliberately abandoned.
+- It puts files in the wrong place, and now your project has two conventions.
+- It re-decides things you already decided, differently each time.
+- It "fixes" behavior that was intentional, and quietly breaks something.
+
+Linters and type checkers catch typos and type errors. They cannot catch intent. So the job falls to you: re-explaining the same context in every new chat, forever.
+
+## The idea
+
+Think about onboarding a new team member.
+
+You do not hand them the codebase and wish them luck. You give them a short briefing. Here is what we are building. Here is how we work. Here is the thing that will surprise you in week one.
+
+**Pillars is that briefing, written once, and read automatically by your AI assistant every time it works on your project.**
+
+Each file covers one topic, and is called a pillar: what the product is, how the repository is organized, how data is stored, how login works, how you ship. A small file at your repository root tells the assistant how to find them.
+
+The assistant only reads what is relevant. Ask it to change a database table and it reads your data pillar. Ask it to restyle a button and it does not.
+
+## Before and after
+
+| You ask | Without Pillars | With Pillars |
+|---|---|---|
+| "Add a customer table" | Picks a database library at random, invents a naming style, forgets your tenant column | Uses your library, your naming style, and flags the tenant rule before writing anything |
+| "Where should this new component go?" | Guesses. Half your components end up somewhere new | Puts it where your other components live, because that is written down |
+| "Speed up this query" | Rewrites it in raw SQL, bypassing the audit logging you rely on | Knows raw SQL is allowed in exactly one file, and why |
+| "Why is this code like this?" | Assumes it is a bug and offers to remove it | Reads the recorded decision and leaves it alone |
+
+## Who this is for
+
+You do not need to be an engineer to get value from this, or to write one of these files.
+
+| If you are | Pillars gives you |
+|---|---|
+| A solo builder or someone building with AI, without a deep coding background | A way to make the assistant stop contradicting itself between sessions |
+| An engineering team | One source of truth that works across every teammate's tool of choice |
+| A founder, product manager, or designer | A place to record product decisions in plain words that the AI will actually follow |
+| An open-source maintainer | Context that travels with the repository, so contributors and their assistants start aligned |
+| A consultant or agency | A repeatable way to hand a project over without a week of meetings |
+
+Most of what belongs in a pillar is a decision, not code. "We use Stripe for payments and we never store card numbers ourselves" is a genuinely useful pillar line. So is "the pricing page copy is approved by legal, do not reword it." If you can explain it to a new hire, you can write it into a pillar.
+
+## Start in five minutes
+
+### Option A: just ask your assistant (no terminal required)
+
+Open your AI coding tool in your project and paste this:
+
+> *Adopt Pillars 1.2.2. Read SPEC.md and PILLARS.md from https://github.com/hannsxpeter/pillars/tree/v1.2.2. Scaffold the always-loaded stubs and applicable Core stubs, then remove created or excluded identities from the local catalog.*
+
+It will set up the files and ask you a few questions about your project. Answer them in plain language.
+
+### Option B: copy two files first
+
+From your project folder:
 
 ```bash
-curl -O https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.1/AGENTS.md
+curl -O https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/AGENTS.md
 mkdir agents
-curl -o agents/catalog.yaml https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.1/agents/catalog.yaml
+curl -o agents/catalog.yaml https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/agents/catalog.yaml
 ```
 
-Then open your coding agent and say:
+Then paste the prompt from Option A. Pinning the version tag keeps the setup reproducible.
 
-> *Adopt Pillars 1.2.1. Read SPEC.md and PILLARS.md from https://github.com/hannsxpeter/pillars/tree/v1.2.1. Scaffold the always-loaded stubs and applicable Core stubs, then remove created or excluded identities from the local catalog.*
+`catalog.yaml` is optional. It is a checklist of topics you have not written up yet, so the assistant knows what it does not know instead of quietly inventing an answer. Delete entries as you write the real thing.
 
-The pinned tag makes installation reproducible. `catalog.yaml` is an optional offline index of concerns you have not authored or excluded yet; remove entries as you create pillars. See [Adoption](#adopting-pillars) below for details.
+**You are not expected to fill everything in on day one.** Two files, `context.md` and `repo.md`, are worth writing early. The rest accumulates as you make decisions. A half-written pillar is more useful than no pillar.
 
-## What Pillars solves
+## What a pillar actually looks like
 
-Coding agents drift. Without project-specific context they:
+It is a normal markdown file. The block at the top tells the assistant when to read it. Everything below is written for a human.
 
-- Reach for the wrong library (Drizzle when you use Prisma).
-- Place files where they don't belong (components in `src/lib/` when the convention is `src/components/`).
-- Re-invent decisions you already made (auth strategy, error handling, naming).
-- "Fix" intentional behavior because they don't know why it exists.
+```markdown
+---
+pillar: data
+status: present
+covers: [database schema, migrations, queries, storage]
+triggers: [database, schema, migration, query, table, postgres]
+must_read_with: [auth, config]
+---
 
-Linters and type systems catch some of this. They don't catch *intent*. Pillars is the layer between "what the code looks like" and "what an experienced engineer would tell a new contributor on day one."
+## Scope
+The data layer: schema, migrations, query patterns, storage.
+Request and response shapes live in `api.md`.
+
+## Context
+We use Drizzle ORM against Postgres 16. All table definitions live in
+one file, `src/db/schema.ts`. Migrations are generated, never hand-written.
+Every table has `id`, `created_at`, and `updated_at`.
+
+## Decisions
+- **Drizzle over Prisma.** We need raw SQL escape hatches for analytics.
+- **One schema file.** It forces us to notice cross-table relations.
+
+## Rules
+- Never write raw SQL outside `src/db/raw.ts`. The audit logger only
+  sees queries that pass through there.
+
+## Watchouts
+- A bug that allows cross-tenant joins is a security incident, not a
+  feature bug. Pair with `auth.md` before touching anything tenant-scoped.
+
+## Gaps
+- Soft delete versus hard delete is still undecided. Ask before choosing.
+```
+
+Two things worth noticing. **Decisions** records the reasoning, not just the choice, so nobody relitigates it at midnight. **Gaps** is where you admit what is not settled yet, which tells the assistant to ask you instead of inventing an answer.
+
+The full template has eight sections. You fill in the ones that earn their place and leave the rest empty. Details in [SPEC.md](SPEC.md).
+
+## How it works
+
+1. You add one file at your repository root, `AGENTS.md`, and a folder called `agents/` holding your pillars.
+2. Each pillar declares, in a few lines at the top, what it covers and which words in a task should summon it.
+3. When you give the assistant a task, it scans those declarations, loads the two always-on pillars plus whichever others match, and follows them.
+4. Anything you have not written up yet degrades gracefully. The assistant states its assumption out loud and suggests writing that pillar, rather than silently guessing.
+
+There are 24 topics in the standard catalog: 2 always loaded, 11 Core, 11 Common, plus as many project-specific ones as you need. Most projects use a focused subset, and deliberately marking a topic as "not applicable here" is a first-class answer. A command-line tool has no login screen, and saying so is useful information.
+
+Full catalog with what each topic covers: [PILLARS.md](PILLARS.md).
+
+## Why this does not rot like normal documentation
+
+Most internal documentation dies quietly. Someone writes it, nobody reads it, it drifts out of date, and eventually everyone learns to ignore it.
+
+Pillars is read on every session, by the assistant, out loud, in its output. When a pillar goes stale the assistant starts confidently doing the wrong thing, in front of you, today. That is annoying, and annoying gets fixed.
+
+Regular documentation rots silently. Pillars rots loudly.
 
 ## What Pillars is not
 
-- Not a workflow tool. It produces no work; it surfaces context.
-- Not a compliance document. Pillars are briefings, not rulebooks. The agent is trusted by default.
-- Not tool-specific. Any agent that reads markdown and parses YAML can implement it.
-- Not tooling. This repo defines the standard. Tooling (CLI, skills, IDE wrappers) lives separately, when it exists. See [the tooling philosophy](#standard-vs-tooling).
+- **Not a workflow tool.** It produces no work. It supplies context.
+- **Not a rulebook.** These are briefings. The assistant is trusted to use judgment, not marched through a compliance checklist.
+- **Not tied to one vendor.** Any assistant that reads markdown can use it.
+- **Not software you install.** This repository defines the standard. Helper tools exist, and they are optional.
 
-## How it works (one minute)
-
-1. A project adopts Pillars by adding an `AGENTS.md` at the repo root and a folder of pillar files at `./agents/`.
-2. Each pillar covers one domain (`data.md`, `auth.md`, `ui.md`, etc.) and follows an 8-section template with YAML frontmatter.
-3. When an agent starts a task, it scans the frontmatter, picks the relevant pillars based on the task description, loads them, and follows their content.
-4. Pillars come in tiers: 2 always-loaded, 11 Core, 11 Common, plus open-ended Domain pillars. Most projects use a focused subset. Excluded pillars are first-class.
-5. Routing has a portable token-matching baseline. Sub-pillars use path-qualified identities, and nested scopes let monorepo packages refine root guidance.
-
-Full spec: [SPEC.md](SPEC.md). Pillar catalog with tiers, boundaries, and sub-pillar patterns: [PILLARS.md](PILLARS.md). FAQ: [FAQ.md](FAQ.md). This project dogfoods itself; the [AGENTS.md](AGENTS.md) and [agents/](agents/) folder demonstrate the standard in use. For a compact end-to-end adoption example, see [examples/saas-dashboard/](examples/saas-dashboard/).
-
-## Adopting Pillars
-
-### For a new project
-
-1. Copy [AGENTS.md](AGENTS.md) from this repo into your repo root.
-2. Create an `agents/` folder and optionally copy [`agents/catalog.yaml`](agents/catalog.yaml) for offline silent-gap discovery.
-3. Ask your coding agent to write stubs for the two always-loaded pillars (`context.md`, `repo.md`) and any Core pillars that apply. Reference [examples/](examples/) for shape.
-4. Remove catalog entries when their pillar is created or explicitly excluded.
-5. Fill sections as you make decisions. A pillar exists once it has frontmatter and a Scope statement; the rest fills in over time.
-
-### For an existing project
-
-1. Copy `AGENTS.md` into your repo root.
-2. Add a local `agents/catalog.yaml` for concerns you want the agent to discover while they are absent. Without a catalog entry, an unknown concern produces no Pillars-specific claim.
-3. Do not create every pillar upfront. A catalog match degrades gracefully: the agent infers from code, states the assumption, and recommends the relevant pillar.
-4. As inferences hit edge cases, ask the agent to author that pillar and remove its catalog entry.
-
-## Standard vs. tooling
-
-The repo defines the **standard** at the root (the spec, template, catalog, protocol). It's portable: any agent in any tool can read it.
-
-**Tooling** lives in [`tooling/`](tooling/). It automates the meta-operations (bootstrap, authoring, drift detection) but isn't required. The standard works in every major AI coding tool with zero tooling installed.
-
-### Multi-tool support
-
-Tooling ships in two forms, with broad coverage:
+## Works with the tools you already use
 
 | Form | Tools | Where |
 |---|---|---|
 | Native skill bundle | Claude Code | [`tooling/claude-skill/`](tooling/claude-skill/) |
-| Universal prompts + per-tool install guides | Cursor, Codex CLI, Gemini CLI, opencode, Aider, Windsurf, Cline, Continue, and any other AI tool | [`tooling/prompts/`](tooling/prompts/) |
+| Paste-in prompts and per-tool setup guides | Cursor, Codex CLI, Gemini CLI, opencode, Aider, Windsurf, Cline, Continue, and anything else | [`tooling/prompts/`](tooling/prompts/) |
 
-The prompt form covers optional report-first workflows for bootstrap, authoring, verification, structural checks, task routing, gap indexing, trimming, and reconciliation with design, product, and README documents.
+The standard itself works in every major AI coding tool with nothing installed. The helpers just automate the housekeeping: setting Pillars up, drafting a pillar from existing code, checking whether your pillars still match reality, showing which pillars a given task would load, and reconciling your pillars with a design doc, a product requirements doc, or your README.
 
-Pick your tool's install doc in [`tooling/prompts/`](tooling/prompts/) for one-paragraph setup instructions, or paste a prompt file directly into your tool's chat to run the operation.
+Pick your tool's setup guide in [`tooling/prompts/`](tooling/prompts/), or paste a prompt file straight into your assistant's chat.
 
-The repository also ships an optional deterministic validator, unit tests, and task-to-load-set fixtures. They use local files only and are not required for compatibility.
+For teams who want automated checks, the repository also ships a small offline validator and test suite. It reads local files only, calls no model and no service, and is never required for compatibility.
 
-### Versioning note
+## Learn more
 
-Pillars-compatible means compatible with the standard in [SPEC.md](SPEC.md): the `AGENTS.md` protocol, `agents/` layout, frontmatter schema, loading behavior, and missing-pillar behavior. Tooling changes do not change project compatibility unless `SPEC.md` changes.
+| Document | Read it when |
+|---|---|
+| [SPEC.md](SPEC.md) | You want the precise, formal rules. Short enough to read in one sitting |
+| [PILLARS.md](PILLARS.md) | You want the catalog of topics and guidance on which to use |
+| [FAQ.md](FAQ.md) | You have a practical question about adopting it |
+| [examples/saas-dashboard/](examples/saas-dashboard/) | You want to see a complete small project set up end to end |
+| [examples/](examples/) | You want realistic sample pillars to copy from |
+| [DESIGN-NOTES.md](DESIGN-NOTES.md) | You want to know why the standard is shaped this way |
 
-Repository releases may include standard changes, tooling changes, or both. The changelog labels tooling-only releases as "Standard itself unchanged" so adopters know whether they need to update their project files.
+This project uses its own standard. The [AGENTS.md](AGENTS.md) and [agents/](agents/) folder here are the real thing, not a demo.
 
-### design.md interop
+## Plain-language glossary
 
-Pillars was inspired by the same pattern that made `design.md` useful: durable, agent-readable project intent in markdown. They fit together cleanly when `design.md` remains the rich design brief and Pillars becomes the task-routed operating memory.
-
-Use root `design.md` for product intent, user journeys, UX rationale, and design narrative. Use `agents/*.md` for the durable facts, decisions, constraints, and gaps agents need while implementing specific tasks. The [`pillars-sync-design.md`](tooling/prompts/pillars-sync-design.md) prompt compares both directions and reports proposed updates without writing files.
+- **Pillar.** One markdown file covering one topic, such as data or login.
+- **AGENTS.md.** The small file at your repository root that tells the assistant how to find and load pillars.
+- **Always-loaded pillar.** The two pillars read on every task: what the project is, and how the repository is organized.
+- **Trigger.** A word or phrase that makes a pillar relevant to a task.
+- **Stub.** A pillar you have started but not filled in. It tells the assistant to ask you rather than assume.
+- **Excluded.** A topic you have marked as not applicable to this project, on purpose.
+- **Gap.** Something you know is unresolved, written down so the assistant surfaces it instead of deciding for you.
 
 ## Repository layout
 
@@ -111,58 +203,44 @@ Use root `design.md` for product intent, user journeys, UX rationale, and design
 pillars/
 ├── README.md           # this file
 ├── SPEC.md             # the formal standard
-├── PILLARS.md          # the pillar enumeration: tiers, boundaries, sub-pillar patterns
-├── AGENTS.md           # this project's own AGENTS.md (dogfooded protocol)
+├── PILLARS.md          # the catalog: topics, tiers, and boundaries
+├── AGENTS.md           # this project's own loader, using the standard
 ├── FAQ.md              # adoption and usage questions
 ├── CONTRIBUTING.md     # how to contribute
 ├── CODE_OF_CONDUCT.md  # community standards
 ├── SECURITY.md         # security policy
 ├── CHANGELOG.md        # version history
 ├── LICENSE             # CC0 1.0 Universal
-├── agents/             # this project's own pillar files (dogfooded)
+├── agents/             # this project's own pillars
 │   ├── context.md
 │   ├── repo.md
-│   └── catalog.yaml    # optional offline absent-concern metadata
-├── examples/           # worked example pillars for adopters
+│   └── catalog.yaml    # optional index of topics not yet written up
+├── examples/           # sample pillars and a full worked project
 │   ├── data.md
 │   ├── auth.md
-│   ├── auth/           # sub-pillar worked example (agent-facing registration)
+│   ├── auth/
 │   │   └── agent-registration.md
-│   └── saas-dashboard/ # compact end-to-end adoption example
-├── tooling/            # optional tooling and repository QA
-│   ├── claude-skill/   # Claude Code native skill bundle
-│   │   ├── pillars-init/
-│   │   ├── pillars-author/
-│   │   └── pillars-verify/
-│   ├── ci/             # validator, pinned dependency, and unit tests
-│   │   ├── validate_pillars.py
-│   │   ├── check_consistency.py
-│   │   ├── requirements.txt
-│   │   └── tests/
+│   └── saas-dashboard/
+├── tooling/            # optional helpers and repository QA
+│   ├── claude-skill/   # Claude Code skill bundle
+│   ├── ci/             # offline validator and tests
 │   ├── conformance/    # routing fixtures and benchmark protocol
-│   └── prompts/        # Universal paste-in prompts + per-tool install guides
-│       ├── pillars-check.md
-│       ├── pillars-find-gaps.md
-│       ├── pillars-init.md
-│       ├── pillars-author.md
-│       ├── pillars-map-task.md
-│       ├── pillars-verify.md
-│       ├── pillars-sync-prd.md
-│       ├── pillars-sync-readme.md
-│       ├── pillars-sync-design.md
-│       ├── pillars-trim.md
-│       └── install-{cursor,codex-cli,gemini-cli,opencode,aider,windsurf,cline,continue}.md
+│   └── prompts/        # paste-in prompts and per-tool setup guides
 └── DESIGN-NOTES.md     # design conversation log
 ```
 
 ## Status
 
-Stable 1.2.0. This backward-compatible release adds the decision-depth sub-pillar pattern on top of 1.1, which specified deterministic routing, path-qualified sub-pillar identities, offline absent discovery, nested scopes, content budgets, and expanded catalog boundaries. No schema or loading behavior changed. The conformance suite is repeatable and local. Hypothetical pressure tests are not presented as adopter evidence, and the optional live-model benchmark template remains unscored until a real run is published. See [CHANGELOG.md](CHANGELOG.md) for version history.
+Stable 1.2. This release is backward compatible with 1.1 and 1.0. Nothing about the file format or loading behavior changed, so existing adopters need no migration.
+
+Version history: [CHANGELOG.md](CHANGELOG.md).
+
+Honest note on evidence: the conformance suite here is repeatable and runs locally, and the standard has been pressure-tested against constructed scenarios. Published before-and-after adoption studies from real projects are still accumulating, and this repository does not present hypothetical tests as adopter evidence.
 
 ## Contributing
 
-Pull requests and proposals are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution model (RFC-style for spec changes, direct PR for typos and examples).
+Proposals and pull requests are welcome, including from people who are not engineers. Wording, examples, and "this was confusing" reports are genuinely useful. See [CONTRIBUTING.md](CONTRIBUTING.md) for how changes to the standard are proposed.
 
 ## License
 
-[CC0 1.0 Universal](LICENSE). Use Pillars freely, in any project, public or private, with or without attribution. The standard wins by being adopted.
+[CC0 1.0 Universal](LICENSE). Use Pillars freely, in any project, public or private, commercial or not, with or without credit. There is no catch. The standard wins by being adopted.
