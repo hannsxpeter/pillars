@@ -81,7 +81,7 @@ Skill versions are tracked in each skill's frontmatter. Skills are versioned ind
 
 | Skill | Version | Standard compatibility |
 |---|---|---|
-| `pillars-init` | 0.2.0 | Pillars v1.1.0+ |
+| `pillars-init` | 0.3.0 | Pillars v1.1.0+ |
 | `pillars-author` | 0.2.0 | Pillars v1.1.0+ |
 | `pillars-verify` | 0.2.0 | Pillars v1.1.0+ |
 

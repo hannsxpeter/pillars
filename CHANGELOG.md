@@ -10,6 +10,18 @@ All notable changes to the Pillars standard are documented here. Format follows 
 
 No unreleased changes.
 
+## [1.2.1] - 2026-08-04
+
+Tooling and documentation only. The standard itself is unchanged, and Pillars compatibility is unaffected. Projects on 1.2.0 need no edits.
+
+### Changed
+
+- **`pillars-init` skill (0.2.0 -> 0.3.0) and the matching `pillars-init.md` prompt:** Step 0 now detects an existing decision-record corpus (`docs/adr/`, `docs/decisions/`, `decisions/`, `adr/`) and instructs against migrating it, since flattening those files into a `Decisions` section discards the supersession history that made them worth keeping. Step 5 teaches the decision-depth sub-pillar as an escalation the user opts into, not something init scaffolds. Step 6 reports the corpus location when one is found. The skill keeps its `>=1.1.0` compatibility floor: sub-pillar identities have existed since 1.1, so 1.2 names the pattern without being required to use it.
+- **`README.md`:** the status badge read "stable 1.1" through the whole 1.2.0 release. It now tracks the current minor.
+- **Adoption guidance:** install and reference URLs are repinned from `v1.2.0` to `v1.2.1`.
+
+[1.2.1]: https://github.com/hannsxpeter/pillars/releases/tag/v1.2.1
+
 ## [1.2.0] - 2026-08-03
 
 Backward-compatible catalog release. No frontmatter schema, identity, or loading behavior changed; a 1.1 project conforms to 1.2 with no edits.

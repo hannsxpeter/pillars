@@ -24,6 +24,14 @@ If either `AGENTS.md` or `agents/` exists with content, stop and ask the user:
 
 Wait for the user's decision before continuing. Otherwise proceed.
 
+Then run:
+
+```
+ls -d docs/adr docs/decisions decisions adr 2>/dev/null
+```
+
+If a decision-record corpus exists, do NOT migrate it into pillar sections. Flattening those files discards the supersession history that made them worth keeping. Note the path for the Step 6 summary and plan to reference it from `arch.md`. Step 5 covers routing them instead.
+
 ### Step 1 — Detect the project archetype
 
 Scan the project structure and pick the archetype that best matches. Priority order:
@@ -47,10 +55,10 @@ If empty/greenfield, ask what they're building and map to the closest archetype.
 
 Fetch these from the Pillars repo (use your tool's web-fetch or download capability):
 
-- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/AGENTS.md`
-- SPEC: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/SPEC.md` (reference)
-- PILLARS: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/PILLARS.md` (reference)
-- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/agents/catalog.yaml`
+- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.1/AGENTS.md`
+- SPEC: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.1/SPEC.md` (reference)
+- PILLARS: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.1/PILLARS.md` (reference)
+- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.1/agents/catalog.yaml`
 
 If you cannot fetch URLs, use the inline AGENTS.md template at the bottom of this prompt.
 
@@ -173,6 +181,8 @@ For each `yes` (or `maybe` after asking the user), write a stub at `agents/<pill
 
 All stubs get `must_read_with: []` and `see_also: []` initially; couplings get added when content arrives.
 
+Decision rationale goes in each pillar's own `Decisions` section by default. Do NOT scaffold `agents/arch/decisions.md` at init. Raise the decision-depth sub-pillar only when the project already has a decision-record corpus (Step 0) or the user says rationale churns enough that a flat section will not hold it. When warranted, `agents/arch/decisions.md` takes the identity `arch/decisions`, routes on its own triggers, and may declare `must_read_with: [arch]`. The parent is not auto-loaded. `stack/decisions` works the same way for technology choices.
+
 ### Step 6 — Summary
 
 Print a concise summary to the user:
@@ -188,6 +198,8 @@ Files created:
 - agents/<core-pillars>.md (N stubs)
 
 Excluded pillars: <list with reasons>
+
+Existing decision records: <path, or omit this line entirely if none were found>
 
 Next steps:
 1. Fill context.md with what this project is.
@@ -220,7 +232,7 @@ If yes, draft `context.md` from what the user has told you. Use the same procedu
 ````markdown
 # Pillars: Agent Protocol
 
-This project follows [Pillars 1.2.0](https://github.com/hannsxpeter/pillars/tree/v1.2.0). Coding agents read project pillar files before acting.
+This project follows [Pillars 1.2.1](https://github.com/hannsxpeter/pillars/tree/v1.2.1). Coding agents read project pillar files before acting.
 
 ## At the start of any task
 
@@ -257,8 +269,8 @@ excluded: []
 
 - Pillar files: `./agents/*.md`
 - Optional absent catalog: `./agents/catalog.yaml`
-- Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.0/SPEC.md
-- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.0/PILLARS.md
+- Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.1/SPEC.md
+- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.1/PILLARS.md
 ````
 
 ---
@@ -266,6 +278,6 @@ excluded: []
 ## Reference
 
 - Pillars standard: https://github.com/hannsxpeter/pillars
-- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.0/SPEC.md
-- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.0/PILLARS.md
-- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.0/examples
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.1/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.1/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.1/examples
