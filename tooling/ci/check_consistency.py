@@ -20,6 +20,9 @@ COMMON = [
     "analytics", "integrations", "async", "cache", "notifications",
 ]
 IGNORED_PARTS = {".git", ".godpowers", "__pycache__"}
+RELEASE_HEADING = re.compile(r"^## \[(\d+\.\d+\.\d+)\][^\n]*$", re.MULTILINE)
+RELEASE_ANCHOR = re.compile(
+    r"^\[(\d+\.\d+\.\d+)\]: \S+/releases/tag/v(\d+\.\d+\.\d+)\s*$", re.MULTILINE)
 
 
 def maintained_files():
@@ -97,6 +100,56 @@ def check_versions(errors):
             errors.append(".github/workflows/validate.yml: expected current action pin '%s'" % action)
 
 
+def changelog_errors(text, version):
+    """Report release-history damage in CHANGELOG text.
+
+    Released entries are append-only. A bulk version bump across the repo is
+    the usual way they get rewritten in place, which is invisible in review
+    because the result still looks like a well-formed changelog.
+    """
+    errors = []
+    headings = RELEASE_HEADING.findall(text)
+    if not headings:
+        return ["CHANGELOG.md: no released version entries found"]
+
+    if headings[0] != version:
+        errors.append("CHANGELOG.md: newest entry is '%s', expected the release version '%s'"
+                      % (headings[0], version))
+
+    seen = set()
+    for entry in headings:
+        if entry in seen:
+            errors.append("CHANGELOG.md: version '%s' has more than one entry" % entry)
+        seen.add(entry)
+
+    def parts(entry):
+        return tuple(int(piece) for piece in entry.split("."))
+
+    for older, newer in zip(headings[1:], headings):
+        if parts(older) >= parts(newer):
+            errors.append("CHANGELOG.md: entry '%s' does not precede '%s' in descending order"
+                          % (newer, older))
+
+    anchors = {}
+    for label, tag in RELEASE_ANCHOR.findall(text):
+        if label != tag:
+            errors.append("CHANGELOG.md: anchor '[%s]' points at tag 'v%s'" % (label, tag))
+        anchors[label] = tag
+    for entry in headings:
+        if entry not in anchors:
+            errors.append("CHANGELOG.md: entry '%s' has no release-tag anchor" % entry)
+    for label in anchors:
+        if label not in seen:
+            errors.append("CHANGELOG.md: anchor '[%s]' has no matching entry" % label)
+
+    return errors
+
+
+def check_changelog(errors):
+    text = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    errors.extend(changelog_errors(text, VERSION))
+
+
 def check_catalog(errors):
     catalog = yaml.safe_load((ROOT / "agents/catalog.yaml").read_text(encoding="utf-8"))
     actual = [entry["identity"] for entry in catalog.get("absent", [])]
@@ -135,6 +188,7 @@ def main():
     check_local_links(errors)
     check_urls_and_terms(errors)
     check_versions(errors)
+    check_changelog(errors)
     check_catalog(errors)
     if errors:
         for error in errors:

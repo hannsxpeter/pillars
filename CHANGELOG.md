@@ -8,7 +8,12 @@ All notable changes to the Pillars standard are documented here. Format follows 
 
 ## [Unreleased]
 
-No unreleased changes.
+Repository QA only. No standard or tooling behavior changed, so nothing here affects Pillars compatibility.
+
+### Added
+
+- **Changelog history guard in `tooling/ci/check_consistency.py`:** released entries are append-only, but the repo-wide version substitution that repins install URLs each release will happily rewrite an already-published entry in place. The damage survives review because the result still looks like a well-formed changelog. The check now verifies that the newest entry matches the release version, that no version has two entries, that entries descend, and that every entry has a release-tag anchor pointing at its own tag. Caught during the 1.2.2 release, where a bulk `1.2.1 -> 1.2.2` substitution rewrote the published 1.2.1 entry.
+- **`tooling/ci/tests/test_check_consistency.py`:** first unit coverage for the consistency checker, including a regression case that replays the bulk-substitution failure and a case asserting the repository's own changelog is intact.
 
 ## [1.2.2] - 2026-08-04
 
