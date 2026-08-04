@@ -1,6 +1,10 @@
 # Pillars Specification
 
-Version 1.2.1.
+Version 1.2.2.
+
+> **Who this document is for.** This is the precise, formal definition of the standard, written for people implementing Pillars in a tool or writing pillars by hand and wanting the exact rules. It is deliberately technical.
+>
+> If you just want to use Pillars in your project, you do not need to read this. Start with [the README](README.md), then [PILLARS.md](PILLARS.md) for the catalog of topics, then [FAQ.md](FAQ.md) for practical questions. Your AI assistant can read this document on your behalf.
 
 This document defines the Pillars standard. It specifies pillar structure, routing, local discovery, nested scopes, and missing-pillar behavior. An implementation that conforms to this spec is *Pillars-compatible*.
 
@@ -229,7 +233,7 @@ A reference implementation is in this repository's [AGENTS.md](AGENTS.md).
 
 Pillars compatibility does not require the repository's validator or any external service. Implementations can validate the standard with their own tooling. Deterministic routing implementations should be checked against representative task-to-load-set fixtures.
 
-This spec uses semantic versioning. The current version is 1.2.1.
+This spec uses semantic versioning. The current version is 1.2.2.
 
 - Major: incompatible changes to existing pillar files or loading behavior.
 - Minor: backward-compatible additions or newly specified behavior.

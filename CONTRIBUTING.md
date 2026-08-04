@@ -1,6 +1,16 @@
 # Contributing to Pillars
 
-Thank you for considering a contribution. Pillars is a standard, not a code project, so its contribution model is closer to RFC-style than typical open-source software. This document explains how to propose changes, what kinds of contributions are welcome, and what to expect.
+Thank you for considering a contribution.
+
+**You do not have to be an engineer to contribute here.** Pillars is a standard written in prose, and the most common failure mode for a standard is being confusing rather than being wrong. Clearer wording, a better example, or an honest "I read this three times and still did not get it" report is a real contribution, and often a more valuable one than a spec change.
+
+The easiest ways in:
+
+- Found a typo or an unclear sentence? Open a pull request directly, or an issue if you are not comfortable with pull requests.
+- Something confused you during adoption? Open an issue with the question template and say what you expected. That is data we cannot get any other way.
+- Wrote pillars for a project type not covered here? Share the exclusion list you ended up with.
+
+Beyond that, Pillars is a standard rather than a code project, so its contribution model is closer to RFC-style than to typical open-source software. The rest of this document explains how to propose changes, what is welcome, and what to expect.
 
 ## What Pillars accepts
 
@@ -49,9 +59,9 @@ Expect a multi-week conversation. The standard is intentionally small and slow-m
 
 Pillars uses [Semantic Versioning](https://semver.org/):
 
-- **Major** (`1.x.x` -> `2.x.x`) — frontmatter schema or loading-mechanism changes that break existing pillars. Requires migration notes.
+- **Major** (`1.x.x` -> `2.x.x`): frontmatter schema or loading-mechanism changes that break existing pillars. Requires migration notes.
 - **Minor** (`1.2.x` -> `1.3.x`): backward-compatible additions to schema, protocol, pillar catalog, or sub-pillar patterns.
-- **Patch** (`1.2.1` -> `1.2.2`): clarifications, typo fixes, new examples, documentation.
+- **Patch** (`1.2.2` -> `1.2.3`): clarifications, typo fixes, new examples, documentation.
 
 The current version is in `CHANGELOG.md`.
 

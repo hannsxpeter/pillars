@@ -10,7 +10,7 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[2]
-VERSION = "1.2.1"
+VERSION = "1.2.2"
 CORE = [
     "stack", "arch", "data", "api", "ui", "auth", "quality",
     "development", "release", "deploy", "observe",
@@ -116,7 +116,7 @@ def check_catalog(errors):
     if "11 Core, 11 Common" not in readme:
         errors.append("README.md: catalog counts are stale")
     faq = (ROOT / "FAQ.md").read_text(encoding="utf-8")
-    if "CLI tools commonly exclude 11 of them" not in faq:
+    if "commonly exclude 11 of them" not in faq:
         errors.append("FAQ.md: CLI exclusion count is stale")
 
     expected_core_line = "- Core: " + ", ".join("`%s`" % item for item in CORE)

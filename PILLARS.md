@@ -1,16 +1,27 @@
-# Pillars Enumeration
+# The Pillar Catalog
 
-This document lists the standard pillar catalog, tiers, scopes, and boundary calls. The file structure and runtime behavior live in [SPEC.md](SPEC.md).
+**This is the menu of topics you can write up, not a list of homework.**
 
-The catalog helps people decide which concerns to record. Runtime discovery is local: present pillars route from their frontmatter and silent gaps route from optional `agents/catalog.yaml`.
+Every project has a handful of things an AI assistant cannot work out on its own: what the product actually is, where files belong, how login works, how you ship. This document names those topics so you can decide, once, which ones matter for your project. Most projects use a focused subset and deliberately skip the rest.
 
-## Tier overview
+New to Pillars? Read [the README](README.md) first. The exact file format and loading behavior live in [SPEC.md](SPEC.md).
 
-- **Always-loaded (2):** `context`, `repo`. Small enough to load for every task.
-- **Tier 1, Core (11):** concerns every non-trivial project should consider. They are task-routed and may be excluded.
-- **Tier 2, Common (11):** recurring cross-cutting concerns to add when relevant.
-- **Tier 3, Domain (open set):** concerns determined by the product and operating model.
-- **Sub-pillars:** folder-based deep dives with path-derived identities.
+## How to use this page
+
+1. Skim the tables below and pick the topics that apply to your project.
+2. Write those pillars, starting with the two always-loaded ones.
+3. Mark topics that clearly do not apply as excluded, in one line, in your `AGENTS.md`. A command-line tool has no login screen, and recording that is genuinely useful.
+4. For topics you know matter but have not documented yet, add an entry to `agents/catalog.yaml` so the assistant knows what it does not know.
+
+You are never required to fill in everything, and a partially written pillar beats no pillar. Suggested starting points by project type are at the [bottom of this page](#archetype-starter-exclusions).
+
+## The tiers, in plain terms
+
+- **Always-loaded (2):** `context` and `repo`. Read on every single task, so they stay short.
+- **Tier 1, Core (11):** the topics almost every real project has an opinion about. Loaded only when the task is relevant, and can be excluded.
+- **Tier 2, Common (11):** cross-cutting topics that show up often but not always. Add them when they apply.
+- **Tier 3, Domain (open set):** whatever is specific to your product, such as payments, search, or inventory. You invent these.
+- **Sub-pillars:** a deeper dive inside one topic, kept in a folder, for when a single pillar starts getting crowded.
 
 ## Always-loaded (2)
 
@@ -70,6 +81,8 @@ Common examples include:
 Use a precise domain noun when possible. `orders.md` is more useful than a catch-all `business-rules.md` when orders are the actual bounded concern.
 
 ## Boundary calls
+
+Two topics often feel like they overlap, and you end up unsure where a fact belongs. These are the calls the standard has already made, with the reasoning. Skip this section until you actually hit one of these questions.
 
 ### Auth vs. security
 
@@ -190,7 +203,7 @@ Sub-pillars use the same 8 sections and routing fields as top-level pillars. A s
 
 ## Archetype starter exclusions
 
-These are starting suggestions, not requirements:
+Find your project type and use the right column as a starting point for what to mark as not applicable. These are suggestions, not requirements, and you can change your mind later.
 
 | Archetype | Typical exclusions |
 |---|---|

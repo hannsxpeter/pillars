@@ -63,5 +63,5 @@ If a procedural update happens, matching prompt and skill forms should be update
 ## Reference
 
 - Pillars standard: https://github.com/hannsxpeter/pillars
-- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.1/SPEC.md
-- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.1/PILLARS.md
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.2/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md

@@ -1,166 +1,190 @@
 # FAQ
 
-Common questions about Pillars. Organized roughly by audience and frequency.
+Questions about Pillars, ordered from "I just found this" to "I am implementing the spec."
 
-## What Pillars is
+New here? Start with [the README](README.md).
 
-### Why does this exist when `AGENTS.md` already does?
+## Starting out
 
-`AGENTS.md` is one file. It works fine for small projects. As a project grows, that one file either bloats (and the agent loads everything every session) or stays thin (and most project knowledge lives in someone's head). Pillars decomposes that one file into a structured set of pillars, each covering one domain, with a loading mechanism so the agent reads only what's relevant to the current task.
+### What is this, in one sentence?
 
-`AGENTS.md` is the entry point in Pillars. The standard sits *under* the AGENTS.md convention rather than replacing it.
+A way to write down what your AI coding assistant needs to know about your project, in plain markdown files it reads automatically, so it stops guessing and re-deciding things you already settled.
 
-### How is this different from Cursor rules, `.windsurfrules`, etc.?
+### Do I need to be a programmer to use it?
 
-Those are tool-specific. They work in one tool and one tool only. Pillars is portable: any agent that reads markdown and parses YAML can implement it. Adopters get one canonical source of truth that survives across Cursor, Claude Code, Codex, Gemini, Aider, and whatever ships next.
+No. The files are plain markdown, and most of what belongs in them is a decision rather than code. "We use Stripe and never store card numbers ourselves" is a good pillar line. So is "this pricing copy was approved by legal, do not reword it."
 
-### Does this require my AI tool to support it?
+You do need a project with code in it, and an AI coding tool. Writing the files themselves is closer to writing an onboarding doc than to programming, and your assistant can draft most of them from your existing code if you ask.
 
-The runtime loop requires the tool to read `AGENTS.md` at the project root. Every major AI coding tool (Claude Code, Codex CLI, Cursor, Gemini CLI, opencode, Aider) already does this, either natively or via a one-line shim file pointing at AGENTS.md.
+### What does it cost?
 
-If your tool doesn't read project-level instructions at all, no, Pillars doesn't help you. That's increasingly rare.
+Nothing. Pillars is released under [CC0](LICENSE), which is as close to public domain as a license gets. There is no account, no company behind a paywall, no premium tier. Use it in commercial work without attribution if you like.
 
-### Is this Anthropic-specific?
+### How long does setup take?
 
-No. The standard mentions Claude and Claude Code as examples because that's a common adoption path, but Pillars is tool-agnostic by design and accepts no tool-specific extensions.
+About five minutes for a new project: copy one file, create one folder, write two short starter pillars. Same for an existing project.
 
-### Is Pillars' `auth.md` the same as WorkOS's `auth.md`?
+The pillars themselves fill in over the life of the project, as you make decisions. There is no "fill in all 24 topics before you start" requirement, and there never will be.
 
-No. They share a filename and nothing else. Pillars' `auth.md` is a dev-time **context pillar** at `agents/auth.md` that briefs a *coding* agent on your project's identity and access design. WorkOS's [`auth.md`](https://github.com/workos/auth.md) is a runtime **agent-registration protocol**: a file a live service hosts at `https://yourservice.com/auth.md` so an *autonomous action agent* can sign up for that service on a user's behalf. Different layer, different audience, different lifecycle, and they coexist fine in one project because they live at different paths. If your project adopts agent-facing registration, document it for your coding agent like any other integration: in your `auth.md` pillar, or a focused sub-pillar such as `agents/auth/agent-registration.md`. See [examples/auth/agent-registration.md](examples/auth/agent-registration.md) for a worked example.
+### Do I have to write all 24 topics?
 
-## How it works
+No. The catalog exists so you consider each topic once, not so you complete each one. Command-line tools commonly exclude 11 of them, and marking a topic as not applicable is a fully supported answer, recorded in one line. See [PILLARS.md](PILLARS.md) for suggested starting points by project type.
 
-### Do I have to use all 24 catalog pillars?
+### Can I adopt it gradually?
 
-No. The standard defines a tiered set so you reason about each topic, but you populate only what applies. CLI tools commonly exclude 11 of them; that's first-class supported via `excluded:` in `AGENTS.md`. See [PILLARS.md](PILLARS.md) for archetype-specific starter exclusion lists.
+Yes, and that is the intended path. Start with the two always-loaded pillars: what the project is (`context.md`) and how the repository is organized (`repo.md`). Add others as decisions get made. Anything you have not written up yet either gets marked as a known gap or simply produces no claim, rather than a confident wrong guess.
 
-### Can I use only some pillars and not others?
+### Do I need to install anything?
 
-Yes. The 5-state missing-pillar protocol handles incomplete adoption: present pillars load, stubs prompt the agent to ask, exclusions are not applicable, locally cataloged absences degrade to explicit inference, and unknown concerns make no Pillars-specific claim.
+No. The daily loop is just markdown files that your AI tool already reads.
 
-### How does this work for a monorepo?
+There is an optional validator for teams who want automated structure checks in CI ([`tooling/ci/validate_pillars.py`](tooling/ci/validate_pillars.py)). It reads local files, calls no model and no external service, and compatibility never depends on it. If you want a structure check without any setup, paste [`tooling/prompts/pillars-check.md`](tooling/prompts/pillars-check.md) into your assistant instead.
 
-Pillars 1.1 defines nested scopes. Put shared guidance in the root `AGENTS.md` and `agents/`. A package can add its own `AGENTS.md` plus `agents/` when it needs local routing or overrides. For a package task, the agent loads applicable scopes from root to package. Non-conflicting guidance accumulates, and the nearest scope wins conflicts. A child exclusion suppresses an inherited task-routed pillar of the same identity for that child.
+### Which AI tools work with this?
 
-Keep one root scope when package differences are small. Nested scopes are useful when packages have independent stacks, layouts, or product boundaries, not as a reason to duplicate every pillar.
+Any tool that reads project instructions from your repository root. That includes Claude Code, Codex CLI, Cursor, Gemini CLI, opencode, Aider, Windsurf, Cline, and Continue, either natively or via a one-line shim file pointing at `AGENTS.md`.
 
-### Can pillars cover non-code concerns (legal, compliance, business rules)?
+If your tool ignores project-level instructions entirely, Pillars cannot help you. That is increasingly rare.
 
-Yes, when relevant. `compliance.md` (Tier 2) is exactly this. `inventory.md` (Domain) often crosses into business rules. The rule of thumb: if a coding agent needs the information to do its job correctly, it belongs in a pillar.
+### Is this an Anthropic thing? A Claude thing?
 
-### What happens if two pillars contradict?
+No. Claude and Claude Code come up as examples because they are a common way people arrive here. The standard is tool-agnostic by design and deliberately accepts no tool-specific extensions.
 
-That's a sign of a real contradiction in the project, not a Pillars problem. Resolve by deciding which pillar is authoritative, updating the other to defer, or reconsidering the boundary between them.
+## How it compares
 
-## Adoption
+### Why not just use one `AGENTS.md` file?
 
-### How long does adoption take for a new project?
+For a small project, one file is fine, and Pillars still uses `AGENTS.md` as the entry point. Pillars sits underneath that convention rather than replacing it.
 
-Five minutes for the install (copy `AGENTS.md`, create `agents/`, write two stubs). The pillars themselves accumulate over the project's lifetime as decisions get made. There's no upfront "fill in every pillar" requirement.
+The problem shows up as a project grows. That single file either bloats, in which case the assistant reads everything every session and the important parts get buried, or it stays thin, in which case most of what matters lives in someone's head. Pillars splits it into focused files and adds a way for the assistant to load only what the current task needs.
 
-### How long for an existing project?
+### How is this different from Cursor rules or `.windsurfrules`?
 
-Five minutes for the install. Add absent concerns to local `agents/catalog.yaml` when you want deterministic offline discovery. A matching catalog entry degrades gracefully: the agent infers from code and states the assumption. Unknown concerns that are not present, excluded, or cataloged produce no Pillars-specific claim.
+Those work in exactly one tool. Pillars is portable: any assistant that reads markdown can use it. You get one source of truth that survives your team using different tools, and survives whatever ships next year.
 
-### Do I need a CLI?
+### How does it relate to `design.md`?
 
-No, not for the runtime alignment loop (the daily use). The standard ships as markdown; every supporting AI tool reads it natively.
+They complement each other. Keep `design.md` as the rich design brief: product intent, user journeys, the reasoning behind the experience. Use pillars as task-routed working memory: the durable facts, constraints, and decisions an assistant needs while implementing something specific.
 
-For deterministic structure and routing checks, the repo ships a small validator ([`tooling/ci/validate_pillars.py`](tooling/ci/validate_pillars.py)) used in its own CI. It checks local files and conformance fixtures without a model or external service. Adopters may run it, but compatibility never requires this implementation or a published package.
+Do not sync them silently. [`tooling/prompts/pillars-sync-design.md`](tooling/prompts/pillars-sync-design.md) produces a report of what each document should learn from the other, plus conflicts that need a human decision.
 
-### How do I check structure without a CLI?
+### Is your `auth.md` the same as WorkOS's `auth.md`?
 
-Use [`tooling/prompts/pillars-check.md`](tooling/prompts/pillars-check.md). Paste it into your AI coding tool and it will check frontmatter, required headings, floor pillars, references, and exclusions. It does not install anything and it does not audit whether pillar claims match code; use `pillars-verify.md` for drift.
+No. Same filename, nothing else in common.
 
-### What report-only maintenance prompts exist?
+The Pillars `auth.md` lives at `agents/auth.md` and briefs a *coding* assistant on how your project handles identity and access. WorkOS's [`auth.md`](https://github.com/workos/auth.md) is a runtime protocol: a file your live service publishes at `https://yourservice.com/auth.md` so an *autonomous agent* can sign itself up on a user's behalf.
 
-The prompt set includes small workflows that inspect and report without writing files:
+Different layer, different audience, different lifecycle. They coexist fine because they live at different paths. If your project does support agent-facing registration, document it for your coding assistant like any other integration, either in your `auth.md` pillar or a focused sub-pillar such as `agents/auth/agent-registration.md`. Worked example: [examples/auth/agent-registration.md](examples/auth/agent-registration.md).
 
-| Prompt | Job |
+## Living with it
+
+### Will this rot like every other documentation system?
+
+It can, if nobody ever updates it. But there is a structural difference worth understanding.
+
+Normal documentation rots silently. Nobody reads it, so nobody notices it is wrong.
+
+Pillars are read on every session, and stale ones produce visibly wrong behavior in front of you today: the assistant confidently suggests the library you abandoned. That is annoying, and annoying gets fixed. Drift-detection helpers reduce it further. Pillars rots loudly.
+
+### What if two pillars contradict each other?
+
+That usually means your project contains a real contradiction, and the pillars just made it visible. Resolve it by deciding which pillar is authoritative, updating the other to defer to it, or reconsidering where the boundary between them sits.
+
+### Can pillars cover non-code topics like legal, compliance, or business rules?
+
+Yes, when a coding assistant needs them to do its job correctly. `compliance.md` is exactly this. Business-rule pillars such as `orders.md` or `inventory.md` are common. The test is simple: would getting this wrong produce bad code or a bad product decision? If so, write it down.
+
+### How does this work in a monorepo?
+
+Put shared guidance in the root `AGENTS.md` and `agents/`. A package that needs its own routing or overrides can add its own pair. For a task inside that package, the assistant applies scopes from the root inward. Non-conflicting guidance accumulates, and the nearest scope wins any conflict.
+
+Keep a single root scope when packages are similar. Nested scopes earn their place when packages have genuinely independent stacks, layouts, or product boundaries, not as an excuse to duplicate every pillar.
+
+### What maintenance helpers exist?
+
+All of these report and recommend. None of them write files behind your back.
+
+| Prompt | What it does |
 |---|---|
-| `pillars-map-task.md` | Show which pillars should load for a task and why |
-| `pillars-find-gaps.md` | Index unresolved `Gaps` across pillars |
-| `pillars-trim.md` | Flag bloat, duplication, and over-prescription |
-| `pillars-sync-design.md` | Reconcile root `design.md` with Pillars |
-| `pillars-sync-prd.md` | Reconcile PRDs or requirements docs with Pillars |
-| `pillars-sync-readme.md` | Reconcile README with Pillars |
+| `pillars-map-task.md` | Shows which pillars would load for a given task, and why |
+| `pillars-find-gaps.md` | Collects every unresolved gap across your pillars into one list |
+| `pillars-trim.md` | Flags bloat, duplication, and over-prescription |
+| `pillars-sync-design.md` | Reconciles a root `design.md` with your pillars |
+| `pillars-sync-prd.md` | Reconciles product requirements docs with your pillars |
+| `pillars-sync-readme.md` | Reconciles your README with your pillars |
 
-### How does Pillars work with design.md?
+### Can I version individual pillars?
 
-Use `design.md` as the rich design brief and Pillars as task-routed operating memory. Root `design.md` is best for product intent, user journeys, UX rationale, and design narrative. Pillars are best for durable facts, constraints, decisions, workflows, watchouts, and gaps that agents need during implementation.
+The standard does not define per-pillar versioning. Your git history is the version log.
 
-Do not auto-sync them silently. Use [`tooling/prompts/pillars-sync-design.md`](tooling/prompts/pillars-sync-design.md) to produce a reconciliation report. It identifies `design.md -> pillars` updates, `pillars -> design.md` updates, and conflicts that need a human decision.
+If a pillar gets a major rewrite, note it in that pillar's own Decisions section. When reversed or superseded choices need to stay visible along with their original reasoning, which a flat Decisions list fights because the natural edit is to delete the stale entry, promote the reasoning into a decision sub-pillar such as `arch/decisions`. See [Common sub-pillar patterns](PILLARS.md#common-sub-pillar-patterns).
 
-### Do tooling updates change compatibility?
+### Is it stable enough to adopt?
 
-Only changes to [SPEC.md](SPEC.md) change what it means to be Pillars-compatible. Prompt, skill, install-guide, and example updates can improve adoption without changing the standard. `CHANGELOG.md` labels tooling-only releases as "Standard itself unchanged."
+Yes. Version 1.2.2 preserves the stable 1.0 schema and single-scope behavior, plus every 1.1 routing rule. It adds catalog guidance only. Any future incompatible change requires a new major version.
 
-### Can I adopt incrementally?
+### Do tooling updates break my project?
 
-Yes. Start with the two always-loaded pillars (`context.md`, `repo.md`). Add Tier 1 pillars as decisions get made. Keep other known concerns in local `agents/catalog.yaml`, or explicitly exclude concerns that do not apply. Remove catalog entries when their pillars are created or excluded.
+No. Only changes to [SPEC.md](SPEC.md) change what it means to be Pillars-compatible. Prompts, skills, install guides, and examples can all improve without touching your files. [CHANGELOG.md](CHANGELOG.md) labels tooling-only releases as "Standard itself unchanged" so you can tell at a glance whether a release affects you.
 
-## Spec details
+### How often does the standard change?
 
-### Why depth-1 loading, not transitive closure?
+Slowly, on purpose. Major versions are years apart. Minor versions land quarterly or when an additive change is needed. Patch versions are continuous.
 
-Predictability. Reading a pillar's frontmatter tells you exactly what loads alongside it. Transitive closure hides coupling depth from authors and creates "this loads everything" surprises. Frequently-needed pillars graduate to `always_load: true` instead of being hidden transitive dependencies.
+## Design decisions, for the curious
 
-### Why 8 sections in the template?
-
-It's the smallest set that covers both *briefing* (Scope, Context, Decisions) and *prescription* (Rules, Workflows, Watchouts) without forcing one shape onto everything. Sections 3-6 are optional per the "earn your keep" principle: include them only when they aren't inferable from Context.
-
-### Why folder-based sub-pillars instead of a `parent:` frontmatter field?
-
-Visual hierarchy is self-documenting. `./agents/data/migrations.md` is obviously a sub-pillar of `data`. Frontmatter would require opening the file to learn the same fact. Hugo, Jekyll, Astro, MkDocs, and every static site generator use folders for hierarchy; the pattern is conventional.
-
-### How do I reference a sub-pillar?
-
-Use its path-derived identity. `agents/auth.md` is `auth`; `agents/auth/agent-registration.md` is `auth/agent-registration`. The frontmatter `pillar` value remains the leaf filename, `agent-registration`. Bare references resolve top-level pillars only, so two parents may safely have sub-pillars with the same leaf name.
-
-### Is trigger matching still implementation-defined?
-
-Implementations may add semantic matching, but 1.1 defines a portable minimum. ASCII letters are lowercased, punctuation becomes spaces, and a selector matches a contiguous token sequence. This means `schema-change` matches `Schema change`, while `api` does not match `capital`. Primary triggers, catalog triggers, and conditional `see_also` checks use the same baseline.
-
-### What is `agents/catalog.yaml`?
-
-It is an optional local index of concerns that this project knows are absent. It carries identities and triggers so a gap can be discovered offline. Present pillars never need catalog entries because their own frontmatter routes them. Exclusions stay in `AGENTS.md`. A missing catalog preserves 1.0 present-pillar behavior but makes no claim about unknown absent concerns.
-
-### Why is tooling optional?
-
-Standards succeed by being portable and small. Tooling is a force multiplier, not a substitute. Pillars 1.2.1 defines compatibility through local text files and loading behavior, so adoption is not gated on which tooling form you use. Optional tooling lives under `tooling/` when the friction it relieves is well-understood.
-
-### Can I version pillars within a project?
-
-The standard doesn't define per-pillar versioning. The project's git history is the version log. If a pillar undergoes a major rewrite, note it in the `Decisions` section of the pillar itself. When reversed or superseded choices need to stay visible with their original reasoning, which a flat `Decisions` section fights because the natural edit is to delete the stale entry, promote the rationale to a decision-depth sub-pillar such as `arch/decisions`. See [Common sub-pillar patterns](PILLARS.md#common-sub-pillar-patterns).
-
-## Philosophy
+These answer "why is it built this way," and assume more familiarity with the spec.
 
 ### Why "briefings, not rulebooks"?
 
-Coding agents are capable. Over-constraining them (long rules lists, banned patterns, compliance-style prose) removes their judgment and produces brittle outputs. Pillars surfaces what the agent *can't infer from code* (project identity, decisions, lessons learned) and trusts the agent to apply that knowledge well. Rules and Watchouts exist for the residual: things the agent can't derive from Context alone.
+Coding assistants are capable. Over-constraining them with long rule lists, banned-pattern catalogs, and compliance-style prose removes their judgment and produces brittle output. Pillars surfaces what the assistant genuinely cannot infer from code, such as project identity, past decisions, and hard-won lessons, then trusts it to apply that well. The Rules and Watchouts sections exist for the residual: things that cannot be derived from context alone.
 
-### What's the "earn your keep" principle?
+### What is the "earn your keep" principle?
 
-Each section in a pillar is populated only when it adds value the others don't. If Context already implies a Rule, don't restate the Rule. If a Workflow is obvious from Context, skip it. Empty sections are marked `(none)`. Pillars stay tight; the agent gets clean signal.
+Each section in a pillar gets populated only when it adds something the others do not. If Context already implies a Rule, do not restate the Rule. If a Workflow is obvious from Context, skip it. Empty sections are marked `(none)`. Pillars stay tight and the assistant gets clean signal.
 
-### Won't this rot like every documentation system?
+### Why eight sections in the template?
 
-Possibly, if no one ever updates pillars. The structural difference: pillars are read by the agent on every session, so they have built-in usage pressure. Stale pillars produce visibly wrong agent behavior (the agent suggests Drizzle when the project uses Prisma), which prompts a fix. Tooling (drift detection in CI) reduces rot further. Pure documentation rots silently; pillars rot loudly.
+It is the smallest set that covers both briefing (Scope, Context, Decisions) and prescription (Rules, Workflows, Watchouts) without forcing one shape onto every topic. Sections 3 through 6 are optional under the earn-your-keep principle.
 
-## Process
+### Why load only direct dependencies, not the whole chain?
 
-### How do I propose a new pillar?
+Predictability. Reading a pillar's frontmatter tells you exactly what loads alongside it. Following the chain transitively hides coupling depth from authors and creates "why did this load everything" surprises. Pillars that turn out to be needed constantly graduate to `always_load: true` instead of hiding as transitive dependencies.
 
-Open an issue using the `feature` template. Describe the project type that needs it, the gap the new pillar fills, and how it relates to existing pillars (boundaries, touchpoints). Discussion happens in the issue. See [CONTRIBUTING.md](CONTRIBUTING.md).
+### Why folder-based sub-pillars instead of a `parent:` field?
 
-### How often is the spec updated?
+Visual hierarchy documents itself. `agents/data/migrations.md` is obviously a sub-pillar of `data`. A frontmatter field would require opening the file to learn the same fact. Hugo, Jekyll, Astro, MkDocs, and essentially every static site generator use folders for hierarchy, so the pattern is already familiar.
 
-Slowly. Major versions are years apart by design. Minor versions are quarterly or as needed for additive changes. Patch versions are continuous.
+### How do I reference a sub-pillar?
 
-### Is this stable enough to adopt?
+By its path-derived identity. `agents/auth.md` is `auth`; `agents/auth/agent-registration.md` is `auth/agent-registration`. The frontmatter `pillar` value stays the leaf filename, `agent-registration`. Bare references resolve top-level pillars only, so two parents can safely have sub-pillars with the same leaf name.
 
-Yes. Pillars 1.2.1 preserves the stable 1.0 top-level schema, single-scope behavior, and every 1.1 routing rule. It adds catalog guidance only. Future incompatible changes still require a new major version.
+### Is trigger matching implementation-defined?
+
+Implementations may add semantic matching on top, but 1.1 defines a portable minimum so results stay comparable. ASCII letters are lowercased, punctuation becomes spaces, and a selector matches a contiguous token sequence. That means `schema-change` matches `Schema change`, while `api` does not match `capital`. Primary triggers, catalog triggers, and conditional `see_also` checks all use the same baseline.
+
+### What exactly is `agents/catalog.yaml`?
+
+An optional local index of topics this project knows are absent. It carries identities and triggers so a gap can be found without network access or model memory. Present pillars never need catalog entries, since their own frontmatter routes them, and exclusions stay in `AGENTS.md`. A project with no catalog behaves exactly like 1.0 for present pillars, and simply makes no claim about topics it has not recorded.
+
+### Can I use only some pillars and not others?
+
+Yes. Five states cover incomplete adoption: present pillars load, stubs prompt the assistant to ask, exclusions are treated as not applicable, locally cataloged absences degrade to explicit stated inference, and genuinely unknown topics produce no Pillars-specific claim at all.
+
+### Why is tooling optional?
+
+Standards succeed by being portable and small. Tooling is a multiplier, not a substitute. Pillars 1.2.2 defines compatibility purely through local text files and loading behavior, so adoption never depends on which helper form you use. Optional tooling lives under `tooling/` where the friction it relieves is well understood.
+
+## Getting involved
+
+### How do I propose a new pillar for the standard?
+
+Open an issue with the `feature` template. Describe the kind of project that needs it, the gap it fills, and how it relates to existing pillars. Discussion happens in the issue. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### How do I report a problem?
 
-Open an issue. Bug template for spec ambiguities or contradictions. Question template for clarification requests. Feature template for proposals.
+Open an issue. Use the bug template for spec ambiguities or contradictions, the question template for clarifications, and the feature template for proposals.
+
+### Can I contribute if I am not an engineer?
+
+Yes, and it is genuinely useful. Clearer wording, better examples, and honest "this section confused me" reports improve adoption more than most spec changes do.

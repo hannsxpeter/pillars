@@ -1,6 +1,6 @@
 # Pillars: Agent Protocol
 
-This project follows [Pillars 1.2.1](https://github.com/hannsxpeter/pillars/tree/v1.2.1). Coding agents read project pillar files before acting.
+This project follows [Pillars 1.2.2](https://github.com/hannsxpeter/pillars/tree/v1.2.2). Coding agents read project pillar files before acting.
 
 ## At the start of any task
 
@@ -42,6 +42,6 @@ excluded: []
 
 - Pillar files in this repo: `./agents/**/*.md`
 - Optional absent catalog: `./agents/catalog.yaml`
-- Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.1/SPEC.md
-- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.1/PILLARS.md
-- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.1/examples
+- Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.2/SPEC.md
+- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.2/examples

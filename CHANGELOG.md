@@ -10,6 +10,22 @@ All notable changes to the Pillars standard are documented here. Format follows 
 
 No unreleased changes.
 
+## [1.2.2] - 2026-08-04
+
+Documentation only. The standard itself is unchanged, and Pillars compatibility is unaffected. Projects on 1.2.1 need no edits.
+
+### Changed
+
+- **`README.md`:** rewritten for a general audience. The old opening described the mechanism ("a decomposed, frontmatter-driven convention") to readers who did not yet know what problem it solved. It now leads with the problem in plain language, frames pillars as the briefing you would give a new team member, and adds a before-and-after table, an audience table that names non-engineers explicitly, an annotated sample pillar, and a plain-language glossary. Installation now offers a paste-a-prompt path before the terminal path, since a reader who does not use `curl` was previously stopped at the first instruction.
+- **`FAQ.md`:** reordered from newcomer questions to implementer questions. Adds the entries a first-time reader actually asks: what this is in one sentence, whether you need to be a programmer, what it costs, which tools work. Spec rationale moved into a "Design decisions, for the curious" section so it no longer sits between a reader and their adoption question. Every prior answer is preserved.
+- **`PILLARS.md`:** retitled "The Pillar Catalog" and reframed as a menu rather than a checklist, since the tier tables read as 24 required files to a newcomer. Adds a four-step "how to use this page" and plain-language tier descriptions. Tables, boundary calls, and archetype exclusions are unchanged.
+- **`SPEC.md`:** adds a "who this document is for" note pointing non-implementers at README, PILLARS, and FAQ. The normative text is deliberately untouched; softening the spec would cost implementers the precision they depend on.
+- **`CONTRIBUTING.md`:** opens by stating that non-engineers can contribute and names three low-friction entry points. A standard fails by being confusing more often than by being wrong, so "this section confused me" reports are worth soliciting directly.
+- **`tooling/ci/check_consistency.py`:** the FAQ staleness guard pinned the exact sentence `CLI tools commonly exclude 11 of them`, coupling a count check to one phrasing. It now matches `commonly exclude 11 of them`, keeping the guard on the number while leaving the wording free.
+- **Adoption guidance:** install and reference URLs are repinned from `v1.2.1` to `v1.2.2`.
+
+[1.2.2]: https://github.com/hannsxpeter/pillars/releases/tag/v1.2.2
+
 ## [1.2.1] - 2026-08-04
 
 Tooling and documentation only. The standard itself is unchanged, and Pillars compatibility is unaffected. Projects on 1.2.0 need no edits.

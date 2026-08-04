@@ -1,6 +1,6 @@
 # Pillars: Agent Protocol
 
-This fictional project follows Pillars 1.2.1. Coding agents read local pillar metadata before acting.
+This fictional project follows Pillars 1.2.2. Coding agents read local pillar metadata before acting.
 
 ## At the start of any task
 
