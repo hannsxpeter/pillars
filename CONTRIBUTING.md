@@ -51,7 +51,7 @@ Pillars uses [Semantic Versioning](https://semver.org/):
 
 - **Major** (`1.x.x` -> `2.x.x`) — frontmatter schema or loading-mechanism changes that break existing pillars. Requires migration notes.
 - **Minor** (`1.2.x` -> `1.3.x`): backward-compatible additions to schema, protocol, pillar catalog, or sub-pillar patterns.
-- **Patch** (`1.2.0` -> `1.2.1`): clarifications, typo fixes, new examples, documentation.
+- **Patch** (`1.2.1` -> `1.2.2`): clarifications, typo fixes, new examples, documentation.
 
 The current version is in `CHANGELOG.md`.
 

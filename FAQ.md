@@ -127,7 +127,7 @@ It is an optional local index of concerns that this project knows are absent. It
 
 ### Why is tooling optional?
 
-Standards succeed by being portable and small. Tooling is a force multiplier, not a substitute. Pillars 1.2.0 defines compatibility through local text files and loading behavior, so adoption is not gated on which tooling form you use. Optional tooling lives under `tooling/` when the friction it relieves is well-understood.
+Standards succeed by being portable and small. Tooling is a force multiplier, not a substitute. Pillars 1.2.1 defines compatibility through local text files and loading behavior, so adoption is not gated on which tooling form you use. Optional tooling lives under `tooling/` when the friction it relieves is well-understood.
 
 ### Can I version pillars within a project?
 
@@ -159,7 +159,7 @@ Slowly. Major versions are years apart by design. Minor versions are quarterly o
 
 ### Is this stable enough to adopt?
 
-Yes. Pillars 1.2.0 preserves the stable 1.0 top-level schema, single-scope behavior, and every 1.1 routing rule. It adds catalog guidance only. Future incompatible changes still require a new major version.
+Yes. Pillars 1.2.1 preserves the stable 1.0 top-level schema, single-scope behavior, and every 1.1 routing rule. It adds catalog guidance only. Future incompatible changes still require a new major version.
 
 ### How do I report a problem?
 

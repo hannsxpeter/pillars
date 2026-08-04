@@ -1,8 +1,8 @@
 ---
 name: pillars-init
 description: "Bootstrap the Pillars standard in a project. Detects the project archetype, writes AGENTS.md, creates `./agents/`, writes always-loaded and applicable Core stubs, reconciles a local absent catalog, and records archetype exclusions. Use this skill when the user asks to set up, adopt, initialize, scaffold, or install Pillars."
-version: 0.2.0
-updated: 2026-07-13
+version: 0.3.0
+updated: 2026-08-03
 compatible_with:
   - claude-code
 standard_version: ">=1.1.0"
@@ -60,6 +60,14 @@ If `AGENTS.md` already exists, or the `agents/` directory has content:
 
 If neither exists, proceed.
 
+Then check for an existing decision-record corpus:
+
+```bash
+ls -d docs/adr docs/decisions decisions adr 2>/dev/null
+```
+
+If one exists, do not migrate it and do not rewrite those files into pillar sections. They are already the project's record, and flattening them into a `Decisions` section discards the supersession history that made them worth keeping. Note the location so Step 6 can report it, and plan to reference it from `arch.md`. If the user wants those records task-routed rather than only referenced, Step 5 covers the decision-depth sub-pillar.
+
 ### Step 1. Detect the project archetype
 
 The archetype determines which pillars apply and which are typically excluded. Detect by scanning the project structure and config files. Use this priority order:
@@ -83,10 +91,10 @@ If the project is **empty/greenfield**, ask the user what they're building. Map 
 
 The skill needs the current canonical text of AGENTS.md and the pillar template. Fetch from the Pillars repo:
 
-- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/AGENTS.md`
-- Spec for template reference: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/SPEC.md`
-- Catalog for archetype exclusions: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/PILLARS.md`
-- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.0/agents/catalog.yaml`
+- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.1/AGENTS.md`
+- Spec for template reference: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.1/SPEC.md`
+- Catalog for archetype exclusions: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.1/PILLARS.md`
+- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.1/agents/catalog.yaml`
 
 Use the `WebFetch` tool. Cache locally for the rest of the session.
 
@@ -255,6 +263,8 @@ For each pillar marked `yes` (or `maybe` after confirmation), write a stub at `a
 
 Use `must_read_with: []` for stubs; the user can add couplings once content exists. Use `see_also: []` for stubs.
 
+Decision rationale belongs in each pillar's own `Decisions` section by default, so do not scaffold `agents/arch/decisions.md` at init. Raise the decision-depth sub-pillar only when the project already has a decision-record corpus (Step 0) or the user says rationale churns enough that a flat section will not hold it. When it is warranted, `agents/arch/decisions.md` takes the identity `arch/decisions`, routes on its own triggers like any other pillar, and may declare `must_read_with: [arch]`. The parent is not auto-loaded. `stack/decisions` works the same way for technology choices. See "Common sub-pillar patterns" in PILLARS.md.
+
 ### Step 6. Summarize what landed
 
 Print a concise summary to the user:
@@ -272,6 +282,8 @@ Files created:
 - ... etc ...
 
 Excluded pillars: <list>
+
+Existing decision records: <path, or omit this line entirely if none were found>
 
 Next steps:
 1. Fill context.md with what this project is. Run `/pillars-author context` or just edit the file.
@@ -305,5 +317,5 @@ If yes, transition to `pillars-author` for `context`. If no, end.
 ## Reference
 
 - Pillars standard: https://github.com/hannsxpeter/pillars
-- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.0/SPEC.md
-- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.0/PILLARS.md
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.1/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.1/PILLARS.md
