@@ -20,7 +20,7 @@ Northstar CRM is a multi-tenant B2B dashboard for account teams. Users manage ac
 
 - **Workspace:** a tenant. Every customer organization has one workspace.
 - **Member:** a user inside a workspace.
-- **Owner:** the member role that can manage billing, invites, and destructive workspace settings.
+- **Owner:** the member role that can manage invites, workspace settings, and destructive actions.
 - **Account:** a customer or prospect company tracked by the sales team.
 - **Contact:** a person associated with an account.
 

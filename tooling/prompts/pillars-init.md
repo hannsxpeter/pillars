@@ -10,7 +10,9 @@ For installation as a native command/skill in specific tools, see the relevant i
 
 You are going to set up the [Pillars](https://github.com/hannsxpeter/pillars) standard in the current project. Follow this procedure exactly. Do not skip steps.
 
-### Step 0 — Check for existing adoption
+### Step 0: Check for existing adoption
+
+Run every step from the scope root: the repository root, or a package directory when the user wants Pillars for one package inside a monorepo. For a package, first confirm it is a genuinely independent scope. Root guidance applies first and nearest-scope guidance wins conflicts. A package `AGENTS.md` may be a thin declaration that inherits the root protocol and records only local exclusions or refinements.
 
 Run:
 
@@ -32,7 +34,7 @@ ls -d docs/adr docs/decisions decisions adr 2>/dev/null
 
 If a decision-record corpus exists, do NOT migrate it into pillar sections. Flattening those files discards the supersession history that made them worth keeping. Note the path for the Step 6 summary and plan to reference it from `arch.md`. Step 5 covers routing them instead.
 
-### Step 1 — Detect the project archetype
+### Step 1: Detect the project archetype
 
 Scan the project structure and pick the archetype that best matches. Priority order:
 
@@ -51,7 +53,7 @@ If ambiguous (e.g., Next.js could be SaaS or marketing), ask the user to confirm
 
 If empty/greenfield, ask what they're building and map to the closest archetype.
 
-### Step 2 — Fetch canonical files
+### Step 2: Fetch canonical files
 
 Fetch these from the Pillars repo (use your tool's web-fetch or download capability):
 
@@ -60,11 +62,11 @@ Fetch these from the Pillars repo (use your tool's web-fetch or download capabil
 - PILLARS: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/PILLARS.md` (reference)
 - Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/agents/catalog.yaml`
 
-If you cannot fetch URLs, use the inline AGENTS.md template at the bottom of this prompt.
+If you cannot fetch URLs, use the inline AGENTS.md template at the bottom of this prompt. It is the canonical file, word for word. If you cannot fetch the starter catalog, build `agents/catalog.yaml` (`version: 1`, then an `absent:` list) from the Core table in Step 5 for every Core identity you neither stub nor exclude, and tell the user the Common entries were skipped.
 
-### Step 3 — Write AGENTS.md at the repo root
+### Step 3: Write AGENTS.md at the scope root
 
-Drop the fetched AGENTS.md content (or the inline template below) at `<project-root>/AGENTS.md`. Replace the `excluded: []` block with archetype-appropriate exclusions:
+Drop the fetched AGENTS.md content (or the inline template below) at `<scope-root>/AGENTS.md`. Replace the `excluded: []` block with archetype-appropriate exclusions:
 
 | Archetype | Typical exclusions |
 |---|---|
@@ -89,7 +91,7 @@ excluded:
 
 Infer concrete reasons from detected stack when possible (e.g., "Vercel Analytics covers monitoring" for Vercel-hosted projects).
 
-### Step 4 — Create `agents/` directory with always-loaded stubs
+### Step 4: Create `agents/` directory with always-loaded stubs
 
 ```
 mkdir agents
@@ -145,7 +147,7 @@ see_also: [repo]
 
 Write `agents/repo.md` with the same structure but covering file layout, naming, structural decisions. Use `see_also: [context]` and the appropriate Scope/Context placeholders.
 
-### Step 5 — Write Core-pillar stubs that apply
+### Step 5: Write Core-pillar stubs that apply
 
 Use this matrix to decide which Core pillars get stubs:
 
@@ -163,27 +165,27 @@ Use this matrix to decide which Core pillars get stubs:
 | deploy | no | yes | yes | yes | yes | yes | no | yes |
 | observe | no | yes | yes | maybe | yes | yes | no | maybe |
 
-For each `yes` (or `maybe` after asking the user), write a stub at `agents/<pillar>.md` with the standard 8-section template. Use these triggers per pillar:
+For each `yes` (or `maybe` after asking the user), write a stub at `agents/<pillar>.md` with the standard 8-section template and `status: stub`. A `no` gets no stub; that identity stays in `agents/catalog.yaml` unless Step 3 excluded it. Copy `covers` and `triggers` from this table, which matches the starter catalog:
 
-| Pillar | triggers |
-|---|---|
-| stack | [stack, framework, library, dependency, package, version] |
-| arch | [architecture, service, module, boundary, design, system] |
-| data | [database, schema, migration, query, table, column, model] |
-| api | [api, endpoint, route, request, response, http, rpc] |
-| ui | [ui, component, page, layout, design, style, theme] |
-| auth | [auth, login, session, role, permission, access, user] |
-| quality | [test, testing, error, lint, style, naming] |
-| development | [develop, development, local setup, bootstrap, debug] |
-| release | [release, version, changelog, publish, semver] |
-| deploy | [deploy, cutover, environment, rollback, promotion] |
-| observe | [log, logging, metric, tracing, alert, monitoring, runbook] |
+| Pillar | covers | triggers |
+|---|---|---|
+| stack | [technology choices, dependencies, version constraints] | [stack, framework, library, dependency, package, version] |
+| arch | [system architecture, services, boundaries, data flow] | [architecture, service, module, boundary, system design] |
+| data | [data model, schema, migrations, queries, storage] | [database, schema, migration, query, table, column, model] |
+| api | [api contracts, requests, responses, versioning] | [api, endpoint, route, request, response, http, rpc] |
+| ui | [visual interface, components, design tokens] | [ui, component, page, layout, style, theme] |
+| auth | [identity, sessions, permissions, access] | [auth, login, session, role, permission, access, user] |
+| quality | [testing, errors, code style, naming] | [test, testing, error, lint, style, naming] |
+| development | [local setup, developer workflow, debugging] | [develop, development, local setup, bootstrap, debug] |
+| release | [versioning, release preparation, publication] | [release, version, changelog, publish, semver] |
+| deploy | [environments, promotion, rollback, cutover] | [deploy, environment, rollback, promotion, cutover] |
+| observe | [logging, metrics, tracing, alerts, runbooks] | [log, logging, metric, tracing, alert, monitoring, runbook] |
 
 All stubs get `must_read_with: []` and `see_also: []` initially; couplings get added when content arrives.
 
 Decision rationale goes in each pillar's own `Decisions` section by default. Do NOT scaffold `agents/arch/decisions.md` at init. Raise the decision-depth sub-pillar only when the project already has a decision-record corpus (Step 0) or the user says rationale churns enough that a flat section will not hold it. When warranted, `agents/arch/decisions.md` takes the identity `arch/decisions`, routes on its own triggers, and may declare `must_read_with: [arch]`. The parent is not auto-loaded. `stack/decisions` works the same way for technology choices.
 
-### Step 6 — Summary
+### Step 6: Summary
 
 Print a concise summary to the user:
 
@@ -209,7 +211,7 @@ Next steps:
 The agent will read AGENTS.md every session and align to your pillars.
 ```
 
-### Step 7 — Offer immediate next action
+### Step 7: Offer immediate next action
 
 Ask:
 
@@ -236,28 +238,33 @@ This project follows [Pillars 1.2.2](https://github.com/hannsxpeter/pillars/tree
 
 ## At the start of any task
 
-1. Resolve applicable scopes from repository root to the task target. Apply outer scopes first; nearest-scope guidance wins conflicts.
-2. In each scope, scan pillar frontmatter, local exclusions, and optional `agents/catalog.yaml`.
-3. Load always-loaded pillars. Match task tokens against other `triggers`; matches are primaries and catalog matches are absent concerns.
-4. Add each primary's `must_read_with` identities at depth 1. Use path-qualified identities for sub-pillars.
-5. Add a selected pillar's `see_also` target only when the task matches its identity, `triggers`, or `covers` with the same matcher.
-6. Read selected bodies and comply with Rules, Workflows, Watchouts, and Gaps.
+1. **Resolve scopes.** Starting at the repository root and ending at the task's target path or current directory, find every directory containing both `AGENTS.md` and `agents/`. Apply scopes from outermost to innermost. The nearest scope wins when guidance conflicts.
+
+2. **Inventory local metadata.** In each scope, scan pillar frontmatter recursively. Read exclusions from the local `AGENTS.md` and absent concerns from optional `agents/catalog.yaml`.
+
+3. **Select always and primary pillars.** Load every pillar with `always_load: true`. Match the task against every other pillar's `triggers` using the portable matcher in `SPEC.md`. Matching pillars are primaries. Matching catalog entries are absent concerns.
+
+4. **Add direct dependencies.** Add every identity in each primary's `must_read_with`. Resolve top-level identities such as `auth` at `agents/auth.md` and sub-pillar identities such as `auth/agent-registration` at that exact relative path. Stop at depth 1.
+
+5. **Consult soft references.** Add a selected pillar's `see_also` target only when the task matches that target's identity, `triggers`, or `covers` with the same matcher. Do not follow `see_also` recursively.
+
+6. **Load and comply.** Read selected bodies. Follow `Rules`, apply `Workflows`, heed `Watchouts` with judgment, and defer to `Gaps`. Preserve non-conflicting ancestor guidance; nearest-scope guidance wins conflicts.
 
 ## Handling missing pillars
 
 | State | Action |
 |---|---|
 | `status: present` | Load and comply. |
-| `status: stub` | Concern acknowledged but rules undefined. Ask the human. Do not infer silently. |
-| Identity in `excluded:` | Treat as not applicable in this scope. |
-| Trigger matches local `agents/catalog.yaml` entry | Infer from code, state the assumption, and recommend the pillar. |
-| No local file, exclusion, or catalog entry | Make no Pillars-specific claim. |
+| `status: stub` | Ask before making decisions in this area. Do not infer silently. |
+| Identity in local `excluded:` | Treat as intentionally not applicable in that scope. |
+| Trigger matches local `agents/catalog.yaml` entry | Infer from code, state the assumption, and recommend creating the pillar. |
+| No local file, exclusion, or catalog entry | Make no Pillars-specific claim about that concern. |
 
-If `context.md` or `repo.md` is missing and not explicitly excluded, pause and ask for a stub or exclusion.
+If `context.md` or `repo.md` is missing and not explicitly excluded, pause and ask the human to create a stub or record an exclusion.
 
 ## Portable matcher
 
-Lowercase ASCII letters, replace non-alphanumeric runs with spaces, and match complete contiguous token sequences. Semantic matching may add results but cannot remove deterministic matches.
+Lowercase ASCII letters, replace each run of non-alphanumeric characters with one space, trim, and split into tokens. A selector matches when its complete token sequence appears contiguously in the task tokens. Semantic matching may add matches but cannot remove deterministic matches.
 
 ## Excluded pillars
 
@@ -267,10 +274,11 @@ excluded: []
 
 ## Reference
 
-- Pillar files: `./agents/*.md`
+- Pillar files in this repo: `./agents/**/*.md`
 - Optional absent catalog: `./agents/catalog.yaml`
 - Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.2/SPEC.md
 - Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.2/examples
 ````
 
 ---

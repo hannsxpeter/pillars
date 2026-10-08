@@ -72,10 +72,12 @@ This example is small, but the report-only prompts show how an adopter would mai
 
 ## Example Task Routing
 
+These rows are checked in CI against the portable minimum matcher (see `tooling/conformance/fixtures.yaml`). The matcher does not stem words, which is why the catalog lists both `page` and `pages`.
+
 | Task | Primary pillars | Additional load |
 |---|---|---|
 | "Add an owner-only team invite link" | `auth` | `data` via `must_read_with`; `repo` and `context` always load |
-| "Add `last_contacted_at` to accounts" | `data` | `auth` via `must_read_with`; `repo` and `context` always load |
+| "Add a `last_contacted_at` column to accounts" | `data` | `auth` via `must_read_with`; `repo` and `context` always load |
 | "Move account pages into a new route group" | none present | `repo` and `context` always load; the local catalog reports absent `ui` |
 
 ## Why It Is Small

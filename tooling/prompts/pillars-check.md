@@ -27,7 +27,8 @@ Check that:
 - `covers` is a list of non-empty strings.
 - `triggers` is a list of non-empty strings unless always-loaded.
 - `must_read_with` and `see_also` are lists of valid identities.
-- List items are the correct type and unique after portable matcher normalization.
+- Selector lists (`covers`, `triggers`) are unique after portable matcher normalization, and every selector normalizes to at least one token. A selector such as `---` or a non-ASCII-only phrase has no portable tokens and is invalid.
+- Reference lists (`must_read_with`, `see_also`) are unique by exact identity.
 - Identities are unique and do not collide on case-insensitive filesystems.
 - Neither reference field contains a self-reference.
 - More than three hard dependencies produces a boundary-smell warning.
@@ -36,7 +37,7 @@ Top-level references remain bare names. Sub-pillar references must be path-quali
 
 ### Step 4: Validate the body and budgets
 
-Require these headings in order: Scope, Context, Decisions, Rules, Workflows, Watchouts, Touchpoints, Gaps. Empty sections use `(none)`.
+Require these headings in order: Scope, Context, Decisions, Rules, Workflows, Watchouts, Touchpoints, Gaps. Empty sections use `(none)`; a section with no text at all is a warning.
 
 Report budget warnings at:
 
@@ -53,7 +54,7 @@ Budgets are warnings, not compatibility errors.
 - An identity cannot be both present and excluded.
 - `agents/catalog.yaml`, when present, has `version: 1` and an `absent:` list.
 - Each catalog entry has a valid unique `identity` and string-list `triggers`; `covers` is optional.
-- An identity cannot be present, cataloged absent, and excluded in more than one state.
+- An identity is in at most one state: present, excluded, or cataloged absent.
 - `context` and `repo` cannot be cataloged absent.
 
 ### Step 6: Validate references

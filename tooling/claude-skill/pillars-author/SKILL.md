@@ -1,8 +1,8 @@
 ---
 name: pillars-author
 description: "Draft or revise a specific Pillars pillar file by scanning the relevant code, decisions, and conventions in the current project. Given a pillar name (e.g., data, auth, api, ui, stack, arch), this skill performs targeted archaeology on the codebase, drafts the 8-section pillar body following the Pillars template, includes proper YAML frontmatter, and presents the draft for the user's approval before writing. Use this skill when the user asks to 'author pillar X,' 'draft data.md,' 'create the auth.md pillar,' 'generate pillar from code,' 'fill in pillar X,' 'populate context.md,' or names a specific pillar they want filled in."
-version: 0.2.0
-updated: 2026-07-13
+version: 0.3.0
+updated: 2026-10-08
 compatible_with:
   - claude-code
 standard_version: ">=1.1.0"
@@ -49,8 +49,9 @@ If the name isn't in the catalog and isn't an obvious domain pillar, ask the use
 
 ### Step 2. Confirm whether to update or create
 
-Check if the pillar already exists at `agents/<pillar>.md`.
+Work in the scope that owns the task: the nearest directory with both `AGENTS.md` and `agents/` (the repository root unless the project uses nested scopes). Check if the pillar already exists at `agents/<pillar>.md`, and read that scope's `AGENTS.md` `excluded:` block and its `agents/catalog.yaml`, if present.
 
+- If the identity is excluded: stop. A pillar and an exclusion with the same identity are invalid in one scope. Tell the user, and ask whether to remove that one exclusion entry before authoring. Continue only on approval.
 - If absent: this is a *create* operation.
 - If present and `status: stub`: this is a *populate* operation. Preserve frontmatter; fill in sections.
 - If present and `status: present`: this is a *revise* operation. Tell the user; ask whether they want to (a) merge new content with existing (preserving Decisions/Watchouts history), (b) overwrite, or (c) abort. Default to merge.
@@ -108,7 +109,7 @@ Follow the [Pillars template](https://github.com/hannsxpeter/pillars/blob/v1.2.2
 
 - **Rules:** hard constraints not inferable from Context. Used *sparingly*. If you don't see a clear non-inferable constraint, leave this as `(none)`. Examples: "Never write raw SQL outside `src/db/raw.ts`."
 
-- **Workflows:** multi-step procedures the agent might not infer. Only include when the workflow isn't obvious from Context. Example: "Adding a column: schema edit, drizzle-kit generate, drizzle-kit push, update seeds." If you don't have evidence of a real workflow, leave as `(none)`.
+- **Workflows:** multi-step procedures the agent might not infer. Only include when the workflow isn't obvious from Context. Example: "Adding a column: schema edit, drizzle-kit generate, drizzle-kit migrate, update seeds." If you don't have evidence of a real workflow, leave as `(none)`.
 
 - **Watchouts:** soft warnings *with reasoning*. Only include when there's evidence of historical pain (TODO comments, bug-related code, defensive patterns). If none visible, leave as `(none)` and note in Gaps: "Watchouts will accumulate after first incidents."
 
@@ -119,8 +120,8 @@ Follow the [Pillars template](https://github.com/hannsxpeter/pillars/blob/v1.2.2
 ### Step 5. Draft the frontmatter
 
 - `pillar`: the canonical name (must match the filename).
-- `status`: `present` if the body has meaningful content (>50% of sections populated); `stub` only if the user explicitly wants a stub.
-- `always_load`: `true` only for `context` and `repo`. `false` for everything else.
+- `status`: `present` once the body has a real Scope and any meaningful content; `stub` only if the user explicitly wants a stub. Sections left as `(none)` do not make a pillar a stub.
+- `always_load`: `true` for `context` and `repo`. Default to `false` for everything else; graduate a pillar only when nearly every task needs it, and keep the scope inside the always-loaded budget.
 - `covers`: array of one-line scope descriptors.
 - `triggers`: keywords the agent will match against task descriptions. Be specific to avoid over-matching.
 - `must_read_with`: hard dependencies on other pillars. Keep to 3 or fewer. If you list more, the boundary is wrong.
@@ -176,14 +177,14 @@ If the authored pillar mentions concepts that belong in other pillars (e.g., aut
 - **Does not fabricate Decisions or Watchouts.** Reasoning that isn't visible in code or stated by the user is left out; surface as Gaps instead.
 - **Does not exceed the 8-section template.** No custom sections.
 - **Does not update other pillar bodies.** One pillar per invocation. Removing the authored identity from `agents/catalog.yaml` is required metadata cleanup.
-- **Does not modify AGENTS.md.** Use `pillars-init` for that.
+- **Does not modify AGENTS.md,** except to remove the authored identity from `excluded:` after the user approves it in Step 2. Use `pillars-init` for anything else.
 
 ## Common failure modes
 
 - **Over-populating Rules.** When in doubt, leave Rules empty. The principle is "include prescriptive content only when it would not be inferred from the facts." Most rules are inferable from Context.
 - **Inventing Decisions.** If the codebase shows Drizzle but doesn't say why, don't invent reasoning. Note in Gaps: "Decision rationale for Drizzle choice not documented; ask the user."
 - **Pillar boundary creep.** If you find yourself writing about auth in `data.md`, stop. Cross-reference auth in Touchpoints; don't duplicate content. The boundary calls in PILLARS.md are the source of truth.
-- **Wrong tier.** If the requested pillar name is Tier 3 / Domain (e.g., `payments`, `ml`), follow the same procedure but expect higher `must_read_with` counts since Domain pillars often cross-cut Core pillars.
+- **Wrong tier.** If the requested pillar name is Tier 3 / Domain (e.g., `payments`, `ml`), follow the same procedure. Domain pillars often cross-cut Core pillars; express that with `see_also` or focused sub-pillars such as `security/ml` rather than pushing `must_read_with` past three.
 
 ## Reference
 

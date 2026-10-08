@@ -1,4 +1,4 @@
-# Pillars
+# Design Notes
 
 > Historical design conversation log. It preserves early plan language and catalog counts. Current normative behavior is Pillars 1.2.2 in `SPEC.md` and `PILLARS.md`. Version 1.1 resolved later questions with path-derived sub-pillar identities, a portable token matcher, optional local absent catalogs, nested-scope precedence, context budgets, and executable conformance fixtures.
 

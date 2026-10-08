@@ -15,7 +15,7 @@ globs:
 alwaysApply: true
 ---
 
-This project follows the [Pillars](https://github.com/hannsxpeter/pillars) standard. Before doing any code work, read `AGENTS.md` at the project root and follow its protocol to load the relevant pillars from `./agents/*.md`.
+This project follows the [Pillars](https://github.com/hannsxpeter/pillars) standard. Before doing any code work, read `AGENTS.md` at the project root and follow its protocol to load the relevant pillars from `./agents/**/*.md`.
 
 Do not infer conventions when a relevant pillar exists; consult the pillar. Do not silently ignore a `Gaps` entry; ask the user instead.
 ```
@@ -26,28 +26,17 @@ Do not infer conventions when a relevant pillar exists; consult the pillar. Do n
 
 If you want `/pillars-init` and similar to work natively in Cursor:
 
-1. Create the commands folder if it doesn't exist:
+1. Download the prompt files as Cursor commands, pinned to the release you adopted:
 
 ```bash
 mkdir -p .cursor/commands
+for name in init author verify check map-task find-gaps trim sync-design sync-prd sync-readme; do
+  curl -fsSL -o ".cursor/commands/pillars-$name.md" \
+    "https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/tooling/prompts/pillars-$name.md"
+done
 ```
 
-2. Copy the prompt files in as Cursor commands:
-
-```bash
-cp tooling/prompts/pillars-init.md .cursor/commands/pillars-init.md
-cp tooling/prompts/pillars-author.md .cursor/commands/pillars-author.md
-cp tooling/prompts/pillars-verify.md .cursor/commands/pillars-verify.md
-cp tooling/prompts/pillars-check.md .cursor/commands/pillars-check.md
-cp tooling/prompts/pillars-sync-design.md .cursor/commands/pillars-sync-design.md
-cp tooling/prompts/pillars-sync-prd.md .cursor/commands/pillars-sync-prd.md
-cp tooling/prompts/pillars-sync-readme.md .cursor/commands/pillars-sync-readme.md
-cp tooling/prompts/pillars-map-task.md .cursor/commands/pillars-map-task.md
-cp tooling/prompts/pillars-find-gaps.md .cursor/commands/pillars-find-gaps.md
-cp tooling/prompts/pillars-trim.md .cursor/commands/pillars-trim.md
-```
-
-3. Restart Cursor or reload the workspace. The commands will be available via matching slash commands such as `/pillars-check`, `/pillars-map-task`, and `/pillars-sync-readme`.
+2. Restart Cursor or reload the workspace. The commands will be available via matching slash commands such as `/pillars-check`, `/pillars-map-task`, and `/pillars-sync-readme`.
 
 Note: Cursor's command format is evolving. If your version uses a different file structure (e.g., `.mdc` extension with frontmatter), wrap each prompt's content with the expected frontmatter block. The command body itself is the prompt content unchanged.
 

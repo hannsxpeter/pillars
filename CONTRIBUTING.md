@@ -120,8 +120,7 @@ End-to-end adoption examples must:
 
 ## Communication
 
-- **Issues:** for bug reports (ambiguities in the spec, contradictions, broken examples), feature proposals (new pillars, new patterns), and questions.
-- **Discussions:** for open-ended conversations that aren't actionable issues (planning the next minor version, exploring patterns).
+- **Issues:** for bug reports (ambiguities in the spec, contradictions, broken examples), feature proposals (new pillars, new patterns), and questions. Open-ended conversations, such as exploring a pattern before it is a proposal, also start as a question issue.
 - **PRs:** for proposed changes. Link to the issue if the change was discussed.
 
 ## License of contributions

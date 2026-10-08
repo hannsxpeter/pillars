@@ -42,7 +42,7 @@ There is an optional validator for teams who want automated structure checks in 
 
 ### Which AI tools work with this?
 
-Any tool that reads project instructions from your repository root. That includes Claude Code, Codex CLI, Cursor, Gemini CLI, opencode, Aider, Windsurf, Cline, and Continue, either natively or via a one-line shim file pointing at `AGENTS.md`.
+Any tool that reads project instructions from your repository root. That includes Claude Code, Codex CLI, GitHub Copilot, Cursor, Gemini CLI, opencode, Aider, Windsurf, Cline, and Continue, either natively, via a one-line shim file pointing at `AGENTS.md`, or via a config entry that loads it (Aider's `read:` list, for example). Each tool's setup is in [`tooling/prompts/`](tooling/prompts/).
 
 If your tool ignores project-level instructions entirely, Pillars cannot help you. That is increasingly rare.
 

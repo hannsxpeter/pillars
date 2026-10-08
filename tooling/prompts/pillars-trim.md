@@ -16,8 +16,10 @@ Check for:
 
 ```bash
 ls AGENTS.md agents/
-find agents -name "*.md" -type f | sort
+find . -name AGENTS.md -not -path "./.git/*" -not -path "*/node_modules/*" | sort
 ```
+
+A scope is a directory with both `AGENTS.md` and `agents/`. List each scope's pillar files, including sub-pillar folders, with `find <scope>/agents -name "*.md" -type f | sort`.
 
 If `AGENTS.md` or `agents/` is missing, report:
 
@@ -47,7 +49,7 @@ Flag:
 - Compliance-style or command-heavy prose.
 - Large examples that could move to `examples/`.
 - Pillars covering multiple domains that should be split.
-- Always-loaded files over 1,000 words or 8 KiB, or over 2,000 words and 16 KiB in aggregate per scope.
+- Always-loaded files over 1,000 words or 8 KiB, or over 2,000 words or 16 KiB in aggregate per scope.
 - Task-routed files over 2,000 words or 16 KiB without a documented reason.
 
 Do not flag concise, useful specificity as bloat.

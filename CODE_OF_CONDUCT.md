@@ -1,6 +1,6 @@
 # Code of Conduct
 
-Pillars is a small community focused on building a useful standard. We aim for the basics: be respectful, be constructive, be patient with newcomers. These principles guide all participation in this project's issues, discussions, pull requests, and any related forums.
+Pillars is a small community focused on building a useful standard. We aim for the basics: be respectful, be constructive, be patient with newcomers. These principles guide all participation in this project's issues, pull requests, and other project spaces.
 
 ## Expected behavior
 
@@ -19,11 +19,11 @@ Pillars is a small community focused on building a useful standard. We aim for t
 
 ## Scope
 
-This code applies to all project spaces: issues, pull requests, discussions, project email, and any official forums.
+This code applies to all project spaces: issues, pull requests, review comments, and any other venue the project operates.
 
 ## Enforcement
 
-Concerns can be raised by opening a private GitHub issue or contacting the maintainers directly through GitHub. Reports are handled confidentially. Possible responses include:
+GitHub issues are always public, so do not report conduct concerns in one. Contact the maintainer, [@hannsxpeter](https://github.com/hannsxpeter), directly through GitHub instead. Reports are handled confidentially. Possible responses include:
 
 1. **Private clarification.** A maintainer reaches out to discuss the concern.
 2. **Public correction.** A maintainer addresses the issue in the thread where it occurred.

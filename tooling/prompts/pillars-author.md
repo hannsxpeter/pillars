@@ -12,7 +12,7 @@ For installation as a native command/skill in specific tools, see the relevant i
 
 You are going to draft (or revise) a specific [Pillars](https://github.com/hannsxpeter/pillars) pillar by scanning the relevant code in this project and presenting a faithful 8-section pillar body for the user's approval before writing.
 
-### Step 1 — Determine which pillar
+### Step 1: Determine which pillar
 
 The user named a pillar. Confirm it's a valid one from the [Pillars catalog](https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md):
 
@@ -24,17 +24,22 @@ The user named a pillar. Confirm it's a valid one from the [Pillars catalog](htt
 
 If the user's pillar isn't on this list and isn't an obvious domain pillar, ask them to confirm before proceeding.
 
-### Step 2 — Check if the pillar already exists
+### Step 2: Check if the pillar already exists
+
+Work in the scope that owns the task: the nearest directory with both `AGENTS.md` and `agents/` (the repository root unless the project uses nested scopes).
 
 ```
 ls agents/<pillar>.md
 ```
 
+Also read that scope's `AGENTS.md` `excluded:` block and its `agents/catalog.yaml`, if present.
+
+- If the identity is excluded: stop. A pillar and an exclusion with the same identity are invalid in one scope. Tell the user, and ask whether to remove that one exclusion entry before authoring. Continue only on approval.
 - If absent: this is a *create* operation.
 - If present and `status: stub`: this is a *populate* operation. Preserve frontmatter; fill sections.
 - If present and `status: present`: this is a *revise* operation. Tell the user. Ask whether they want to (a) merge (preserve existing Decisions/Watchouts), (b) overwrite, or (c) abort. Default to merge.
 
-### Step 3 — Scan the relevant code
+### Step 3: Scan the relevant code
 
 Each pillar has typical scan areas. Use this table:
 
@@ -60,10 +65,14 @@ Each pillar has typical scan areas. Use this table:
 | async | `jobs/`, `workers/`, `queue/`, cron | BullMQ, Sidekiq, Celery configs | Background work, retries |
 | cache | Redis init, in-memory cache, CDN config | TTL constants | Strategy, invalidation |
 | notifications | email templates, SMS service, push setup | Resend, SendGrid, Twilio config | Transactional patterns |
+| analytics | event tracker init, KPI dashboards | PostHog, Mixpanel, Amplitude config | Event taxonomy, dashboards |
+| i18n | `locales/`, `i18n/`, translation files | i18next, next-intl, Lingui config | Locales supported, RTL, formatters |
+| a11y | aria attributes in components, a11y test setup | axe-core or Pa11y config | WCAG patterns, screen reader conventions |
+| compliance | retention config, audit log setup, regulatory comments | policies kept in the repo | Regulatory and control mapping, if any |
 
 For Domain pillars, use judgment to identify relevant code. For sub-pillars, scan within the parent's territory. Use path-derived identities in references: `agents/auth/agent-registration.md` has `pillar: agent-registration` but is referenced as `auth/agent-registration`.
 
-### Step 4 — Draft the 8 sections
+### Step 4: Draft the 8 sections
 
 Apply the "earn your keep" principle: populate a section only when it adds value the others don't.
 
@@ -89,13 +98,13 @@ Apply the "earn your keep" principle: populate a section only when it adds value
 
 **Gaps** (always for fresh pillars): explicit "not decided yet" entries. Surface unknowns rather than inferring them.
 
-### Step 5 — Draft the frontmatter
+### Step 5: Draft the frontmatter
 
 ```yaml
 ---
 pillar: <name>
 status: present  # or "stub" if explicitly requested
-always_load: false  # true only for context and repo
+always_load: false  # true for context and repo; graduate others only when nearly every task needs them
 covers: [...]
 triggers: [keyword1, keyword2, ...]
 must_read_with: []  # max 3 entries; more is a boundary smell
@@ -105,7 +114,7 @@ see_also: []
 
 Keep always-loaded pillars at or below 1,000 words and 8 KiB. Keep task-routed pillars at or below 2,000 words and 16 KiB unless the project documents a justified exception.
 
-### Step 6 — Present the draft
+### Step 6: Present the draft
 
 **Never write the file without user approval.** Show the draft in chat:
 
@@ -125,7 +134,7 @@ Ask:
 
 If revisions requested, iterate.
 
-### Step 7 — Write on approval
+### Step 7: Write on approval
 
 Write to `agents/<pillar>.md` (or `agents/<parent>/<name>.md` for sub-pillars). If revising an existing pillar, preserve existing Decisions and Watchouts content when merging. Remove the same identity from `agents/catalog.yaml` when the new pillar replaces a locally cataloged absence.
 
@@ -141,7 +150,7 @@ Gaps to revisit: <list>
 The agent will load this pillar when triggered by: <list triggers>.
 ```
 
-### Step 8 — Suggest related pillars
+### Step 8: Suggest related pillars
 
 If authoring this pillar surfaced concepts belonging in another pillar (e.g., authoring `data.md` revealed multi-tenancy concerns), suggest:
 
@@ -155,7 +164,7 @@ If authoring this pillar surfaced concepts belonging in another pillar (e.g., au
 - Do NOT fabricate Decisions or Watchouts. Surface gaps instead.
 - Do NOT exceed the 8-section template.
 - Do NOT modify other pillar bodies in this invocation. Removing the authored identity from `agents/catalog.yaml` is required metadata cleanup.
-- Do NOT modify AGENTS.md (use `pillars-init` for that).
+- Do NOT modify AGENTS.md, except to remove the authored identity from `excluded:` after the user approves it in Step 2.
 - Do NOT populate Rules with content inferable from Context.
 
 ## Common failure modes to avoid

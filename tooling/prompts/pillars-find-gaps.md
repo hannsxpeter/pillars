@@ -16,8 +16,10 @@ Check for:
 
 ```bash
 ls AGENTS.md agents/
-find agents -name "*.md" -type f | sort
+find . -name AGENTS.md -not -path "./.git/*" -not -path "*/node_modules/*" | sort
 ```
+
+A scope is a directory with both `AGENTS.md` and `agents/`. List each scope's pillar files, including sub-pillar folders, with `find <scope>/agents -name "*.md" -type f | sort`.
 
 If `AGENTS.md` or `agents/` is missing, report:
 

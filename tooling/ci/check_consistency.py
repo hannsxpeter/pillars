@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check release links, versions, catalog counts, URLs, and stale terminology."""
+"""Check release links, versions, catalog counts, URLs, tooling indexes, and stale terminology."""
 
 from pathlib import Path
 import re
@@ -19,15 +19,25 @@ COMMON = [
     "config", "security", "privacy", "compliance", "i18n", "a11y",
     "analytics", "integrations", "async", "cache", "notifications",
 ]
-IGNORED_PARTS = {".git", ".godpowers", "__pycache__"}
+IGNORED_PARTS = {
+    ".git", ".godpowers", "__pycache__", ".pytest_cache",
+    ".venv", "venv", "node_modules",
+}
 RELEASE_HEADING = re.compile(r"^## \[(\d+\.\d+\.\d+)\][^\n]*$", re.MULTILINE)
 RELEASE_ANCHOR = re.compile(
     r"^\[(\d+\.\d+\.\d+)\]: \S+/releases/tag/v(\d+\.\d+\.\d+)\s*$", re.MULTILINE)
+EMBEDDED_AGENTS_MD = re.compile(r"^````markdown\n(.*?)^````$", re.MULTILINE | re.DOTALL)
+INIT_FORMS = [
+    "tooling/prompts/pillars-init.md",
+    "tooling/claude-skill/pillars-init/SKILL.md",
+]
 
 
 def maintained_files():
     for path in ROOT.rglob("*"):
-        if not path.is_file() or any(part in IGNORED_PARTS for part in path.parts):
+        # Only folders inside the repository count; the checkout itself may
+        # live under a folder that happens to share an ignored name.
+        if not path.is_file() or IGNORED_PARTS.intersection(path.relative_to(ROOT).parts):
             continue
         if path.suffix in {".md", ".py", ".yml", ".yaml"}:
             yield path
@@ -76,19 +86,20 @@ def check_versions(errors):
         "SPEC.md": "Version %s." % VERSION,
         "README.md": "Spec: v%s" % VERSION,
         "AGENTS.md": "Pillars %s" % VERSION,
-        "CHANGELOG.md": "## [%s] - 2026-08-04" % VERSION,
     }
     for rel, marker in expected.items():
         if marker not in (ROOT / rel).read_text(encoding="utf-8"):
             errors.append("%s: missing release marker '%s'" % (rel, marker))
-    for path in [
-        ROOT / "tooling/claude-skill/pillars-init/SKILL.md",
-        ROOT / "tooling/claude-skill/pillars-author/SKILL.md",
-        ROOT / "tooling/claude-skill/pillars-verify/SKILL.md",
-    ]:
+    skill_readme = (ROOT / "tooling/claude-skill/README.md").read_text(encoding="utf-8")
+    for name in ("pillars-init", "pillars-author", "pillars-verify"):
+        path = ROOT / "tooling/claude-skill" / name / "SKILL.md"
         text = path.read_text(encoding="utf-8")
         if 'standard_version: ">=1.1.0"' not in text:
             errors.append("%s: stale standard compatibility" % path.relative_to(ROOT))
+        version = re.search(r"^version: (\S+)$", text, re.MULTILINE)
+        if not version or "| `%s` | %s |" % (name, version.group(1)) not in skill_readme:
+            errors.append("tooling/claude-skill/README.md: version for %s does not match "
+                          "its SKILL.md" % name)
     requirements = (ROOT / "tooling/ci/requirements.txt").read_text(encoding="utf-8").strip()
     if requirements != "PyYAML==6.0.3":
         errors.append("tooling/ci/requirements.txt: dependency pin is not the verified release")
@@ -150,6 +161,43 @@ def check_changelog(errors):
     errors.extend(changelog_errors(text, VERSION))
 
 
+def check_tooling_indexes(errors):
+    """Every shipped prompt and CI script must be listed where readers look."""
+    tooling_readme = (ROOT / "tooling/README.md").read_text(encoding="utf-8")
+    prompts_readme = (ROOT / "tooling/prompts/README.md").read_text(encoding="utf-8")
+    for path in sorted((ROOT / "tooling/prompts").glob("*.md")):
+        if path.name == "README.md":
+            continue
+        for rel, text in (("tooling/README.md", tooling_readme),
+                          ("tooling/prompts/README.md", prompts_readme)):
+            if path.name not in text:
+                errors.append("%s: does not list tooling/prompts/%s" % (rel, path.name))
+    for path in sorted((ROOT / "tooling/ci").glob("*.py")):
+        if path.name not in tooling_readme:
+            errors.append("tooling/README.md: does not list tooling/ci/%s" % path.name)
+
+
+def core_stub_row(entry):
+    return "| %s | [%s] | [%s] |" % (
+        entry["identity"], ", ".join(entry.get("covers", [])), ", ".join(entry["triggers"]))
+
+
+def check_init_templates(errors):
+    """Init writes AGENTS.md and Core stubs from text it carries for offline use."""
+    canonical = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    catalog = yaml.safe_load((ROOT / "agents/catalog.yaml").read_text(encoding="utf-8"))
+    entries = {entry["identity"]: entry for entry in catalog.get("absent", [])}
+    for rel in INIT_FORMS:
+        text = (ROOT / rel).read_text(encoding="utf-8")
+        embedded = EMBEDDED_AGENTS_MD.findall(text)
+        if embedded != [canonical]:
+            errors.append("%s: embedded AGENTS.md does not match the root AGENTS.md" % rel)
+        for identity in CORE:
+            if identity in entries and core_stub_row(entries[identity]) not in text:
+                errors.append("%s: Core stub row for '%s' does not match agents/catalog.yaml" %
+                              (rel, identity))
+
+
 def check_catalog(errors):
     catalog = yaml.safe_load((ROOT / "agents/catalog.yaml").read_text(encoding="utf-8"))
     actual = [entry["identity"] for entry in catalog.get("absent", [])]
@@ -189,13 +237,16 @@ def main():
     check_urls_and_terms(errors)
     check_versions(errors)
     check_changelog(errors)
+    check_tooling_indexes(errors)
+    check_init_templates(errors)
     check_catalog(errors)
     if errors:
         for error in errors:
             print("ERROR  " + error)
         print("\nConsistency check failed with %d error(s)." % len(errors))
         return 1
-    print("Consistency check passed: links, versions, owner URLs, catalog, CI, and terminology align.")
+    print("Consistency check passed: links, versions, owner URLs, catalog, CI, tooling indexes, "
+          "init templates, and terminology align.")
     return 0
 
 

@@ -13,7 +13,7 @@ In `.continue/config.json`, add a `systemMessage` that points the agent at AGENT
 ```json
 {
   "models": [...],
-  "systemMessage": "This project follows the Pillars standard. Read AGENTS.md at the project root and follow its protocol to load the relevant pillars from ./agents/*.md before any code work. Comply with their Rules, apply Workflows, heed Watchouts, defer to Gaps."
+  "systemMessage": "This project follows the Pillars standard. Read AGENTS.md at the project root and follow its protocol to load the relevant pillars from ./agents/**/*.md before any code work. Comply with their Rules, apply Workflows, heed Watchouts, defer to Gaps."
 }
 ```
 

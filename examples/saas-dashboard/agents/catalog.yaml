@@ -2,7 +2,7 @@ version: 1
 absent:
   - identity: ui
     covers: [pages, layouts, and visual components]
-    triggers: [ui, component, page, layout]
+    triggers: [ui, component, components, page, pages, layout]
   - identity: api
     covers: [request and response contracts]
     triggers: [api, endpoint, request, response]

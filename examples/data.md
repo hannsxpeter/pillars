@@ -59,7 +59,7 @@ src/db/
   1. Edit `src/db/schema.ts`.
   2. Run `pnpm db:generate` (wraps `drizzle-kit generate`).
   3. Inspect the generated migration in `src/db/migrations/`.
-  4. Run `pnpm db:push` against your local DB to apply.
+  4. Run `pnpm db:migrate` (wraps `drizzle-kit migrate`) against your local DB to apply it.
   5. Update relevant seeds if the column is non-nullable without a default.
 
 - **Adding a complex query:**
@@ -75,8 +75,8 @@ src/db/
 
 ## Touchpoints
 
-- `must_read_with: [auth, config]` — auth determines tenant identity; config holds DATABASE_URL and connection pool settings.
-- `see_also: [api, observe]` — API endpoints often query the DB; observe.md covers query-latency metrics.
+- `must_read_with: [auth, config]`: auth determines tenant identity; config holds DATABASE_URL and connection pool settings.
+- `see_also: [api, observe]`: API endpoints often query the DB; observe.md covers query-latency metrics.
 
 ## Gaps
 
