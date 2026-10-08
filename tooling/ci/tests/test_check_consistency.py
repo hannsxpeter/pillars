@@ -1,5 +1,6 @@
 import importlib.util
 from pathlib import Path
+import tempfile
 import textwrap
 import unittest
 
@@ -24,6 +25,22 @@ def changelog(*entries):
             [{version}]: {tag}{version}
             """).format(version=version, date=date, tag=TAG))
     return "\n".join(blocks)
+
+
+def run_with_root(files, check):
+    """Run a ROOT-reading check against a temporary repository of files."""
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp) / "repo"
+        for rel, text in files.items():
+            path = root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        original = consistency.ROOT
+        consistency.ROOT = root
+        try:
+            return check()
+        finally:
+            consistency.ROOT = original
 
 
 class ChangelogHistoryTests(unittest.TestCase):
@@ -78,6 +95,114 @@ class ChangelogHistoryTests(unittest.TestCase):
     def test_repository_changelog_is_intact(self):
         text = (consistency.ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
         self.assertEqual(consistency.changelog_errors(text, consistency.VERSION), [])
+
+
+class ToolingIndexTests(unittest.TestCase):
+
+    def run_against(self, files):
+        errors = []
+        run_with_root(files, lambda: consistency.check_tooling_indexes(errors))
+        return errors
+
+    def test_indexed_prompts_and_scripts_pass(self):
+        errors = self.run_against({
+            "tooling/README.md": "pillars-trim.md validate.py",
+            "tooling/prompts/README.md": "pillars-trim.md",
+            "tooling/prompts/pillars-trim.md": "prompt",
+            "tooling/ci/validate.py": "",
+        })
+        self.assertEqual(errors, [])
+
+    def test_unlisted_prompt_and_script_are_errors(self):
+        errors = self.run_against({
+            "tooling/README.md": "",
+            "tooling/prompts/README.md": "",
+            "tooling/prompts/pillars-trim.md": "prompt",
+            "tooling/ci/validate.py": "",
+        })
+        self.assertEqual(errors, [
+            "tooling/README.md: does not list tooling/prompts/pillars-trim.md",
+            "tooling/prompts/README.md: does not list tooling/prompts/pillars-trim.md",
+            "tooling/README.md: does not list tooling/ci/validate.py",
+        ])
+
+    def test_repository_tooling_indexes_are_complete(self):
+        errors = []
+        consistency.check_tooling_indexes(errors)
+        self.assertEqual(errors, [])
+
+
+class InitTemplateTests(unittest.TestCase):
+
+    def test_repository_init_templates_match_canonical_files(self):
+        errors = []
+        consistency.check_init_templates(errors)
+        self.assertEqual(errors, [])
+
+    def test_drifted_embedded_agents_md_is_an_error(self):
+        canonical = "# Protocol\n\n```yaml\nexcluded: []\n```\n"
+        good_row = "| arch | [system architecture] | [architecture, system design] |\n"
+        drifted_row = "| arch | [system architecture] | [architecture, design, system] |\n"
+        files = {
+            "AGENTS.md": canonical,
+            "agents/catalog.yaml": ("version: 1\nabsent:\n"
+                                    "  - identity: arch\n"
+                                    "    covers: [system architecture]\n"
+                                    "    triggers: [architecture, system design]\n"),
+            consistency.INIT_FORMS[0]: "````markdown\n" + canonical + "````\n" + good_row,
+            consistency.INIT_FORMS[1]: ("````markdown\n" + canonical.replace("[]", "[ui]") +
+                                        "````\n" + drifted_row),
+        }
+        errors = []
+        run_with_root(files, lambda: consistency.check_init_templates(errors))
+        self.assertEqual(errors, [
+            "%s: embedded AGENTS.md does not match the root AGENTS.md" % consistency.INIT_FORMS[1],
+            "%s: Core stub row for 'arch' does not match agents/catalog.yaml" %
+            consistency.INIT_FORMS[1],
+        ])
+
+
+class SkillVersionTests(unittest.TestCase):
+
+    def test_skill_readme_version_drift_is_an_error(self):
+        files = {
+            "tooling/claude-skill/README.md": (
+                "| `pillars-init` | 0.3.0 | Pillars v1.1.0+ |\n"
+                "| `pillars-author` | 0.1.0 | Pillars v1.1.0+ |\n"
+                "| `pillars-verify` | 0.1.0 | Pillars v1.1.0+ |\n"),
+        }
+        for name, version in (("pillars-init", "0.4.0"), ("pillars-author", "0.1.0"),
+                              ("pillars-verify", "0.1.0")):
+            files["tooling/claude-skill/%s/SKILL.md" % name] = (
+                '---\nname: %s\nversion: %s\nstandard_version: ">=1.1.0"\n---\n' %
+                (name, version))
+        for rel in ("SPEC.md", "README.md", "AGENTS.md", "tooling/ci/requirements.txt",
+                    ".github/workflows/validate.yml"):
+            files[rel] = ""
+        errors = []
+        run_with_root(files, lambda: consistency.check_versions(errors))
+        self.assertIn("tooling/claude-skill/README.md: version for pillars-init does not match "
+                      "its SKILL.md", errors)
+        self.assertFalse(any("pillars-author" in error or "pillars-verify" in error
+                             for error in errors))
+
+
+class MaintainedFileTests(unittest.TestCase):
+
+    def test_checkout_under_an_ignored_folder_name_is_still_scanned(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "venv" / "pillars"
+            (root / "docs").mkdir(parents=True)
+            (root / "docs" / "kept.md").write_text("kept", encoding="utf-8")
+            (root / ".venv").mkdir()
+            (root / ".venv" / "skipped.md").write_text("skipped", encoding="utf-8")
+            original = consistency.ROOT
+            consistency.ROOT = root
+            try:
+                found = sorted(path.name for path in consistency.maintained_files())
+            finally:
+                consistency.ROOT = original
+        self.assertEqual(found, ["kept.md"])
 
 
 if __name__ == "__main__":

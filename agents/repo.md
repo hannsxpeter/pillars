@@ -40,9 +40,10 @@ pillars/
 │   │   └── agent-registration.md
 │   └── saas-dashboard/ # compact end-to-end adoption example
 └── tooling/            # optional prompts, skills, validator, tests, and conformance assets
-    ├── prompts/
-    ├── claude-skill/
-    └── ci/
+    ├── prompts/        # paste-in prompts and per-tool install guides
+    ├── claude-skill/   # Claude Code skill bundle
+    ├── ci/             # offline validator, consistency checker, unit tests
+    └── conformance/    # routing fixtures, fixture project, benchmark protocol
 ```
 
 **Naming:**
@@ -93,7 +94,7 @@ pillars/
 
 ## Touchpoints
 
-- `see_also: [context]` — repo layout and project identity are tightly related; readers often need both.
+- `see_also: [context]`: repo layout and project identity are tightly related; readers often need both.
 
 ## Gaps
 

@@ -1,7 +1,7 @@
 name: Feature / Proposal
 description: Propose a new pillar, a new sub-pillar pattern, a new archetype, a boundary refinement, or a structural change.
 title: "[proposal]: "
-labels: ["proposal", "needs-discussion"]
+labels: ["enhancement"]
 body:
   - type: markdown
     attributes:

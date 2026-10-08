@@ -41,15 +41,27 @@ ROUTED_BYTE_BUDGET = 16 * 1024
 
 
 class Findings:
+    """Ordered errors and warnings, each reported once.
+
+    Conformance fixtures re-validate every scope they route through, so the
+    same finding can be raised many times in one run.
+    """
+
     def __init__(self):
         self.errors = []
         self.warnings = []
 
+    @staticmethod
+    def _add(bucket, where, message):
+        entry = (str(where), message)
+        if entry not in bucket:
+            bucket.append(entry)
+
     def error(self, where, message):
-        self.errors.append((str(where), message))
+        self._add(self.errors, where, message)
 
     def warn(self, where, message):
-        self.warnings.append((str(where), message))
+        self._add(self.warnings, where, message)
 
 
 def split_frontmatter(text):
@@ -147,12 +159,22 @@ def check_headings(body, where, findings):
         findings.error(where, "unexpected level-2 sections: " + ", ".join(unexpected))
     found = [heading for heading in all_headings if heading in REQUIRED_SECTIONS]
     if found == REQUIRED_SECTIONS:
+        check_empty_sections(body, where, findings)
         return
     missing = [section for section in REQUIRED_SECTIONS if section not in found]
     if missing:
         findings.error(where, "missing or misnamed sections: " + ", ".join(missing))
     else:
         findings.error(where, "section order is %s, expected %s" % (found, REQUIRED_SECTIONS))
+
+
+def check_empty_sections(body, where, findings):
+    """Warn about sections with no text; SPEC.md asks for (none) instead."""
+    parts = re.split(r"^##[ \t]+([^\n#]+?)[ \t]*$", body, flags=re.MULTILINE)
+    for heading, content in zip(parts[1::2], parts[2::2]):
+        if heading in REQUIRED_SECTIONS and not content.strip():
+            findings.warn(where, "section '%s' is empty; write (none) when nothing applies" %
+                          heading)
 
 
 def count_words(text):
@@ -456,7 +478,7 @@ def validate_standalone(path, findings, display_root=None):
         project_dirs = {item.parent.resolve() for item in target.rglob("AGENTS.md")}
         candidates = []
         for candidate in sorted(target.rglob("*.md")):
-            if any(scope == candidate.parent or scope in candidate.parents for scope in project_dirs):
+            if any(scope in candidate.parents for scope in project_dirs):
                 continue
             candidates.append(candidate)
 

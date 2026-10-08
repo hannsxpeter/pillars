@@ -1,60 +1,48 @@
 # Pillars in Aider
 
-[Aider](https://aider.chat/) reads conventions files (`CONVENTIONS.md`, recent versions also support `AGENTS.md`) and includes them in the system context.
+[Aider](https://aider.chat/) does not load project instruction files on its own. You hand them to it as read-only context with `--read` on the command line, `/read-only` in chat, or a `read:` list in `.aider.conf.yml`. Read-only files are cached when prompt caching is enabled.
 
 ## Runtime alignment
 
-### Option A: native AGENTS.md (preferred)
-
-If your Aider version reads `AGENTS.md`, no extra config needed. The runtime loop just works.
-
-Confirm by checking your `aider.conf.yml` for a `read:` entry or by running `aider --help | grep -i agents`.
-
-### Option B: explicit `--read` flag
-
-If your Aider version doesn't auto-read `AGENTS.md`, add it explicitly:
+### Option A: read AGENTS.md and the pillars (recommended)
 
 ```bash
-aider --read AGENTS.md --read 'agents/*.md'
+aider --read AGENTS.md --read agents
 ```
 
-Or persistently in `~/.aider.conf.yml`:
+Passing the `agents` directory reads every file under it, including sub-pillar folders and `catalog.yaml`. Aider does not expand glob patterns in `--read`, so pass the directory rather than a pattern such as `agents/*.md`.
+
+Aider resolves these paths from the directory it was launched in, so start it from the project root. To make it permanent, add this to `.aider.conf.yml` in the project root:
 
 ```yaml
-read:
-  - AGENTS.md
-  - agents/*.md
+read: [AGENTS.md, agents]
 ```
 
-This loads all pillar files into Aider's context at session start. Note: this differs from the Pillars protocol's task-routed loading. Aider sees all pillars; the agent matches relevance internally.
+This loads every pillar at session start, which differs from the Pillars protocol's task-routed loading: Aider sees all pillars and the model applies the protocol to decide which ones matter. For a small pillar set that is usually fine.
 
-### Option C: CONVENTIONS.md redirect
+### Option B: task-routed loading by hand
 
-For older Aider versions that only read `CONVENTIONS.md`:
+For a large pillar set, read only the protocol:
 
-`CONVENTIONS.md`:
-
-```markdown
-# Project conventions
-
-This project follows the [Pillars](https://github.com/hannsxpeter/pillars) standard.
-
-Read `AGENTS.md` at the repo root and follow its protocol to load the relevant pillars from `./agents/*.md` before doing any work.
+```bash
+aider --read AGENTS.md
 ```
+
+Then, per task, add the pillars the protocol selects with `/read-only agents/<name>.md`. This keeps context small at the cost of a manual step.
 
 ## Running the prompt workflows
 
-Aider doesn't have persistent slash commands beyond its built-ins. Use paste-in:
+Aider has no persistent custom slash commands. Use paste-in:
 
 1. Open the relevant prompt file in this folder.
 2. Copy its content.
 3. Paste into Aider's chat as a single message.
 
-Or use the `/load` command (if available in your version) to load the prompt as additional context.
+Or save the prompt file into your project and add it with `/read-only <file>`, then ask Aider to follow it.
 
 ## Removing
 
-Remove `--read AGENTS.md` flags or the `read:` block from your aider config. Delete `CONVENTIONS.md` if you added a redirect.
+Remove the `--read` flags or the `read:` entries from `.aider.conf.yml`.
 
 ## Reference
 

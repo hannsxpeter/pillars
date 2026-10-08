@@ -1,8 +1,8 @@
 ---
 name: pillars-init
 description: "Bootstrap the Pillars standard in a project. Detects the project archetype, writes AGENTS.md, creates `./agents/`, writes always-loaded and applicable Core stubs, reconciles a local absent catalog, and records archetype exclusions. Use this skill when the user asks to set up, adopt, initialize, scaffold, or install Pillars."
-version: 0.3.0
-updated: 2026-08-03
+version: 0.4.0
+updated: 2026-10-08
 compatible_with:
   - claude-code
 standard_version: ">=1.1.0"
@@ -98,9 +98,11 @@ The skill needs the current canonical text of AGENTS.md and the pillar template.
 
 Use the `WebFetch` tool. Cache locally for the rest of the session.
 
+If fetching fails, use the canonical AGENTS.md text in the "Fallback AGENTS.md" section below; it matches the published file word for word. If you cannot fetch the starter catalog, build `agents/catalog.yaml` (`version: 1`, then an `absent:` list) from the Core table in Step 5 for every Core identity you neither stub nor exclude, and tell the user the Common entries were skipped.
+
 ### Step 3. Write AGENTS.md
 
-Drop the fetched AGENTS.md text at the project root. Replace the `excluded: []` block with archetype-appropriate exclusions from this table (drawn from PILLARS.md's archetype starter lists):
+Drop the fetched AGENTS.md text at the scope root: the repository root, or the package directory when adopting for one monorepo package. Replace the `excluded: []` block with archetype-appropriate exclusions from this table (drawn from PILLARS.md's archetype starter lists):
 
 | Archetype | Typical exclusions |
 |---|---|
@@ -148,11 +150,11 @@ see_also: [repo]
 
 ## Scope
 
-(stub) — fill in with the project's identity, domain language, product invariants, and a glossary of canonical terms.
+(stub) Fill in with the project's identity, domain language, product invariants, and a glossary of canonical terms.
 
 ## Context
 
-(stub) — describe what this project is, who it's for, the domain language. The agent will ask before inferring while this remains a stub.
+(stub) Describe what this project is, who it's for, the domain language. The agent will ask before inferring while this remains a stub.
 
 ## Decisions
 
@@ -194,11 +196,11 @@ see_also: [context]
 
 ## Scope
 
-(stub) — fill in with the project's file layout, naming conventions, and structural decisions.
+(stub) Fill in with the project's file layout, naming conventions, and structural decisions.
 
 ## Context
 
-(stub) — describe the folder structure, file naming patterns, where different kinds of code/docs go. The agent will ask before inferring while this remains a stub.
+(stub) Describe the folder structure, file naming patterns, where different kinds of code/docs go. The agent will ask before inferring while this remains a stub.
 
 ## Decisions
 
@@ -243,23 +245,23 @@ Not every Tier 1 pillar applies to every archetype. Use this matrix to decide wh
 | deploy | no | yes | yes | yes | yes | yes | no | yes |
 | observe | no | yes | yes | maybe | yes | yes | no | maybe |
 
-`maybe` means "ask the user before stubbing." `no` means it's likely excluded (already handled in step 3).
+`maybe` means "ask the user before stubbing." `no` means no stub: the identity stays in `agents/catalog.yaml` as a known absence unless Step 3 excluded it.
 
-For each pillar marked `yes` (or `maybe` after confirmation), write a stub at `agents/<pillar>.md` following the same shape as the always-loaded stubs above. Use these triggers per pillar:
+For each pillar marked `yes` (or `maybe` after confirmation), write a stub at `agents/<pillar>.md` following the same shape as the always-loaded stubs above, with `always_load: false`. Copy `covers` and `triggers` from this table, which matches the starter catalog:
 
-| Pillar | triggers |
-|---|---|
-| stack | [stack, framework, library, dependency, package, version] |
-| arch | [architecture, service, module, boundary, design, system] |
-| data | [database, schema, migration, query, table, column, model] |
-| api | [api, endpoint, route, request, response, http, rpc] |
-| ui | [ui, component, page, layout, design, style, theme] |
-| auth | [auth, login, session, role, permission, access, user] |
-| quality | [test, testing, error, lint, style, naming] |
-| development | [develop, development, local setup, bootstrap, debug] |
-| release | [release, version, changelog, publish, semver] |
-| deploy | [deploy, cutover, environment, rollback, promotion] |
-| observe | [log, logging, metric, tracing, alert, monitoring, runbook] |
+| Pillar | covers | triggers |
+|---|---|---|
+| stack | [technology choices, dependencies, version constraints] | [stack, framework, library, dependency, package, version] |
+| arch | [system architecture, services, boundaries, data flow] | [architecture, service, module, boundary, system design] |
+| data | [data model, schema, migrations, queries, storage] | [database, schema, migration, query, table, column, model] |
+| api | [api contracts, requests, responses, versioning] | [api, endpoint, route, request, response, http, rpc] |
+| ui | [visual interface, components, design tokens] | [ui, component, page, layout, style, theme] |
+| auth | [identity, sessions, permissions, access] | [auth, login, session, role, permission, access, user] |
+| quality | [testing, errors, code style, naming] | [test, testing, error, lint, style, naming] |
+| development | [local setup, developer workflow, debugging] | [develop, development, local setup, bootstrap, debug] |
+| release | [versioning, release preparation, publication] | [release, version, changelog, publish, semver] |
+| deploy | [environments, promotion, rollback, cutover] | [deploy, environment, rollback, promotion, cutover] |
+| observe | [logging, metrics, tracing, alerts, runbooks] | [log, logging, metric, tracing, alert, monitoring, runbook] |
 
 Use `must_read_with: []` for stubs; the user can add couplings once content exists. Use `see_also: []` for stubs.
 
@@ -312,7 +314,61 @@ If yes, transition to `pillars-author` for `context`. If no, end.
 
 - **Wrong archetype guess.** If detection is ambiguous, *ask* before writing. Better to clarify than to write the wrong exclusion set.
 - **Project has a hand-built `CLAUDE.md` or `.cursorrules`.** Do not delete these. Instead, note them in the summary and recommend the user reduce them to a redirect: `"See AGENTS.md and the pillars in ./agents/."`
-- **User wants to adopt for a sub-package in a monorepo.** Pillars 1.1 supports nested scopes. Confirm the package is a real independent scope, then place its `AGENTS.md` and `agents/` there. Root guidance applies first, and nearest-scope guidance wins conflicts.
+- **User wants to adopt for a sub-package in a monorepo.** Pillars supports nested scopes. Confirm the package is a genuinely independent scope, then place its `AGENTS.md` and `agents/` there. Root guidance applies first and nearest-scope guidance wins conflicts. A package `AGENTS.md` may be a thin declaration that inherits the root protocol and records only local exclusions or refinements.
+
+## Fallback AGENTS.md
+
+Use this only when Step 2 cannot fetch the published file.
+
+````markdown
+# Pillars: Agent Protocol
+
+This project follows [Pillars 1.2.2](https://github.com/hannsxpeter/pillars/tree/v1.2.2). Coding agents read project pillar files before acting.
+
+## At the start of any task
+
+1. **Resolve scopes.** Starting at the repository root and ending at the task's target path or current directory, find every directory containing both `AGENTS.md` and `agents/`. Apply scopes from outermost to innermost. The nearest scope wins when guidance conflicts.
+
+2. **Inventory local metadata.** In each scope, scan pillar frontmatter recursively. Read exclusions from the local `AGENTS.md` and absent concerns from optional `agents/catalog.yaml`.
+
+3. **Select always and primary pillars.** Load every pillar with `always_load: true`. Match the task against every other pillar's `triggers` using the portable matcher in `SPEC.md`. Matching pillars are primaries. Matching catalog entries are absent concerns.
+
+4. **Add direct dependencies.** Add every identity in each primary's `must_read_with`. Resolve top-level identities such as `auth` at `agents/auth.md` and sub-pillar identities such as `auth/agent-registration` at that exact relative path. Stop at depth 1.
+
+5. **Consult soft references.** Add a selected pillar's `see_also` target only when the task matches that target's identity, `triggers`, or `covers` with the same matcher. Do not follow `see_also` recursively.
+
+6. **Load and comply.** Read selected bodies. Follow `Rules`, apply `Workflows`, heed `Watchouts` with judgment, and defer to `Gaps`. Preserve non-conflicting ancestor guidance; nearest-scope guidance wins conflicts.
+
+## Handling missing pillars
+
+| State | Action |
+|---|---|
+| `status: present` | Load and comply. |
+| `status: stub` | Ask before making decisions in this area. Do not infer silently. |
+| Identity in local `excluded:` | Treat as intentionally not applicable in that scope. |
+| Trigger matches local `agents/catalog.yaml` entry | Infer from code, state the assumption, and recommend creating the pillar. |
+| No local file, exclusion, or catalog entry | Make no Pillars-specific claim about that concern. |
+
+If `context.md` or `repo.md` is missing and not explicitly excluded, pause and ask the human to create a stub or record an exclusion.
+
+## Portable matcher
+
+Lowercase ASCII letters, replace each run of non-alphanumeric characters with one space, trim, and split into tokens. A selector matches when its complete token sequence appears contiguously in the task tokens. Semantic matching may add matches but cannot remove deterministic matches.
+
+## Excluded pillars
+
+```yaml
+excluded: []
+```
+
+## Reference
+
+- Pillar files in this repo: `./agents/**/*.md`
+- Optional absent catalog: `./agents/catalog.yaml`
+- Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.2/SPEC.md
+- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.2/examples
+````
 
 ## Reference
 

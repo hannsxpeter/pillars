@@ -22,16 +22,16 @@ The repo also ships optional tooling forms for meta-operations around the standa
 
 **Glossary:**
 
-- **Pillar** — a single domain's briefing file (e.g., `data.md`, `auth.md`). Sits in `./agents/`.
-- **Always-loaded pillar** — frontmatter has `always_load: true`. Read every session regardless of task. Currently `context` and `repo`.
-- **Trigger** — keyword or phrase in frontmatter; the agent matches against the task description to decide relevance.
+- **Pillar:** a single domain's briefing file (e.g., `data.md`, `auth.md`). Sits in `./agents/`.
+- **Always-loaded pillar:** frontmatter has `always_load: true`. Read every session regardless of task. Currently `context` and `repo`.
+- **Trigger:** keyword or phrase in frontmatter; the agent matches against the task description to decide relevance.
 - **Identity:** path-derived reference for a pillar: `auth` for a top-level pillar or `auth/agent-registration` for a sub-pillar.
 - **Local catalog:** optional `agents/catalog.yaml` metadata for concerns known to be absent in this project.
 - **Scope:** a directory with both `AGENTS.md` and `agents/`; nested scopes inherit ancestor guidance and use nearest-scope precedence.
-- **Touchpoint** — declared coupling between pillars. Hard (`must_read_with`) or soft (`see_also`).
-- **Load set** — the full set of pillars loaded for a task: primaries plus their direct `must_read_with` (depth 1, no transitive following).
-- **Stub** — pillar with `status: stub` and minimal body. Signals "concern acknowledged, rules undefined; ask, don't infer."
-- **Excluded** — pillar name declared in AGENTS.md's `excluded:` list as not applicable to this project.
+- **Touchpoint:** declared coupling between pillars. Hard (`must_read_with`) or soft (`see_also`).
+- **Load set:** the full set of pillars loaded for a task: always-loaded pillars, primaries, their direct `must_read_with` (depth 1, no transitive following), and any `see_also` targets the task matches.
+- **Stub:** pillar with `status: stub` and minimal body. Signals "concern acknowledged, rules undefined; ask, don't infer."
+- **Excluded:** an identity declared in AGENTS.md's `excluded:` list as not applicable to this scope.
 
 **Product invariants:**
 
@@ -44,7 +44,7 @@ The repo also ships optional tooling forms for meta-operations around the standa
 
 ## Decisions
 
-- **Three tiers plus an always-loaded set, not a flat list.** Reason: handles the long tail of project types without bloating the required core. A flat list of 25+ mandatory pillars would prevent incremental adoption.
+- **Three tiers plus an always-loaded set, not a flat list.** Reason: handles the long tail of project types without bloating the required core. A flat list of two dozen mandatory pillars would prevent incremental adoption.
 - **Frontmatter-driven present discovery, with a narrow local absent catalog.** Reason: present pillars stay decentralized, while silent gaps can be detected deterministically without network access or model memory.
 - **8-section template combining briefing + prescriptive layers.** Reason: trust the agent by default (Context + Decisions) but allow hard constraints (Rules + Watchouts) when not inferable from facts.
 - **Depth-1 loading, not transitive closure.** Reason: predictability for authors. Each pillar's frontmatter declares the exact load set.
@@ -55,7 +55,7 @@ The repo also ships optional tooling forms for meta-operations around the standa
 
 ## Rules
 
-(none) — context.md surfaces facts; constraint pillars sit elsewhere.
+(none). This pillar surfaces facts; constraint pillars sit elsewhere.
 
 ## Workflows
 
@@ -72,7 +72,7 @@ The repo also ships optional tooling forms for meta-operations around the standa
 
 ## Touchpoints
 
-- `see_also: [repo]` — tasks that touch file layout in addition to project identity load `repo.md`.
+- `see_also: [repo]`: tasks that touch file layout in addition to project identity load `repo.md`.
 
 ## Gaps
 

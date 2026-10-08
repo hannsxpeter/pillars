@@ -83,8 +83,8 @@ src/auth/
 
 ## Touchpoints
 
-- `must_read_with: [data, config]` — auth queries the `users` and `memberships` tables (data); session secrets and provider credentials live in config.
-- `see_also: [security, api]` — security covers non-auth adversarial concerns (rate limiting, brute force); api covers how handlers consume session state.
+- `must_read_with: [data, config]`: auth queries the `users` and `memberships` tables (data); session secrets and provider credentials live in config.
+- `see_also: [security, api]`: security covers non-auth adversarial concerns (rate limiting, brute force); api covers how handlers consume session state.
 
 ## Gaps
 

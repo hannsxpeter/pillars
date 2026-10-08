@@ -14,11 +14,16 @@ tooling/
 │   ├── pillars-init/
 │   ├── pillars-author/
 │   └── pillars-verify/
-├── ci/                     # Deterministic structural validator (this repo's CI)
-│   ├── validate_pillars.py
+├── ci/                     # Deterministic checks run by this repo's CI
+│   ├── validate_pillars.py     # structure and routing validator
+│   ├── check_consistency.py    # release, link, catalog, and index consistency
 │   ├── requirements.txt
 │   └── tests/
 ├── conformance/            # Task routing fixtures and benchmark protocol
+│   ├── fixtures.yaml
+│   ├── projects/routing/   # fixture project with a nested scope
+│   ├── BENCHMARK-PROTOCOL.md
+│   └── RESULTS-TEMPLATE.md
 └── prompts/                # Universal paste-in prompts + per-tool install guides
     ├── pillars-check.md
     ├── pillars-find-gaps.md
@@ -49,7 +54,7 @@ tooling/
 | Codex CLI | `prompts/install-codex-cli.md` | Native AGENTS.md support; paste-in for meta-ops |
 | Gemini CLI | `prompts/install-gemini-cli.md` | Native AGENTS.md or GEMINI.md redirect |
 | opencode | `prompts/install-opencode.md` | Native AGENTS.md support; optional commands |
-| Aider | `prompts/install-aider.md` | `--read AGENTS.md` flag or conventions file |
+| Aider | `prompts/install-aider.md` | `--read AGENTS.md --read agents`, or a `read:` list in `.aider.conf.yml` |
 | Windsurf | `prompts/install-windsurf.md` | `.windsurfrules` redirect or native AGENTS.md |
 | Cline | `prompts/install-cline.md` | `.clinerules` redirect or native AGENTS.md |
 | Continue | `prompts/install-continue.md` | `systemMessage` + `slashCommands` config |

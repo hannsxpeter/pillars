@@ -1,7 +1,7 @@
 name: Bug / Spec issue
 description: Something in the standard is wrong, contradictory, ambiguous, or out of date.
 title: "[bug]: "
-labels: ["bug", "needs-triage"]
+labels: ["bug"]
 body:
   - type: markdown
     attributes:

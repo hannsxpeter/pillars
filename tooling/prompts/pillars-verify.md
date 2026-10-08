@@ -26,7 +26,7 @@ End.
 
 Also find nested directories containing both `AGENTS.md` and `agents/`. Verify each scope independently and apply nearest-scope precedence when claims conflict. Read each scope's exclusions and optional `agents/catalog.yaml`. Exclusions are intentional. Catalog entries are known absences, not pillar claims.
 
-### Step 2 — Inventory pillar files
+### Step 2: Inventory pillar files
 
 For each file in `agents/` (recursively for sub-pillars):
 
@@ -35,7 +35,7 @@ For each file in `agents/` (recursively for sub-pillars):
 - If `status: stub`, skip drift checks (stubs claim nothing).
 - If `status: present`, proceed to checks.
 
-### Step 3 — Run drift checks per present pillar
+### Step 3: Run drift checks per present pillar
 
 Use evidence-driven verification. For each claim in the Context section, verify against code.
 
@@ -53,7 +53,7 @@ Check against:
 Drift example:
 - Claim (in `data.md`): "We use Drizzle ORM."
 - Evidence: `package.json` has `prisma`, no `drizzle-orm`.
-- Finding: **drift** — declared Drizzle, code uses Prisma.
+- Finding: **drift** (declared Drizzle, code uses Prisma).
 
 #### 3b. File-location claims
 
@@ -95,9 +95,9 @@ Rules are constraints. Sample-check whether they're followed.
 Drift example:
 - Rule (in `data.md`): "Never write raw SQL outside `src/db/raw.ts`."
 - Evidence: found `postgres.unsafe(...)` in `src/api/v2/reports.ts`.
-- Finding: **rule violation** — code violates the declared rule.
+- Finding: **rule violation** (code violates the declared rule).
 
-### Step 4 — Compile findings
+### Step 4: Compile findings
 
 For each pillar with findings:
 
@@ -118,15 +118,15 @@ Findings: M
 
 If no findings: "No drift detected for `<pillar>.md`."
 
-### Step 5 — Surface global patterns
+### Step 5: Surface global patterns
 
 Look for cross-cutting issues:
 
 - **A pillar claims a tech the project doesn't have.** Likely a stale pillar.
 - **The project uses a tech no pillar mentions.** Likely a new pillar needed, or existing pillar's Context needs the addition.
-- **Excluded pillars now have code in their area.** Example: `excluded: [ui]` but the project now has `src/components/`. The exclusion may need to be removed and `ui.md` authored.
+- **Excluded pillars now have code in their area.** Example: `excluded: [ui]` but the project now has `src/components/`. The exclusion may need to be removed and `ui.md` authored; `pillars-author` offers to remove the exclusion, with approval, before it writes the pillar.
 
-### Step 6 — Present the report
+### Step 6: Present the report
 
 ```
 # Pillars Drift Report
@@ -150,7 +150,7 @@ Findings: <total>
 
 Ask the user which findings to act on. Do not auto-fix.
 
-### Step 7 — (Optional) Hand off
+### Step 7: (Optional) Hand off
 
 If the user picks a finding to address:
 - For Context drift: route them to `pillars-author <pillar>` for revision.
@@ -176,7 +176,7 @@ If the user picks a finding to address:
 
 ## Scope limits
 
-- No CI/CD integration. This is a manual, in-session audit.
+- No CI/CD integration. This is a manual, in-session audit. Structure and routing can be checked in CI with the Pillars repository's offline validator (`tooling/ci/validate_pillars.py`); judgment-based drift checks like this one stay manual.
 - No cross-project drift detection. Current project only.
 - No autonomous remediation. Findings only.
 

@@ -17,7 +17,7 @@ For versions that only read `.clinerules`:
 ```markdown
 This project follows the Pillars standard (https://github.com/hannsxpeter/pillars).
 
-Before doing any code work, read `AGENTS.md` at the project root and follow its protocol to load the relevant pillars from `./agents/*.md`.
+Before doing any code work, read `AGENTS.md` at the project root and follow its protocol to load the relevant pillars from `./agents/**/*.md`.
 
 Do not infer conventions when a relevant pillar exists. Do not silently ignore a Gaps entry; ask the user.
 ```

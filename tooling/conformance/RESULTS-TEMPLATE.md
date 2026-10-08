@@ -10,6 +10,8 @@ Status: not run
 | Repository commit | |
 | Model and version | |
 | Model settings | |
+| System prompt | |
+| Task set | |
 | Graders | |
 | Repetitions per task | |
 | Raw artifact location | |
@@ -21,8 +23,10 @@ No results recorded.
 
 ## Per-task results
 
-| Task | Expected load set | Condition | Run | Facts | Rules | Placement | Decisions | Gaps | Relevance | Notes |
-|---|---|---|---:|---:|---:|---:|---:|---:|---:|---|
+Each run gets three rows: one per grader (`A`, `B`) and one `Adjudicated` row. Scores are 0 to 2 per the protocol rubric.
+
+| Task | Expected load set | Condition | Run | Grader | Facts | Rules | Placement | Decisions | Gaps | Relevance | Notes |
+|---|---|---|---:|---|---:|---:|---:|---:|---:|---:|---|
 
 ## Context and latency
 

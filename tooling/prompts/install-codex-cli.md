@@ -7,7 +7,7 @@ OpenAI Codex CLI natively reads `AGENTS.md` at the project root and applies it a
 Once your project has `AGENTS.md` and `agents/` at the root, Codex CLI will:
 
 1. Read `AGENTS.md` on session start.
-2. Follow its protocol to scan `agents/*.md` frontmatter.
+2. Follow its protocol to scan pillar frontmatter under `agents/`, including sub-pillar folders.
 3. Load the relevant pillars based on the task.
 4. Comply with their content during code work.
 
@@ -29,7 +29,7 @@ Codex CLI's persistent custom-command support varies by version, so the portable
 If your Codex CLI accepts piped input as the initial message:
 
 ```bash
-cat tooling/prompts/pillars-init.md | codex
+curl -fsSL https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/tooling/prompts/pillars-init.md | codex
 ```
 
 (Adapt the binary name to your install; check `codex --help` for input modes.)
@@ -40,7 +40,10 @@ You can stage the prompts inside your project as a one-time convenience:
 
 ```bash
 mkdir -p .codex/prompts
-cp tooling/prompts/pillars-*.md .codex/prompts/
+for name in init author verify check map-task find-gaps trim sync-design sync-prd sync-readme; do
+  curl -fsSL -o ".codex/prompts/pillars-$name.md" \
+    "https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/tooling/prompts/pillars-$name.md"
+done
 ```
 
 Then ask Codex CLI to read `.codex/prompts/pillars-init.md` and follow it.

@@ -55,7 +55,7 @@ Use this authority model unless the project says otherwise:
 | `agents/context.md` | Durable vocabulary, product invariants, project identity |
 | `agents/arch.md` | System shape, boundaries, data flow, technical design |
 | `agents/ui.md` | UI implementation conventions, component patterns, design tokens |
-| Other `agents/*.md` | Domain-specific operating constraints |
+| Other pillars under `agents/` | Domain-specific operating constraints |
 
 Do not duplicate every claim across files. The goal is reconciliation, not mirroring.
 

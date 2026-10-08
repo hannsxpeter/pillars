@@ -1,8 +1,8 @@
 ---
 name: pillars-verify
 description: "Audit the current project's Pillars files against the actual codebase. Walks each pillar's Context section, checks whether its declarative claims (stack, file locations, conventions, decisions) still match the code, flags drift, and proposes specific fixes for each finding. Use this skill when the user asks to 'verify pillars,' 'check pillars for drift,' 'audit pillars,' 'are my pillars up to date,' 'check if my pillars match the code,' or after a significant refactor when they want to confirm the pillars still reflect reality."
-version: 0.2.0
-updated: 2026-07-13
+version: 0.2.1
+updated: 2026-10-08
 compatible_with:
   - claude-code
 standard_version: ">=1.1.0"
@@ -76,7 +76,7 @@ Check against:
 Drift example:
 - Claim (in `data.md` Context): "We use Drizzle ORM."
 - Evidence: `package.json` has `prisma` but no `drizzle-orm`.
-- Finding: **drift** — declared Drizzle, code uses Prisma.
+- Finding: **drift** (declared Drizzle, code uses Prisma).
 
 #### 3b. File-location claims
 
@@ -93,7 +93,7 @@ find . -name "schema.ts" -not -path "*/node_modules/*"
 Drift example:
 - Claim (in `data.md`): "Schema in `src/db/schema.ts`."
 - Evidence: file doesn't exist; found `app/lib/db/schema.ts` instead.
-- Finding: **drift** — declared `src/db/schema.ts`, actual `app/lib/db/schema.ts`.
+- Finding: **drift** (declared `src/db/schema.ts`, actual `app/lib/db/schema.ts`).
 
 #### 3c. Convention claims
 
@@ -122,7 +122,7 @@ Rules are constraints. Sample-check whether they're being followed in code.
 Drift example:
 - Rule (in `data.md`): "Never write raw SQL outside `src/db/raw.ts`."
 - Evidence: found `postgres.unsafe(...)` calls in `src/api/v2/reports.ts`.
-- Finding: **rule violation** — code violates the declared rule. Worth flagging even though it's not strictly pillar drift; the agent should know.
+- Finding: **rule violation** (code violates the declared rule). Worth flagging even though it's not strictly pillar drift; the agent should know.
 
 ### Step 4. Compile findings
 
@@ -151,7 +151,7 @@ Beyond per-pillar findings, look for cross-cutting issues:
 
 - **A pillar claims a tech the project doesn't have.** Likely the pillar is stale (project migrated away).
 - **The project uses a tech no pillar mentions.** Likely a new pillar is needed, or an existing pillar's Context needs the addition.
-- **Excluded pillars now have code in their area.** Example: `excluded: [ui]` but the project now has a `src/components/` directory. The exclusion may need to be removed and `ui.md` authored.
+- **Excluded pillars now have code in their area.** Example: `excluded: [ui]` but the project now has a `src/components/` directory. The exclusion may need to be removed and `ui.md` authored; `pillars-author` offers to remove the exclusion, with approval, before it writes the pillar.
 
 ### Step 6. Present the report
 
@@ -205,7 +205,7 @@ If the user picks a specific finding to address:
 
 ## Scope limits
 
-- **No CI/CD integration.** This is a manual, in-session audit. A CLI form of this check would belong in CI; see the Pillars roadmap for that future direction.
+- **No CI/CD integration.** This is a manual, in-session audit. Structure and routing can be checked in CI with the Pillars repository's offline validator (`tooling/ci/validate_pillars.py`); judgment-based drift checks like this one stay manual.
 - **No autonomous remediation.** Findings are presented; user decides what to act on.
 - **No cross-project drift detection.** Operates on the current project only.
 

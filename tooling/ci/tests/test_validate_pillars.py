@@ -4,6 +4,8 @@ import tempfile
 import textwrap
 import unittest
 
+import yaml
+
 
 MODULE_PATH = Path(__file__).resolve().parents[1] / "validate_pillars.py"
 SPEC = importlib.util.spec_from_file_location("validate_pillars", MODULE_PATH)
@@ -183,6 +185,27 @@ class StructuralTests(unittest.TestCase):
             self.assertTrue(any("both present and excluded" in message
                                 for _, message in findings.errors))
 
+    def test_empty_section_is_warning(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = root / "data.md"
+            path.write_text(pillar_text("data").replace("Scope text.\n", ""), encoding="utf-8")
+            findings = validator.Findings()
+            validator.validate_pillar(path, root, findings, root)
+            self.assertFalse(findings.errors)
+            self.assertEqual([message for _, message in findings.warnings],
+                             ["section 'Scope' is empty; write (none) when nothing applies"])
+
+    def test_repeated_findings_are_reported_once(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_agents(root, "[ui]")
+            write_floor(root)
+            findings = validator.Findings()
+            for _ in range(3):
+                validator.validate_project(root, findings, root)
+            self.assertEqual(len(findings.warnings), 1)
+
     def test_content_budget_is_warning(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -224,7 +247,8 @@ class RoutingTests(unittest.TestCase):
         fixture = Path(__file__).resolve().parents[2] / "conformance" / "fixtures.yaml"
         findings = validator.Findings()
         count = validator.run_conformance_file(fixture, findings, fixture.parents[2])
-        self.assertEqual(count, 6)
+        cases = yaml.safe_load(fixture.read_text(encoding="utf-8"))["cases"]
+        self.assertEqual(count, len(cases))
         self.assertFalse(findings.errors, findings.errors)
 
 

@@ -53,3 +53,32 @@ cases:
       load: [root::context, root::repo]
       primaries: []
       absent: [root::release]
+
+  # The SaaS dashboard example documents these routes in its README. Keeping
+  # them here stops the example from drifting away from the matcher.
+  - name: example owner-only invite routes through auth
+    project: ../../examples/saas-dashboard
+    task: Add an owner-only team invite link
+    target: src/app/api/invites/route.ts
+    expected:
+      load: [root::auth, root::context, root::data, root::repo]
+      primaries: [root::auth]
+      absent: []
+
+  - name: example column change routes through data
+    project: ../../examples/saas-dashboard
+    task: Add a `last_contacted_at` column to accounts
+    target: src/db/schema.ts
+    expected:
+      load: [root::auth, root::context, root::data, root::repo]
+      primaries: [root::data]
+      absent: []
+
+  - name: example layout move reports absent ui
+    project: ../../examples/saas-dashboard
+    task: Move account pages into a new route group
+    target: src/app/(dashboard)/accounts/page.tsx
+    expected:
+      load: [root::context, root::repo]
+      primaries: []
+      absent: [root::ui]

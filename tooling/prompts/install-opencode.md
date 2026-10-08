@@ -7,7 +7,7 @@
 Once your project has `AGENTS.md` and `agents/` at the root, opencode will:
 
 1. Read `AGENTS.md` on session start.
-2. Follow its protocol to scan `agents/*.md` frontmatter.
+2. Follow its protocol to scan pillar frontmatter under `agents/`, including sub-pillar folders.
 3. Load the relevant pillars based on the task.
 4. Comply with their content during code work.
 
@@ -23,16 +23,10 @@ Check your opencode version's command format (it has evolved). If your version s
 
 ```bash
 mkdir -p .opencode/commands
-cp tooling/prompts/pillars-init.md .opencode/commands/pillars-init.md
-cp tooling/prompts/pillars-author.md .opencode/commands/pillars-author.md
-cp tooling/prompts/pillars-verify.md .opencode/commands/pillars-verify.md
-cp tooling/prompts/pillars-check.md .opencode/commands/pillars-check.md
-cp tooling/prompts/pillars-sync-design.md .opencode/commands/pillars-sync-design.md
-cp tooling/prompts/pillars-sync-prd.md .opencode/commands/pillars-sync-prd.md
-cp tooling/prompts/pillars-sync-readme.md .opencode/commands/pillars-sync-readme.md
-cp tooling/prompts/pillars-map-task.md .opencode/commands/pillars-map-task.md
-cp tooling/prompts/pillars-find-gaps.md .opencode/commands/pillars-find-gaps.md
-cp tooling/prompts/pillars-trim.md .opencode/commands/pillars-trim.md
+for name in init author verify check map-task find-gaps trim sync-design sync-prd sync-readme; do
+  curl -fsSL -o ".opencode/commands/pillars-$name.md" \
+    "https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/tooling/prompts/pillars-$name.md"
+done
 ```
 
 Then invoke via matching slash commands such as `/pillars-check`, `/pillars-map-task`, and `/pillars-sync-readme`. Adapt the file format (frontmatter, extension) to match your opencode version's expectations.
