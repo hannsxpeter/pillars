@@ -46,49 +46,49 @@ def run_with_root(files, check):
 class ChangelogHistoryTests(unittest.TestCase):
 
     def test_intact_history_passes(self):
-        text = changelog(("1.2.2", "2026-08-04"), ("1.2.1", "2026-08-04"),
+        text = changelog(("1.2.3", "2026-08-04"), ("1.2.1", "2026-08-04"),
                          ("1.2.0", "2026-08-03"), ("1.1.0", "2026-07-13"))
-        self.assertEqual(consistency.changelog_errors(text, "1.2.2"), [])
+        self.assertEqual(consistency.changelog_errors(text, "1.2.3"), [])
 
     def test_bulk_bump_that_duplicates_a_released_entry_is_an_error(self):
-        # A repo-wide 1.2.1 -> 1.2.2 substitution rewrites the released 1.2.1
-        # entry in place. Adding the real 1.2.2 entry then leaves two of them.
-        text = changelog(("1.2.2", "2026-08-04"), ("1.2.2", "2026-08-04"),
+        # A repo-wide 1.2.1 -> 1.2.3 substitution rewrites the released 1.2.1
+        # entry in place. Adding the real 1.2.3 entry then leaves two of them.
+        text = changelog(("1.2.3", "2026-08-04"), ("1.2.3", "2026-08-04"),
                          ("1.2.0", "2026-08-03"))
-        errors = consistency.changelog_errors(text, "1.2.2")
+        errors = consistency.changelog_errors(text, "1.2.3")
         self.assertTrue(any("more than one entry" in error for error in errors))
 
     def test_missing_newest_entry_is_an_error(self):
         text = changelog(("1.2.1", "2026-08-04"), ("1.2.0", "2026-08-03"))
-        errors = consistency.changelog_errors(text, "1.2.2")
-        self.assertTrue(any("expected the release version '1.2.2'" in error
+        errors = consistency.changelog_errors(text, "1.2.3")
+        self.assertTrue(any("expected the release version '1.2.3'" in error
                             for error in errors))
 
     def test_out_of_order_history_is_an_error(self):
-        text = changelog(("1.2.2", "2026-08-04"), ("1.1.0", "2026-07-13"),
+        text = changelog(("1.2.3", "2026-08-04"), ("1.1.0", "2026-07-13"),
                          ("1.2.0", "2026-08-03"))
-        errors = consistency.changelog_errors(text, "1.2.2")
+        errors = consistency.changelog_errors(text, "1.2.3")
         self.assertTrue(any("descending order" in error for error in errors))
 
     def test_anchor_pointing_at_another_tag_is_an_error(self):
-        text = changelog(("1.2.2", "2026-08-04")).replace(
-            "[1.2.2]: %s1.2.2" % TAG, "[1.2.2]: %s1.2.1" % TAG)
-        errors = consistency.changelog_errors(text, "1.2.2")
+        text = changelog(("1.2.3", "2026-08-04")).replace(
+            "[1.2.3]: %s1.2.3" % TAG, "[1.2.3]: %s1.2.1" % TAG)
+        errors = consistency.changelog_errors(text, "1.2.3")
         self.assertTrue(any("points at tag 'v1.2.1'" in error for error in errors))
 
     def test_entry_without_an_anchor_is_an_error(self):
-        text = changelog(("1.2.2", "2026-08-04"), ("1.2.0", "2026-08-03")).replace(
+        text = changelog(("1.2.3", "2026-08-04"), ("1.2.0", "2026-08-03")).replace(
             "[1.2.0]: %s1.2.0\n" % TAG, "")
-        errors = consistency.changelog_errors(text, "1.2.2")
+        errors = consistency.changelog_errors(text, "1.2.3")
         self.assertTrue(any("no release-tag anchor" in error for error in errors))
 
     def test_anchor_without_an_entry_is_an_error(self):
-        text = changelog(("1.2.2", "2026-08-04")) + "\n[1.1.0]: %s1.1.0\n" % TAG
-        errors = consistency.changelog_errors(text, "1.2.2")
+        text = changelog(("1.2.3", "2026-08-04")) + "\n[1.1.0]: %s1.1.0\n" % TAG
+        errors = consistency.changelog_errors(text, "1.2.3")
         self.assertTrue(any("no matching entry" in error for error in errors))
 
     def test_empty_history_is_an_error(self):
-        errors = consistency.changelog_errors("# Changelog\n", "1.2.2")
+        errors = consistency.changelog_errors("# Changelog\n", "1.2.3")
         self.assertEqual(len(errors), 1)
         self.assertIn("no released version entries", errors[0])
 

@@ -1,6 +1,6 @@
 # Pillars Specification
 
-Version 1.2.2.
+Version 1.2.3.
 
 > **Who this document is for.** This is the precise, formal definition of the standard, written for people implementing Pillars in a tool or writing pillars by hand and wanting the exact rules. It is deliberately technical.
 >
@@ -233,7 +233,7 @@ A reference implementation is in this repository's [AGENTS.md](AGENTS.md).
 
 Pillars compatibility does not require the repository's validator or any external service. Implementations can validate the standard with their own tooling. Deterministic routing implementations should be checked against representative task-to-load-set fixtures.
 
-This spec uses semantic versioning. The current version is 1.2.2.
+This spec uses semantic versioning. The current version is 1.2.3.
 
 - Major: incompatible changes to existing pillar files or loading behavior.
 - Minor: backward-compatible additions or newly specified behavior.

@@ -14,11 +14,11 @@ This pillar covers the file and folder layout of the Pillars repository: where e
 
 ## Context
 
-Pillars is a documentation repository, not an application codebase. Its layout is intentionally flat at the root with three visible structural directories:
+Pillars is a documentation-and-tooling repository. Its layout is intentionally flat at the root with a few visible structural directories:
 
 ```
 pillars/
-├── README.md           # human-first intro and adoption guide
+├── README.md           # human-first product intro
 ├── SPEC.md             # the formal standard
 ├── PILLARS.md          # the pillar enumeration with tiers and boundaries
 ├── AGENTS.md           # this project's own AGENTS.md, dogfooded protocol
@@ -28,7 +28,10 @@ pillars/
 ├── SECURITY.md         # security policy
 ├── CHANGELOG.md        # standard and tooling release notes
 ├── LICENSE             # CC0 1.0 dedication
-├── DESIGN-NOTES.md     # design conversation log
+├── package.json        # npm package @hxp-tools/pillars
+├── install.sh          # skill installer
+├── bin/                # npx entry
+├── assets/             # product graphics
 ├── agents/             # this project's pillars, dogfooded
 │   ├── context.md      # always-loaded
 │   ├── repo.md         # always-loaded
@@ -36,19 +39,19 @@ pillars/
 ├── examples/           # adopter-facing examples
 │   ├── data.md
 │   ├── auth.md
-│   ├── auth/           # sub-pillar worked example (agent-facing registration)
+│   ├── auth/           # sub-pillar worked example
 │   │   └── agent-registration.md
 │   └── saas-dashboard/ # compact end-to-end adoption example
-└── tooling/            # optional prompts, skills, validator, tests, and conformance assets
-    ├── prompts/        # paste-in prompts and per-tool install guides
-    ├── claude-skill/   # Claude Code skill bundle
-    ├── ci/             # offline validator, consistency checker, unit tests
-    └── conformance/    # routing fixtures, fixture project, benchmark protocol
+└── tooling/            # optional prompts, skills, validator, tests, conformance
+    ├── prompts/
+    ├── claude-skill/
+    ├── ci/
+    └── conformance/
 ```
 
 **Naming:**
 
-- Top-level docs use SCREAMING-CASE (`README.md`, `SPEC.md`, `PILLARS.md`, `AGENTS.md`, `LICENSE`, `DESIGN-NOTES.md`). Convention for repo-level documents.
+- Top-level docs use SCREAMING-CASE (`README.md`, `SPEC.md`, `PILLARS.md`, `AGENTS.md`, `LICENSE`). Convention for repo-level documents.
 - Pillar files use lowercase single-word names (`context.md`, `data.md`, `auth.md`). Matches the `pillar:` field in frontmatter.
 - Sub-pillars live in a folder named for the parent (`agents/<parent>/<name>.md`).
 - Sub-pillar references use their path-derived identity (`<parent>/<name>`). The frontmatter `pillar` value remains the leaf filename.
@@ -61,15 +64,17 @@ pillars/
 - `AGENTS.md` is the loader, dogfooded.
 - `agents/` holds the project's own pillars (dogfooded).
 - `examples/` holds worked example pillars and compact adoption examples for adopters to reference.
-- `tooling/` holds optional helper forms and repository QA. It packages prompts, skills, the deterministic validator, unit tests, conformance fixtures, and benchmark protocol assets.
-- `.github/` holds repository hosting metadata such as issue templates, PR templates, and CI workflows (for example, `workflows/validate.yml`, which runs the structural validator). It is not part of the Pillars standard.
+- `tooling/` holds optional helper forms and repository QA.
+- `package.json`, `install.sh`, `bin/`, and `assets/` are the npm product surface. They distribute skills and branding; they are not part of the Pillars standard itself.
+- `.github/` holds repository hosting metadata such as issue templates, PR templates, and CI workflows. It is not part of the Pillars standard.
 
 ## Decisions
 
-- **Flat root layout with three visible structural directories.** Reason: keeps top-level scannable. Anyone landing on the repo sees the documents that define the standard (README, SPEC, PILLARS, AGENTS) immediately, while examples and optional tooling stay grouped.
-- **`agents/` for dogfooded pillars; `examples/` for adopter references.** Reason: separates "this project's own pillars" from "pillars an adopter might want to copy." Keeps dogfooding honest while still providing reference material.
+- **Flat root layout with clear product and standard surfaces.** Reason: anyone landing on the repo sees README, SPEC, PILLARS, and AGENTS immediately, while examples and optional tooling stay grouped.
+- **`agents/` for dogfooded pillars; `examples/` for adopter references.** Reason: separates "this project's own pillars" from "pillars an adopter might want to copy."
 - **`tooling/` for optional helper forms.** Reason: prompts and skills make meta-operations easier, but the standard must remain usable without installing anything.
-- **SCREAMING-CASE at root, lowercase under `agents/` and `examples/`.** Reason: matches conventional repo expectations (README, LICENSE in caps) while keeping pillar filenames machine-friendly (lowercase matches `pillar:` field).
+- **npm package ships skills, not a runtime requirement.** Reason: `npx @hxp-tools/pillars` installs skills; Pillars-compatible projects still need only AGENTS.md plus `agents/`.
+- **SCREAMING-CASE at root, lowercase under `agents/` and `examples/`.** Reason: matches conventional repo expectations while keeping pillar filenames machine-friendly.
 - **Executable QA stays under `tooling/`.** Reason: validator tests and conformance assets support the standard but do not turn optional tooling into a runtime requirement.
 
 ## Rules
@@ -77,7 +82,7 @@ pillars/
 - **Pillar filename must match the `pillar:` frontmatter field.** Loading is path-based; mismatch breaks discovery.
 - **Sub-pillars must live in `agents/<parent>/<name>.md`.** No `parent:` field in frontmatter; the path is the source of truth.
 - **`agents/catalog.yaml` records only absent concerns.** Present pillar metadata stays in frontmatter; exclusions stay in `AGENTS.md`.
-- **`agents/`, `examples/`, and `tooling/` are the only visible structural directories.** Don't introduce new top-level folders without updating this pillar. Hidden repository metadata such as `.github/` is allowed when it supports project hosting.
+- **`agents/`, `examples/`, `tooling/`, `bin/`, and `assets/` are the only visible structural directories.** Don't introduce new top-level folders without updating this pillar. Hidden repository metadata such as `.github/` is allowed when it supports project hosting.
 
 ## Workflows
 

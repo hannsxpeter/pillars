@@ -59,7 +59,7 @@ body:
     attributes:
       label: Pressure-test against project archetypes
       description: |
-        For structural changes, walk this proposal through at least 2 of the archetypes documented in DESIGN-NOTES.md
+        For structural changes, walk this proposal through at least 2 of the archetypes in PILLARS.md
         (SaaS dashboard, CLI tool, ML pipeline, marketing site, real-time collab, e-commerce).
         For new pillars or boundary changes, show how at least 2 different project types would use the new shape.
 

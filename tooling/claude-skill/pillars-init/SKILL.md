@@ -91,10 +91,10 @@ If the project is **empty/greenfield**, ask the user what they're building. Map 
 
 The skill needs the current canonical text of AGENTS.md and the pillar template. Fetch from the Pillars repo:
 
-- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/AGENTS.md`
-- Spec for template reference: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/SPEC.md`
-- Catalog for archetype exclusions: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/PILLARS.md`
-- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/agents/catalog.yaml`
+- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/AGENTS.md`
+- Spec for template reference: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/SPEC.md`
+- Catalog for archetype exclusions: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/PILLARS.md`
+- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/agents/catalog.yaml`
 
 Use the `WebFetch` tool. Cache locally for the rest of the session.
 
@@ -323,7 +323,7 @@ Use this only when Step 2 cannot fetch the published file.
 ````markdown
 # Pillars: Agent Protocol
 
-This project follows [Pillars 1.2.2](https://github.com/hannsxpeter/pillars/tree/v1.2.2). Coding agents read project pillar files before acting.
+This project follows [Pillars 1.2.3](https://github.com/hannsxpeter/pillars/tree/v1.2.3). Coding agents read project pillar files before acting.
 
 ## At the start of any task
 
@@ -365,13 +365,13 @@ excluded: []
 
 - Pillar files in this repo: `./agents/**/*.md`
 - Optional absent catalog: `./agents/catalog.yaml`
-- Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.2/SPEC.md
-- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md
-- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.2/examples
+- Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.3/SPEC.md
+- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.3/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.3/examples
 ````
 
 ## Reference
 
 - Pillars standard: https://github.com/hannsxpeter/pillars
-- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.2/SPEC.md
-- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.3/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.3/PILLARS.md

@@ -36,7 +36,7 @@ If your version supports them, download the prompt files, pinned to the release 
 mkdir -p "$HOME/.gemini/commands"
 for name in init author verify check map-task find-gaps trim sync-design sync-prd sync-readme; do
   curl -fsSL -o "$HOME/.gemini/commands/pillars-$name.md" \
-    "https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/tooling/prompts/pillars-$name.md"
+    "https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/tooling/prompts/pillars-$name.md"
 done
 ```
 

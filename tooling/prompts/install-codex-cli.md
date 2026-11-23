@@ -29,7 +29,7 @@ Codex CLI's persistent custom-command support varies by version, so the portable
 If your Codex CLI accepts piped input as the initial message:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/tooling/prompts/pillars-init.md | codex
+curl -fsSL https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/tooling/prompts/pillars-init.md | codex
 ```
 
 (Adapt the binary name to your install; check `codex --help` for input modes.)
@@ -42,7 +42,7 @@ You can stage the prompts inside your project as a one-time convenience:
 mkdir -p .codex/prompts
 for name in init author verify check map-task find-gaps trim sync-design sync-prd sync-readme; do
   curl -fsSL -o ".codex/prompts/pillars-$name.md" \
-    "https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/tooling/prompts/pillars-$name.md"
+    "https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/tooling/prompts/pillars-$name.md"
 done
 ```
 

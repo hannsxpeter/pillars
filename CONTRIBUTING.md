@@ -50,7 +50,7 @@ Pillars treats these as RFCs. You'll be asked to:
 
 1. Describe the change.
 2. Explain the problem it solves (a concrete failure mode in the current standard).
-3. Pressure-test it against the existing project archetypes documented in `DESIGN-NOTES.md`.
+3. Pressure-test it against the project archetypes in `PILLARS.md`.
 4. Propose how existing adopters migrate.
 
 Expect a multi-week conversation. The standard is intentionally small and slow-moving.
@@ -61,7 +61,7 @@ Pillars uses [Semantic Versioning](https://semver.org/):
 
 - **Major** (`1.x.x` -> `2.x.x`): frontmatter schema or loading-mechanism changes that break existing pillars. Requires migration notes.
 - **Minor** (`1.2.x` -> `1.3.x`): backward-compatible additions to schema, protocol, pillar catalog, or sub-pillar patterns.
-- **Patch** (`1.2.2` -> `1.2.3`): clarifications, typo fixes, new examples, documentation.
+- **Patch** (`1.2.3` -> `1.2.3`): clarifications, typo fixes, new examples, documentation.
 
 The current version is in `CHANGELOG.md`.
 

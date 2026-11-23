@@ -10,7 +10,7 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[2]
-VERSION = "1.2.2"
+VERSION = "1.2.3"
 CORE = [
     "stack", "arch", "data", "api", "ui", "auth", "quality",
     "development", "release", "deploy", "observe",

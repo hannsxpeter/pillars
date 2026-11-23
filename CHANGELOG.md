@@ -6,12 +6,14 @@ All notable changes to the Pillars standard are documented here. Format follows 
 - **Minor** — backward-compatible additions to schema, protocol, or pillar catalog.
 - **Patch** — clarifications and corrections without behavior changes.
 
-## [Unreleased]
+## [1.2.3] - 2026-11-23
 
-Tooling, examples, documentation, and repository QA. The standard itself is unchanged, so Pillars compatibility is unaffected and projects on 1.2.2 need no edits.
+Product packaging, tooling, examples, documentation, and repository QA. The standard itself is unchanged, so Pillars compatibility is unaffected and projects on 1.2.2 need no edits.
 
 ### Added
 
+- **npm package `@hxp-tools/pillars`:** `npx @hxp-tools/pillars` installs the init, author, and verify skills for detected coding tools. Ships `package.json`, `bin/pillars.js`, and `install.sh`.
+- **Product graphics in `assets/`:** hero, load-map, and achievement badges for the README.
 - **Changelog history guard in `tooling/ci/check_consistency.py`:** released entries are append-only, but the repo-wide version substitution that repins install URLs each release will happily rewrite an already-published entry in place. The damage survives review because the result still looks like a well-formed changelog. The check now verifies that the newest entry matches the release version, that no version has two entries, that entries descend, and that every entry has a release-tag anchor pointing at its own tag. Caught during the 1.2.2 release, where a bulk `1.2.1 -> 1.2.2` substitution rewrote the published 1.2.1 entry.
 - **`tooling/ci/tests/test_check_consistency.py`:** first unit coverage for the consistency checker, including a regression case that replays the bulk-substitution failure and a case asserting the repository's own changelog is intact.
 - **Example routing fixtures:** three conformance cases pin the "Example Task Routing" table in `examples/saas-dashboard/README.md`. Two of its three rows did not hold under the portable matcher (see Fixed), and nothing caught it because the example was only structurally linted.
@@ -20,6 +22,7 @@ Tooling, examples, documentation, and repository QA. The standard itself is unch
 
 ### Changed
 
+- **`README.md`:** reframed as a product landing page with arcade graphics, press-start install, load map, and achievements, while keeping the problem statement and sample pillar.
 - **`pillars-init` skill (0.3.0 -> 0.4.0) and prompt:** both now carry the canonical `AGENTS.md` verbatim for offline use. The prompt's fallback had drifted (a non-recursive `./agents/*.md` glob that hid sub-pillars, no scope definition, and flattened compliance wording), and the skill had no fallback at all. Core stubs take `covers` and `triggers` from the starter catalog; the old trigger table added `design` to both `arch` and `ui`, so any task mentioning design routed to both, and stubs had no required `covers`. The prompt gains the skill's monorepo guidance, placed before its first command and with AGENTS.md written at the scope root, and a `no` in the stub matrix now correctly means "stays cataloged absent" rather than "already excluded".
 - **`pillars-author` skill (0.2.0 -> 0.3.0) and prompt:** authoring now checks the scope's `excluded:` list first, and offers to remove a matching exclusion with approval, because a pillar and an exclusion with the same identity are invalid. Previously `pillars-verify` sent users to author an excluded pillar, and author forbade the one edit that would make the result valid. Also drops the skill's "more than 50% of sections populated" rule for `status: present`, which contradicted SPEC 3.4; the advice to expect more than three `must_read_with` entries on Domain pillars; and the claim that only `context` and `repo` may be always-loaded. The prompt's scan table gains the `analytics`, `i18n`, `a11y`, and `compliance` rows the skill already had.
 - **`pillars-verify` skill (0.2.0 -> 0.2.1) and prompt:** points to the offline validator instead of a roadmap document that does not exist, and notes that `pillars-author` handles exclusion removal.
@@ -29,13 +32,18 @@ Tooling, examples, documentation, and repository QA. The standard itself is unch
 - **`tooling/ci/check_consistency.py`:** the changelog date is no longer pinned separately from `VERSION`, since the history guard already checks the newest entry; local virtualenv and `node_modules` folders are skipped, matched only inside the repository so a checkout under a folder named `venv` is still scanned.
 - **`LICENSE`:** now carries the full CC0 1.0 legal code. GitHub reported the short dedication as "Other"; the plain-language summary stays in the README.
 - **`.github/workflows/validate.yml`:** checkout no longer persists credentials, and the job has a timeout.
-- **Housekeeping:** `.gitignore` drops placeholder Node and reserved-tooling entries now that the only tooling language is Python; `DESIGN-NOTES.md` is titled as the historical log it is.
+- **Housekeeping:** `.gitignore` drops placeholder Node and reserved-tooling entries now that the only tooling language is Python.
+- **Adoption guidance:** install and reference URLs are repinned from `v1.2.2` to `v1.2.3`.
+
+### Removed
+
+- **`DESIGN-NOTES.md`:** historical design conversation log. Normative behavior lives in `SPEC.md` and `PILLARS.md`; keeping the log at the root duplicated guidance and drifted from the shipped standard.
 
 ### Fixed
 
 - **`examples/saas-dashboard/`:** the README said "Add `last_contacted_at` to accounts" routes to `data`, but no `data` trigger appears in that sentence; the row now says "column". It also said "Move account pages into a new route group" reports absent `ui`, but the matcher does not stem, so `pages` never matched `page`; the local catalog's `ui` entry now lists both forms, and `components` beside `component`. The owner role no longer claims billing, which the example excludes.
 - **`examples/data.md`:** the column workflow generated a migration and then ran `db:push`, which bypasses it; it now runs `db:migrate`, matching the pillar's own watchout.
-- **`agents/context.md` and `agents/repo.md`:** the load-set definition now includes always-loaded and `see_also` pillars, and the layout tree lists `tooling/conformance/`.
+- **`agents/context.md` and `agents/repo.md`:** the load-set definition now includes always-loaded and `see_also` pillars, and the layout tree lists the npm product surface and `tooling/conformance/`.
 - **`tooling/README.md`:** the tree lists `check_consistency.py` and the conformance assets; the Aider row matches the corrected guide.
 - **`tooling/conformance/RESULTS-TEMPLATE.md`:** adds the system prompt and task set the protocol says to pin, and per-grader plus adjudicated score rows the protocol requires.
 - **Community files:** `CODE_OF_CONDUCT.md` no longer suggests a "private GitHub issue", which GitHub does not offer; `CONTRIBUTING.md` no longer points to Discussions, which are disabled; issue templates apply labels that exist (`bug`, `enhancement`, `question`); `FAQ.md` lists GitHub Copilot, which the README already named.
@@ -54,6 +62,7 @@ Documentation only. The standard itself is unchanged, and Pillars compatibility 
 - **`tooling/ci/check_consistency.py`:** the FAQ staleness guard pinned the exact sentence `CLI tools commonly exclude 11 of them`, coupling a count check to one phrasing. It now matches `commonly exclude 11 of them`, keeping the guard on the number while leaving the wording free.
 - **Adoption guidance:** install and reference URLs are repinned from `v1.2.1` to `v1.2.2`.
 
+[1.2.3]: https://github.com/hannsxpeter/pillars/releases/tag/v1.2.3
 [1.2.2]: https://github.com/hannsxpeter/pillars/releases/tag/v1.2.2
 
 ## [1.2.1] - 2026-08-04

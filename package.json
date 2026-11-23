@@ -1,0 +1,60 @@
+{
+  "name": "@hxp-tools/pillars",
+  "version": "1.2.3",
+  "description": "Your agent starts blank. Give it a briefing. Open standard for project context in plain markdown, built on AGENTS.md.",
+  "keywords": [
+    "agent-skills",
+    "agents-md",
+    "ai-agents",
+    "ai-coding",
+    "claude-code",
+    "codex",
+    "context-engineering",
+    "cursor",
+    "developer-tools",
+    "markdown",
+    "open-standard",
+    "pillars"
+  ],
+  "homepage": "https://github.com/hannsxpeter/pillars#readme",
+  "bugs": {
+    "url": "https://github.com/hannsxpeter/pillars/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hannsxpeter/pillars.git"
+  },
+  "license": "CC0-1.0",
+  "author": "hannsxpeter",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "pillars": "bin/pillars.js"
+  },
+  "files": [
+    "bin",
+    "assets",
+    "install.sh",
+    "AGENTS.md",
+    "SPEC.md",
+    "PILLARS.md",
+    "FAQ.md",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "agents",
+    "examples",
+    "tooling/claude-skill",
+    "tooling/prompts",
+    "tooling/README.md",
+    "!**/__pycache__",
+    "!**/*.pyc"
+  ],
+  "scripts": {
+    "test": "python3 -m unittest discover -s tooling/ci/tests"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

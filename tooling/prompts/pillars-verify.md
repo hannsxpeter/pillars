@@ -185,8 +185,8 @@ If the user picks a finding to address:
 ## Reference
 
 - Pillars standard: https://github.com/hannsxpeter/pillars
-- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.2/SPEC.md
-- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.3/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.3/PILLARS.md
 
 ---
 

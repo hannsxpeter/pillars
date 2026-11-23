@@ -121,7 +121,7 @@ If a pillar gets a major rewrite, note it in that pillar's own Decisions section
 
 ### Is it stable enough to adopt?
 
-Yes. Version 1.2.2 preserves the stable 1.0 schema and single-scope behavior, plus every 1.1 routing rule. It adds catalog guidance only. Any future incompatible change requires a new major version.
+Yes. Version 1.2.3 preserves the stable 1.0 schema and single-scope behavior, plus every 1.1 routing rule. It adds catalog guidance only. Any future incompatible change requires a new major version.
 
 ### Do tooling updates break my project?
 
@@ -173,7 +173,7 @@ Yes. Five states cover incomplete adoption: present pillars load, stubs prompt t
 
 ### Why is tooling optional?
 
-Standards succeed by being portable and small. Tooling is a multiplier, not a substitute. Pillars 1.2.2 defines compatibility purely through local text files and loading behavior, so adoption never depends on which helper form you use. Optional tooling lives under `tooling/` where the friction it relieves is well understood.
+Standards succeed by being portable and small. Tooling is a multiplier, not a substitute. Pillars 1.2.3 defines compatibility purely through local text files and loading behavior, so adoption never depends on which helper form you use. Optional tooling lives under `tooling/` where the friction it relieves is well understood.
 
 ## Getting involved
 

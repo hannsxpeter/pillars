@@ -57,10 +57,10 @@ If empty/greenfield, ask what they're building and map to the closest archetype.
 
 Fetch these from the Pillars repo (use your tool's web-fetch or download capability):
 
-- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/AGENTS.md`
-- SPEC: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/SPEC.md` (reference)
-- PILLARS: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/PILLARS.md` (reference)
-- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/agents/catalog.yaml`
+- AGENTS.md: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/AGENTS.md`
+- SPEC: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/SPEC.md` (reference)
+- PILLARS: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/PILLARS.md` (reference)
+- Starter absent catalog: `https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/agents/catalog.yaml`
 
 If you cannot fetch URLs, use the inline AGENTS.md template at the bottom of this prompt. It is the canonical file, word for word. If you cannot fetch the starter catalog, build `agents/catalog.yaml` (`version: 1`, then an `absent:` list) from the Core table in Step 5 for every Core identity you neither stub nor exclude, and tell the user the Common entries were skipped.
 
@@ -234,7 +234,7 @@ If yes, draft `context.md` from what the user has told you. Use the same procedu
 ````markdown
 # Pillars: Agent Protocol
 
-This project follows [Pillars 1.2.2](https://github.com/hannsxpeter/pillars/tree/v1.2.2). Coding agents read project pillar files before acting.
+This project follows [Pillars 1.2.3](https://github.com/hannsxpeter/pillars/tree/v1.2.3). Coding agents read project pillar files before acting.
 
 ## At the start of any task
 
@@ -276,9 +276,9 @@ excluded: []
 
 - Pillar files in this repo: `./agents/**/*.md`
 - Optional absent catalog: `./agents/catalog.yaml`
-- Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.2/SPEC.md
-- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md
-- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.2/examples
+- Spec: https://github.com/hannsxpeter/pillars/blob/v1.2.3/SPEC.md
+- Pillar enumeration: https://github.com/hannsxpeter/pillars/blob/v1.2.3/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.3/examples
 ````
 
 ---
@@ -286,6 +286,6 @@ excluded: []
 ## Reference
 
 - Pillars standard: https://github.com/hannsxpeter/pillars
-- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.2/SPEC.md
-- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.2/PILLARS.md
-- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.2/examples
+- SPEC.md: https://github.com/hannsxpeter/pillars/blob/v1.2.3/SPEC.md
+- PILLARS.md: https://github.com/hannsxpeter/pillars/blob/v1.2.3/PILLARS.md
+- Worked examples: https://github.com/hannsxpeter/pillars/tree/v1.2.3/examples

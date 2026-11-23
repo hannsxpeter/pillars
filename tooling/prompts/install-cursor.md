@@ -32,7 +32,7 @@ If you want `/pillars-init` and similar to work natively in Cursor:
 mkdir -p .cursor/commands
 for name in init author verify check map-task find-gaps trim sync-design sync-prd sync-readme; do
   curl -fsSL -o ".cursor/commands/pillars-$name.md" \
-    "https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.2/tooling/prompts/pillars-$name.md"
+    "https://raw.githubusercontent.com/hannsxpeter/pillars/v1.2.3/tooling/prompts/pillars-$name.md"
 done
 ```
 

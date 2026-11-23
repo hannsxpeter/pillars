@@ -18,7 +18,7 @@ Pillars is an open standard for project-specific instructions that keep coding a
 
 The standard is tool-agnostic: any agent that can read markdown and parse YAML can implement Pillars. Pillars sits underneath the broader AGENTS.md convention rather than replacing it; tool-specific files (`CLAUDE.md`, `.cursorrules`, `copilot-instructions.md`) become thin shims pointing at AGENTS.md.
 
-The repo also ships optional tooling forms for meta-operations around the standard: initializing Pillars in a project, authoring a pillar from code, verifying drift, and checking structural conformance. These live under `tooling/` and are not part of the runtime standard. They are distribution aids for humans and agents, not requirements for Pillars compatibility.
+The repo also ships optional tooling forms for meta-operations around the standard: initializing Pillars in a project, authoring a pillar from code, verifying drift, and checking structural conformance. These live under `tooling/` and are not part of the runtime standard. The npm package `@hxp-tools/pillars` installs those skills via `npx`; it is a distribution aid, not a requirement for Pillars compatibility.
 
 **Glossary:**
 
